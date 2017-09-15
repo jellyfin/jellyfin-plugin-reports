@@ -1,2 +1,2 @@
-# emby-auto-organize
-Auto-organize plugin for Emby Server
+# Emby Reports
+Reports plugin for Emby Server
