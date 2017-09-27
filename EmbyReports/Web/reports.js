@@ -1,4 +1,4 @@
-﻿define(['jQuery', 'libraryBrowser', 'loading', 'fnchecked', 'emby-linkbutton', 'paper-icon-button-light', 'jqmpanel', 'detailtablecss'], function ($, libraryBrowser, loading) {
+﻿define(['jQuery', 'libraryBrowser', 'loading', 'appRouter', 'fnchecked', 'emby-linkbutton', 'paper-icon-button-light', 'jqmpanel', 'detailtablecss'], function ($, libraryBrowser, loading, appRouter) {
     'use strict';
 
     var defaultSortBy = "SortName";
@@ -91,15 +91,17 @@
     function getItem(rHeader, rRow, rItem) {
         var html = '';
         html += '<td class="detailTableBodyCell">';
+        var id = rRow.Id;
+        if (rItem.Id)
+            id = rItem.Id;
+        var serverId = rRow.ServerId || rItem.ServerId || ApiClient.serverId();
+
         switch (rHeader.ItemViewType) {
             case "None":
                 html += rItem.Name;
                 break;
             case "Detail":
-                var id = rRow.Id;
-                if (rItem.Id)
-                    id = rItem.Id;
-                html += '<a is="emby-linkbutton" class="button-link" href="itemdetails.html?serverId=' + rItem.ServerId + '&id=' + id + '">' + rItem.Name + '</a>';
+                html += '<a is="emby-linkbutton" class="button-link" href="' + appRouter.getRouteUrl({ Id: id, ServerId: serverId }) + '">' + rItem.Name + '</a>';
                 break;
             case "Edit":
                 html += '<a is="emby-linkbutton" class="button-link" href="edititemmetadata.html?id=' + rRow.Id + '">' + rItem.Name + '</a>';
@@ -108,7 +110,7 @@
                 html += '<a is="emby-linkbutton" class="button-link" href="itemlist.html?serverId=' + rItem.ServerId + '&id=' + rRow.Id + '">' + rItem.Name + '</a>';
                 break;
             case "ItemByNameDetails":
-                html += '<a is="emby-linkbutton" class="button-link" href="itemdetails.html?serverId=' + rItem.ServerId + '&id=' + rItem.Id + '&context=' + rRow.RowType + '">' + rItem.Name + '</a>';
+                html += '<a is="emby-linkbutton" class="button-link" href="' + appRouter.getRouteUrl({ Id: id, ServerId: serverId }) + '">' + rItem.Name + '</a>';
                 break;
             case "EmbeddedImage":
                 if (rRow.HasEmbeddedImage) {
