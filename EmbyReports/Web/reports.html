@@ -56,28 +56,28 @@
     <div class="content-primary">
         <div style="text-align: center;">
             <div class="viewControls">
-                <span style="margin-right: 10px; vertical-align: middle;">${LabelReport}</span>
+                <span style="margin-right: 10px; vertical-align: middle;">Report</span>
                 <div style="display: inline-block;">
                     <select data-mini="true" data-inline="true" id="selectViewType">
-                        <option value="ReportData">${OptionReportList}</option>
-                        <option value="ReportActivities">${OptionReportActivities}</option>
+                        <option value="ReportData">List</option>
+                        <option value="ReportActivities">Activities</option>
                     </select>
                 </div>
                 <div style="display: inline-block;" id="selectIncludeItemTypesBox">
                     <select data-mini="true" data-inline="true" id="selectIncludeItemTypes" name="selectIncludeItemTypes">
-                        <option value="MusicAlbum">${OptionReportAlbums}</option>
-                        <option value="MusicArtist">${OptionReportArtists}</option>
-                        <option value="Book">${OptionReportBooks}</option>
-                        <option value="BoxSet">${OptionReportCollections}</option>
-                        <option value="Episode">${OptionReportEpisodes}</option>
-                        <option value="Game">${OptionReportGames}</option>
-                        <option value="Video">${OptionReportHomeVideos}</option>
-                        <option value="Movie">${OptionReportMovies}</option>
-                        <option value="MusicVideo">${OptionReportMusicVideos}</option>
-                        <option value="Trailer">${OptionReportTrailers}</option>
-                        <option value="Season">${OptionReportSeasons}</option>
-                        <option value="Series">${OptionReportSeries}</option>
-                        <option value="Audio">${OptionReportSongs}</option>
+                        <option value="MusicAlbum">Albums</option>
+                        <option value="MusicArtist">Artists</option>
+                        <option value="Book">Books</option>
+                        <option value="BoxSet">Collections</option>
+                        <option value="Episode">Episodes</option>
+                        <option value="Game">Games</option>
+                        <option value="Video">Home videos</option>
+                        <option value="Movie">Movies</option>
+                        <option value="MusicVideo">Music videos</option>
+                        <option value="Trailer">Trailers</option>
+                        <option value="Season">Seasons</option>
+                        <option value="Series">Series</option>
+                        <option value="Audio">Songs</option>
                     </select>
                 </div>
                 <button is="paper-icon-button-light" onclick="jQuery('.viewPanel').panel('toggle');" class="autoSize" tabindex="-1">
@@ -96,19 +96,19 @@
         <div data-role="panel" id="viewPanel" class="viewPanel" data-position="right" data-display="overlay" data-position-fixed="true">
             <form>
                 <div class="viewPanelTabs">
-                    <a is="emby-linkbutton" href="#" id="tabView" data-role="button" class="viewTabButton ui-btn-active" data-tab="tabView">${TabView}</a>
-                    <a is="emby-linkbutton" href="#" id="tabFilter" data-role="button" class="viewTabButton" data-tab="tabFilter">${TabFilter}</a>
+                    <a is="emby-linkbutton" href="#" id="tabView" data-role="button" class="viewTabButton ui-btn-active" data-tab="tabView">View</a>
+                    <a is="emby-linkbutton" href="#" id="tabFilter" data-role="button" class="viewTabButton" data-tab="tabFilter">Filter</a>
                 </div>
 
                 <div class="tabView viewTab" id="tabViewBox">
                     <div id="selectReportGroupingBox">
-                        <label for="selectViewGrouping">${OptionReportGrouping}</label>
+                        <label for="selectViewGrouping">Grouping</label>
                         <select id="selectReportGroup"></select>
                         <br />
                     </div>
 
                     <div id="selectPageSizeBox" style="display: none;">
-                        <label for="selectPageSize">${LabelPageSize}</label>
+                        <label for="selectPageSize">Page size</label>
                         <select id="selectPageSize" class="selectPageSize">
                             <option value="20">20</option>
                             <option value="50">50</option>
@@ -123,7 +123,7 @@
 
                     <div id="exportReportBox">
                         <fieldset>
-                            <label>${HeaderExport}</label>
+                            <label>Export</label>
                             <button type="button" name="btnReportExportExcel" id="btnReportExportExcel" data-icon="arrow-d">Excel</button>
                             <button type="button" name="btnReportExportCsv" id="btnReportExportCsv" data-icon="arrow-d">CSV</button>
                         </fieldset>
@@ -131,8 +131,8 @@
                     </div>
 
                     <div data-role="collapsible" data-collapsed="true" class="reportsColumns" id="grpReportsColumns">
-                        <h2>${HeaderColumns}</h2>
-                        <button type="button" name="btnResetReportColumns" id="btnResetReportColumns" data-icon="refresh">${ButtonReset}</button>
+                        <h2>Columns</h2>
+                        <button type="button" name="btnResetReportColumns" id="btnResetReportColumns" data-icon="refresh">Reset</button>
                         <br />
                         <div class="filterOptions">
                         </div>
@@ -142,29 +142,29 @@
                 <div class="tabFilter viewTab hide" id="tabFilterBox">
                     <fieldset>
                         <legend>
-                            ${HeaderFilters}
+                            Filters
                         </legend>
                         <input class="chkStandardFilter" type="checkbox" name="chkPlayed" id="chkPlayed" data-filter="IsPlayed">
-                        <label for="chkPlayed">${OptionPlayed}</label>
+                        <label for="chkPlayed">Played</label>
 
                         <input class="chkStandardFilter" type="checkbox" name="chkUnplayed" id="chkUnplayed" data-filter="IsUnPlayed">
-                        <label for="chkUnplayed">${OptionUnplayed}</label>
+                        <label for="chkUnplayed">Unplayed</label>
 
                         <input class="chkStandardFilter" type="checkbox" name="chkResumable" id="chkResumable" data-filter="IsResumable">
-                        <label for="chkResumable">${OptionResumable}</label>
+                        <label for="chkResumable">Resumable</label>
 
                         <input class="chkStandardFilter" type="checkbox" name="chkLikes" id="chkLikes" data-filter="Likes">
-                        <label for="chkLikes">${OptionLikes}</label>
+                        <label for="chkLikes">Likes</label>
 
                         <input class="chkStandardFilter" type="checkbox" name="chkDislikes" id="chkDislikes" data-filter="Dislikes">
-                        <label for="chkDislikes">${OptionDislikes}</label>
+                        <label for="chkDislikes">Dislikes</label>
 
                         <div id="isFavoriteDiv">
                             <label for="isFavorite"></label>
                             <select id="isFavorite" class="isFavorite">
-                                <option value="-">${OptionFavorite}: All</option>
-                                <option value="true">${OptionFavorite}: True</option>
-                                <option value="false">${OptionFavorite}: False</option>
+                                <option value="-">Favorite: All</option>
+                                <option value="true">Favorite: True</option>
+                                <option value="false">Favorite: False</option>
                             </select>
                         </div>
 
@@ -172,141 +172,141 @@
                     <br />
 
                     <div data-role="collapsible" data-collapsed="true" data-mini="true">
-                        <h2>${LabelManagement}</h2>
+                        <h2>Management</h2>
                         <div>
                             <input class="chkIsLocked" type="checkbox" id="chkIsLocked">
-                            <label for="chkIsLocked">${OptionLocked}</label>
+                            <label for="chkIsLocked">Locked</label>
 
                             <input class="chkMissingOverview" type="checkbox" name="chkMissingOverview" id="chkMissingOverview">
-                            <label for="chkMissingOverview">${OptionMissingOverview}</label>
+                            <label for="chkMissingOverview">Missing Overview</label>
 
                             <input class="chkMissingRating" type="checkbox" name="chkMissingRating" id="chkMissingRating">
-                            <label for="chkMissingRating">${OptionMissingParentalRating}</label>
+                            <label for="chkMissingRating">Missing parental rating</label>
 
                             <input class="chkMissingImdbId" type="checkbox" name="chkMissingImdbId" id="chkMissingImdbId">
-                            <label for="chkMissingImdbId">${OptionMissingImdbId}</label>
+                            <label for="chkMissingImdbId">Missing Imdb id</label>
 
                             <input class="chkMissingTmdbId" type="checkbox" name="chkMissingTmdbId" id="chkMissingTmdbId">
-                            <label for="chkMissingTmdbId">${OptionMissingTmdbId}</label>
+                            <label for="chkMissingTmdbId">Missing MovieDb id</label>
 
                             <input class="chkMissingTvdbId" type="checkbox" name="chkMissingTvdbId" id="chkMissingTvdbId">
-                            <label for="chkMissingTvdbId">${OptionMissingTvdbId}</label>
+                            <label for="chkMissingTvdbId">Missing Tvdb id</label>
                         </div>
                     </div>
 
                     <div data-role="collapsible" data-collapsed="true" data-mini="true" id="GroupStatus">
-                        <h2>${HeaderStatus}</h2>
+                        <h2>Status</h2>
                         <div>
                             <input class="chkStatus" type="checkbox" name="chkStatusContinuing" id="chkStatusContinuing" data-filter="Continuing">
-                            <label for="chkStatusContinuing">${OptionContinuing}</label>
+                            <label for="chkStatusContinuing">Continuing</label>
                             <input class="chkStatus" type="checkbox" name="chkStatusEnded" id="chkStatusEnded" data-filter="Ended">
-                            <label for="chkStatusEnded">${OptionEnded}</label>
+                            <label for="chkStatusEnded">Ended</label>
                         </div>
                     </div>
 
                     <div data-role="collapsible" data-collapsed="true" data-mini="true" id="GroupAirDays">
-                        <h2>${HeaderAirDays}</h2>
+                        <h2>Air Days</h2>
 
                         <div>
                             <input class="chkAirDays" type="checkbox" name="chkSunday" id="chkSunday" data-filter="Sunday">
-                            <label for="chkSunday">${OptionSunday}</label>
+                            <label for="chkSunday">Sunday</label>
                             <input class="chkAirDays" type="checkbox" name="chkMonday" id="chkMonday" data-filter="Monday">
-                            <label for="chkMonday">${OptionMonday}</label>
+                            <label for="chkMonday">Monday</label>
                             <input class="chkAirDays" type="checkbox" name="chkTuesday" id="chkTuesday" data-filter="Tuesday">
-                            <label for="chkTuesday">${OptionTuesday}</label>
+                            <label for="chkTuesday">Tuesday</label>
                             <input class="chkAirDays" type="checkbox" name="chkWednesday" id="chkWednesday" data-filter="Wednesday">
-                            <label for="chkWednesday">${OptionWednesday}</label>
+                            <label for="chkWednesday">Wednesday</label>
                             <input class="chkAirDays" type="checkbox" name="chkThursday" id="chkThursday" data-filter="Thursday">
-                            <label for="chkThursday">${OptionThursday}</label>
+                            <label for="chkThursday">Thursday</label>
                             <input class="chkAirDays" type="checkbox" name="chkFriday" id="chkFriday" data-filter="Friday">
-                            <label for="chkFriday">${OptionFriday}</label>
+                            <label for="chkFriday">Friday</label>
                             <input class="chkAirDays" type="checkbox" name="chkSaturday" id="chkSaturday" data-filter="Saturday">
-                            <label for="chkSaturday">${OptionSaturday}</label>
+                            <label for="chkSaturday">Saturday</label>
                         </div>
                     </div>
                     <div data-role="collapsible" data-collapsed="true" data-mini="true" id="GroupEpisodes">
-                        <h2>${HeaderEpisodes}</h2>
+                        <h2>Episodes</h2>
                         <div>
                             <input type="checkbox" name="chkSpecialEpisode" id="chkSpecialEpisode">
-                            <label for="chkSpecialEpisode">${OptionSeason0}</label>
+                            <label for="chkSpecialEpisode">Specials</label>
 
                             <input type="checkbox" name="chkMissingEpisode" id="chkMissingEpisode">
-                            <label for="chkMissingEpisode">${OptionMissingEpisode}</label>
+                            <label for="chkMissingEpisode">Missing episodes</label>
                         </div>
                     </div>
                     <div data-role="collapsible" data-collapsed="true" data-mini="true">
-                        <h2>${HeaderFeatures}</h2>
+                        <h2>Features</h2>
 
                         <div>
 
                             <input class="chkFeatureFilter" type="checkbox" name="chkSubtitle" id="chkSubtitle">
-                            <label for="chkSubtitle">${OptionHasSubtitles}</label>
+                            <label for="chkSubtitle">Subtitles</label>
 
                             <input class="chkFeatureFilter" type="checkbox" name="chkTrailer" id="chkTrailer">
-                            <label for="chkTrailer">${OptionHasTrailer}</label>
+                            <label for="chkTrailer">Trailer</label>
 
                             <input class="chkFeatureFilter" type="checkbox" name="chkMissingTrailer" id="chkMissingTrailer">
-                            <label for="chkMissingTrailer">${OptionNoTrailer}</label>
+                            <label for="chkMissingTrailer">No Trailer</label>
 
                             <input class="chkFeatureFilter" type="checkbox" name="chkSpecialFeature" id="chkSpecialFeature">
-                            <label for="chkSpecialFeature">${OptionHasSpecialFeatures}</label>
+                            <label for="chkSpecialFeature">Extras</label>
 
                             <input class="chkFeatureFilter" type="checkbox" name="chkThemeSong" id="chkThemeSong">
-                            <label for="chkThemeSong">${OptionHasThemeSong}</label>
+                            <label for="chkThemeSong">Theme Song</label>
 
                             <input class="chkFeatureFilter" type="checkbox" name="chkThemeVideo" id="chkThemeVideo">
-                            <label for="chkThemeVideo">${OptionHasThemeVideo}</label>
+                            <label for="chkThemeVideo">Theme Video</label>
                         </div>
                     </div>
 
                     <div data-role="collapsible" data-collapsed="true" data-mini="true" class="genreFilters">
-                        <h2>${HeaderGenres}</h2>
+                        <h2>Genres</h2>
 
                         <div class="filterOptions">
                         </div>
                     </div>
 
                     <div data-role="collapsible" data-collapsed="true" data-mini="true" class="officialRatingFilters">
-                        <h2>${HeaderParentalRatings}</h2>
+                        <h2>Parental Ratings</h2>
 
                         <div class="filterOptions">
                         </div>
                     </div>
 
                     <div data-role="collapsible" data-collapsed="true" data-mini="true" class="tagFilters">
-                        <h2>${HeaderTags}</h2>
+                        <h2>Tags</h2>
 
                         <div class="filterOptions">
                         </div>
                     </div>
 
                     <div data-role="collapsible" data-collapsed="true" data-mini="true">
-                        <h2>${HeaderVideoTypes}</h2>
+                        <h2>Video Types</h2>
 
                         <div>
 
                             <input class="chkVideoTypeFilter" type="checkbox" name="chkBluray" id="chkBluray" data-filter="Bluray">
-                            <label for="chkBluray">${OptionBluray}</label>
+                            <label for="chkBluray">Blu-ray</label>
 
                             <input class="chkVideoTypeFilter" type="checkbox" name="chkDvd" id="chkDvd" data-filter="Dvd">
-                            <label for="chkDvd">${OptionDvd}</label>
+                            <label for="chkDvd">DVD</label>
 
                             <input class="chkVideoTypeFilter" type="checkbox" name="chkIso" id="chkIso" data-filter="Iso">
-                            <label for="chkIso">${OptionIso}</label>
+                            <label for="chkIso">ISO</label>
 
                             <input class="chkHDFilter" type="checkbox" name="chkHD" id="chkHD" data-filter="IsHD">
-                            <label for="chkHD">${OptionIsHD}</label>
+                            <label for="chkHD">HD</label>
 
                             <input class="chkSDFilter" type="checkbox" name="chkSD" id="chkSD" data-filter="IsHD">
-                            <label for="chkSD">${OptionIsSD}</label>
+                            <label for="chkSD">SD</label>
 
                             <input class="chk3DFilter" type="checkbox" name="chk3D" id="chk3D" data-filter="Digital3D,Sbs3D">
-                            <label for="chk3D">${Option3D}</label>
+                            <label for="chk3D">3D</label>
                         </div>
                     </div>
 
                     <div data-role="collapsible" data-collapsed="true" data-mini="true" class="yearFilters">
-                        <h2>${HeaderYears}</h2>
+                        <h2>Years</h2>
 
                         <div class="filterOptions">
                         </div>
