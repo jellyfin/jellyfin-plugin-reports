@@ -129,7 +129,7 @@ namespace EmbyReports.Api.Common
         /// <returns> The core localized string. </returns>
         public static string GetCoreLocalizedString(string phrase)
         {
-            return BaseItem.LocalizationManager.GetLocalizedString(phrase);
+            return phrase;
         }
 
         #endregion

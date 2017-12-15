@@ -158,7 +158,7 @@ namespace EmbyReports.Api.Common
             string headerName = "";
             if (internalHeader != HeaderMetadata.None)
             {
-                string localHeader = "Header" + internalHeader.ToString();
+                string localHeader = internalHeader.ToString();
                 headerName = ReportHelper.GetCoreLocalizedString(localHeader);
             }
             return headerName;
