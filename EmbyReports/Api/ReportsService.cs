@@ -200,7 +200,6 @@ namespace EmbyReports.Api
                 HasImdbId = request.HasImdbId,
                 IsPlaceHolder = request.IsPlaceHolder,
                 IsLocked = request.IsLocked,
-                IsInBoxSet = request.IsInBoxSet,
                 IsHD = request.IsHD,
                 Is3D = request.Is3D,
                 HasTvdbId = request.HasTvdbId,
