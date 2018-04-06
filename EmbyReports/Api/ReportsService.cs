@@ -352,7 +352,7 @@ namespace EmbyReports.Api
                     var ids = query.ItemIds.ToList();
 
                     // Try to preserve order
-                    result.Items = result.Items.OrderBy(i => ids.IndexOf(i.Id.ToString("N"))).ToArray();
+                    result.Items = result.Items.OrderBy(i => ids.IndexOf(i.Id)).ToArray();
                 }
 
                 return result;
