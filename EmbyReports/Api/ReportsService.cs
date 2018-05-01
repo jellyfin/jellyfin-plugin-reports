@@ -187,8 +187,6 @@ namespace EmbyReports.Api
                 ExcludeItemTypes = request.GetExcludeItemTypes(),
                 Recursive = request.Recursive,
                 OrderBy = request.GetOrderBy(),
-
-                IsFavorite = request.IsFavorite,
                 Limit = request.Limit,
                 StartIndex = request.StartIndex,
                 IsMissing = request.IsMissing,
@@ -240,15 +238,22 @@ namespace EmbyReports.Api
                 query.CollapseBoxSetItems = false;
             }
 
+            query.IsFavorite = null;
+            if(request.IsFavorite == true)
+            {
+                query.IsFavorite = true;
+            }
+            else if (request.IsNotFavorite == true)
+            {
+                query.IsFavorite = false;
+            }
+
             foreach (var filter in request.GetFilters())
             {
                 switch (filter)
                 {
                     case ItemFilter.Dislikes:
                         query.IsLiked = false;
-                        break;
-                    case ItemFilter.IsFavorite:
-                        query.IsFavorite = true;
                         break;
                     case ItemFilter.IsFavoriteOrLikes:
                         query.IsFavoriteOrLiked = true;
@@ -311,6 +316,8 @@ namespace EmbyReports.Api
             {
                 query.MaxParentalRating = _localization.GetRatingLevel(request.MaxOfficialRating);
             }
+
+            query.CollapseBoxSetItems = false;
 
             return query;
         }
