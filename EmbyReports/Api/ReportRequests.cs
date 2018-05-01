@@ -231,8 +231,15 @@ namespace EmbyReports.Api
         /// Gets or sets the Isfavorite option
         /// </summary>
         /// <value>IsFavorite</value>
-        [ApiMember(Name = "IsFavorite", Description = "Optional filter by items that are marked as favorite, or not.", IsRequired = false, DataType = "bool", ParameterType = "query", Verb = "GET")]
-        public bool? IsFavorite { get; set; }
+        [ApiMember(Name = "IsFavorite", Description = "Optional filter by items that are marked as favorite.", IsRequired = false, DataType = "bool", ParameterType = "query", Verb = "GET")]
+        public bool IsFavorite { get; set; }
+
+        /// <summary>
+        /// Gets or sets the IsNotFavorite option
+        /// </summary>
+        /// <value>IsFavorite</value>
+        [ApiMember(Name = "IsNotFavorite", Description = "Optional filter by items that are marked as not favorite.", IsRequired = false, DataType = "bool", ParameterType = "query", Verb = "GET")]
+        public bool IsNotFavorite { get; set; }
 
         /// <summary>
         /// Gets or sets the media types.

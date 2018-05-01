@@ -964,15 +964,8 @@
         $('#selectIncludeItemTypes').val(query.IncludeItemTypes);
 
         // isfavorite
-        if (query.IsFavorite == true) {
-            $('#isFavorite').val("true");
-        }
-        else if (query.IsFavorite == false) {
-            $('#isFavorite').val("false");
-        }
-        else {
-            $('#isFavorite').val("-");
-        }
+        $('#isFavorite').checked(query.IsFavorite == true);
+        $('#isNotFavorite').checked(query.IsNotFavorite == true);
 
 
     }
@@ -1028,11 +1021,13 @@
                 value = filter.FieldName;
                 checked = filter.Visible;
             }
-            itemHtml += '<label for="' + id + '">' + label + '</label>';
+            
             itemHtml += '<input id="' + id + '" type="checkbox" data-filter="' + value + '" class="' + cssClass + '"';
             if (checked)
                 itemHtml += ' checked="checked" ';
-            itemHtml += '/>';
+            itemHtml += '/> ';
+            itemHtml += '<label for="' + id + '">' + label + '</label>';
+            itemHtml += '<br/>';
 
             index++;
 
@@ -1295,18 +1290,25 @@
             reloadItems(page);
         });
 
-        $('#isFavorite', page).on('change', function () {
+        $('#chkIsFavorite', page).on('change', function () {
 
-            if (this.value == "true") {
+            if (this.checked) {
                 query.IsFavorite = true;
             }
-            else if (this.value == "false") {
+            else {
                 query.IsFavorite = false;
             }
-            else {
-                query.IsFavorite = null;
+            reloadItems(page);
+        });
+
+        $('#chkIsNotFavorite', page).on('change', function () {
+
+            if (this.checked) {
+                query.IsNotFavorite = true;
             }
-            query.StartIndex = 0;
+            else {
+                query.IsNotFavorite = false;
+            }
             reloadItems(page);
         });
 
