@@ -233,6 +233,11 @@ namespace EmbyReports.Api
                 EnableTotalRecordCount = request.EnableTotalRecordCount
             };
 
+            if (request.Limit == -1)
+            {
+                query.Limit = null;
+            }
+
             if (!string.IsNullOrWhiteSpace(request.Ids))
             {
                 query.CollapseBoxSetItems = false;

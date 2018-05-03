@@ -543,7 +543,7 @@
         DisplayType: "Screen",
     };
 
-    function getTable(result) {
+    function getTable(result, initial_state) {
         var html = '';
         //Report table
         html += '<table id="tblReport" data-role="table" data-mode="reflow" class="tblLibraryReport stripedTable ui-responsive table-stroke detailTable" style="display:table;">';
@@ -585,17 +585,27 @@
             });
         }
         else {
-
+            var row_count = 0;
+            var current_state = "table-row";
+            var current_pointer = "&#x25BC;";
+            if (initial_state == true) {
+                current_state = "none";
+                current_pointer = "&#x25B6;";
+            }
             result.Groups.map(function (group) {
-                html += '<tr style="background-color: rgb(51, 51, 51);">';
-                html += '<th class="detailTableHeaderCell" scope="rowgroup" colspan="' + result.Headers.length + '">' + (group.Name || '&nbsp;') + '</th>';
+                html += '<tr style="background-color: rgb(51, 51, 51); color: rgba(255,255,255,.87);">';
+                html += '<th class="detailTableHeaderCell" scope="rowgroup" colspan="' + result.Headers.length + '">';
+                html += '<a class="lnkShowHideRows" data-group_id="' + row_count + '" data-group_state="' + current_state + '" style="cursor: pointer;">' +  current_pointer + '</a> ';
+                html += (group.Name || '&nbsp;') + ' : ' + group.Rows.length;
+                html += '</th>';
                 html += '</tr>';
                 group.Rows.map(function (row) {
-                    html += getRow(result.Headers, row);
+                    html += getRow(result.Headers, row, row_count, current_state);
                 });
                 html += '<tr>';
-                html += '<th class="detailTableHeaderCell" scope="rowgroup" colspan="' + result.Headers.length + '">' + '&nbsp;' + '</th>';
+                html += '<th class="detailTableHeaderCell row_id_' + row_count + '" scope="rowgroup" colspan="' + result.Headers.length + '" style="display:' + current_state + ';">&nbsp;</th>';
                 html += '</tr>';
+                row_count++;
             });
         }
 
@@ -604,9 +614,9 @@
         return html;
     }
 
-    function getRow(rHeaders, rRow) {
+    function getRow(rHeaders, rRow, row_count, current_state) {
         var html = '';
-        html += '<tr class="detailTableBodyRow detailTableBodyRow-shaded">';
+        html += '<tr class="detailTableBodyRow detailTableBodyRow-shaded row_id_' + row_count + '" style="display:' + current_state + ';">';
 
         for (var j = 0; j < rHeaders.length; j++) {
             var rHeader = rHeaders[j];
@@ -784,9 +794,13 @@
             $('#tabFilter', page).hide();
         }
 
+        var limit_per_page = query.Limit;
+        if (query.Limit == -1) {
+            limit_per_page = result.TotalRecordCount;
+        }
         var pagingHtml = libraryBrowser.getQueryPagingHtml({
             startIndex: query.StartIndex,
-            limit: query.Limit,
+            limit: limit_per_page,
             totalRecordCount: result.TotalRecordCount,
             updatePageSizeSetting: false,
             viewButton: true,
@@ -820,9 +834,27 @@
             $('#selectReportGroupingBox', page).show();
             $('#grpReportsColumns', page).show();
 
-            html += getTable(result);
+            var initial_state = $('#chkStartCollapsed', page).prop('checked');
+            html += getTable(result, initial_state);
 
             $('.reporContainer', page).html(html).trigger('create');
+
+            $('.lnkShowHideRows', page).on('click', function () {
+                var row_id = this.getAttribute('data-group_id');
+                var row_id_index = 'row_id_' + row_id;
+                var row_group_state = this.getAttribute("data-group_state");
+                //alert(this.getAttribute("data-group_state"));
+                if (row_group_state == "table-row") {
+                    this.setAttribute("data-group_state", "none");
+                    $('.' + row_id_index, page).css("display", "none");
+                    this.innerHTML = "&#x25B6;";
+                }
+                else {
+                    this.setAttribute("data-group_state", "table-row");
+                    $('.' + row_id_index, page).css("display", "table-row");
+                    this.innerHTML = "&#x25BC;";
+                }
+            });
 
             $('.lnkColumnSort', page).on('click', function () {
 
@@ -1256,6 +1288,10 @@
         $('#selectReportGroup', page).on('change', function () {
             query.GroupBy = this.value;
             query.StartIndex = 0;
+            reloadItems(page);
+        });
+
+        $('#chkStartCollapsed', page).on('change', function () {
             reloadItems(page);
         });
 

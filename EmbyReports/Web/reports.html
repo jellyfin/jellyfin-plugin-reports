@@ -386,6 +386,7 @@
 						<label for="selectViewGrouping">Grouping</label>
 						<select id="selectReportGroup"></select>
 						<br />
+						<input type="checkbox" id="chkStartCollapsed" /> <label for="chkPlayed">Start Collapsed</label><br />
 					</div>
 					<br />
 					<div id="selectPageSizeBox" style="display: none;">
@@ -397,7 +398,7 @@
 							<option value="200">200</option>
 							<option value="300">300</option>
 							<option value="500">500</option>
-							<option value="10000">10000</option>
+							<option value="-1">All</option>
 						</select>
 						<br />
 						<br />
@@ -441,10 +442,10 @@
 						<label for="chkDislikes">Dislikes</label><br />
 
 						<input class="chkIsFavorite" type="checkbox" name="chkFavorite" id="chkIsFavorite" data-filter="IsFavorite">
-						<label for="chkDislikes">Favorite</label><br />
+						<label for="chkIsFavorite">Favorite</label><br />
 
 						<input class="chkIsNotFavorite" type="checkbox" name="chkNotFavorite" id="chkIsNotFavorite" data-filter="IsNotFavorite">
-						<label for="chkDislikes">Not Favorite</label><br />
+						<label for="chkIsNotFavorite">Not Favorite</label><br />
 
 					</div>
 
