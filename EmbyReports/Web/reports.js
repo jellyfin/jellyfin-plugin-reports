@@ -794,18 +794,17 @@
             $('#tabFilter', page).hide();
         }
 
-        var limit_per_page = query.Limit;
-        if (query.Limit == -1) {
-            limit_per_page = result.TotalRecordCount;
+        var pagingHtml = "Total : " + result.TotalRecordCount;
+        if (query.Limit != -1) {
+            pagingHtml = libraryBrowser.getQueryPagingHtml({
+                startIndex: query.StartIndex,
+                limit: query.Limit,
+                totalRecordCount: result.TotalRecordCount,
+                updatePageSizeSetting: false,
+                viewButton: true,
+                showLimit: false
+            });
         }
-        var pagingHtml = libraryBrowser.getQueryPagingHtml({
-            startIndex: query.StartIndex,
-            limit: limit_per_page,
-            totalRecordCount: result.TotalRecordCount,
-            updatePageSizeSetting: false,
-            viewButton: true,
-            showLimit: false
-        });
 
         if (query.ReportView === "ReportData" || query.ReportView === "ReportActivities") {
 
