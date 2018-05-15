@@ -559,7 +559,7 @@ namespace EmbyReports.Api.Data
                     break;
 
                 case HeaderMetadata.Genres:
-                    option.Column = (i, r) => this.GetListAsString(i.Genres);
+                    option.Column = (i, r) => this.GetListAsString(i.Genres.ToList());
                     break;
 
             }
