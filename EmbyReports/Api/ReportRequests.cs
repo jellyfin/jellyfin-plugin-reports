@@ -533,18 +533,18 @@ namespace EmbyReports.Api
         /// Gets the order by.
         /// </summary>
         /// <returns>IEnumerable{ItemSortBy}.</returns>
-        public Tuple<string, SortOrder>[] GetOrderBy()
+        public ValueTuple<string, SortOrder>[] GetOrderBy()
         {
             return GetOrderBy(SortBy, SortOrder);
         }
 
-        public static Tuple<string, SortOrder>[] GetOrderBy(string sortBy, string requestedSortOrder)
+        public static ValueTuple<string, SortOrder>[] GetOrderBy(string sortBy, string requestedSortOrder)
         {
             var val = sortBy;
 
             if (string.IsNullOrEmpty(val))
             {
-                return new Tuple<string, MediaBrowser.Model.Entities.SortOrder>[] { };
+                return new ValueTuple<string, MediaBrowser.Model.Entities.SortOrder>[] { };
             }
 
             var vals = val.Split(',');
@@ -555,7 +555,7 @@ namespace EmbyReports.Api
 
             var sortOrders = requestedSortOrder.Split(',');
 
-            var result = new Tuple<string, MediaBrowser.Model.Entities.SortOrder>[vals.Length];
+            var result = new ValueTuple<string, MediaBrowser.Model.Entities.SortOrder>[vals.Length];
 
             for (var i = 0; i < vals.Length; i++)
             {
@@ -564,7 +564,7 @@ namespace EmbyReports.Api
                 var sortOrderValue = sortOrders.Length > sortOrderIndex ? sortOrders[sortOrderIndex] : null;
                 var sortOrder = string.Equals(sortOrderValue, "Descending", StringComparison.OrdinalIgnoreCase) ? MediaBrowser.Model.Entities.SortOrder.Descending : MediaBrowser.Model.Entities.SortOrder.Ascending;
 
-                result[i] = new Tuple<string, MediaBrowser.Model.Entities.SortOrder>(vals[i], sortOrder);
+                result[i] = new ValueTuple<string, MediaBrowser.Model.Entities.SortOrder>(vals[i], sortOrder);
             }
 
             return result;
