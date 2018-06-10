@@ -227,7 +227,7 @@ namespace EmbyReports.Api
                 MaxPlayers = request.MaxPlayers,
                 MinCommunityRating = request.MinCommunityRating,
                 MinCriticRating = request.MinCriticRating,
-                ParentId = string.IsNullOrWhiteSpace(request.ParentId) ? (Guid?)null : new Guid(request.ParentId),
+                ParentId = string.IsNullOrWhiteSpace(request.ParentId) ? Guid.Empty : new Guid(request.ParentId),
                 ParentIndexNumber = request.ParentIndexNumber,
                 AiredDuringSeason = request.AiredDuringSeason,
                 EnableTotalRecordCount = request.EnableTotalRecordCount
