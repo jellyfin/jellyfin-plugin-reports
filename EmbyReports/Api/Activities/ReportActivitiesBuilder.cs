@@ -248,7 +248,7 @@ namespace EmbyReports.Api.Activities
         {
             ReportRow rRow = new ReportRow
             {
-                Id = item.Id,
+                Id = item.Id.ToString(),
                 UserId = item.UserId
             };
             return rRow;

@@ -95,200 +95,200 @@ namespace EmbyReports.Api.Data
             {
                 case ReportIncludeItemTypes.Season:
                     return new List<HeaderMetadata>
-					{   
-                        HeaderMetadata.Status,                     
+                    {
+                        HeaderMetadata.Status,
                         HeaderMetadata.Locked,
                         HeaderMetadata.ImagePrimary,
                         HeaderMetadata.ImageBackdrop,
                         HeaderMetadata.ImageLogo,
-						HeaderMetadata.Series,
-						HeaderMetadata.Season,
-						HeaderMetadata.SeasonNumber,
+                        HeaderMetadata.Series,
+                        HeaderMetadata.Season,
+                        HeaderMetadata.SeasonNumber,
                         HeaderMetadata.DateAdded,
-						HeaderMetadata.Year,
-						HeaderMetadata.Genres
-					};
+                        HeaderMetadata.Year,
+                        HeaderMetadata.Genres
+                    };
 
                 case ReportIncludeItemTypes.Series:
                     return new List<HeaderMetadata>
-					{     
-                        HeaderMetadata.Status,
-                        HeaderMetadata.Locked,
-                        HeaderMetadata.ImagePrimary,
-                        HeaderMetadata.ImageBackdrop,
-                        HeaderMetadata.ImageLogo,
-						HeaderMetadata.Name,
-						HeaderMetadata.Network,
-						HeaderMetadata.DateAdded,
-						HeaderMetadata.Year,
-						HeaderMetadata.Genres,
-						HeaderMetadata.ParentalRating,
-						HeaderMetadata.CommunityRating,
-						HeaderMetadata.Runtime,
-						HeaderMetadata.Trailers,
-						HeaderMetadata.Specials
-					};
-
-                case ReportIncludeItemTypes.MusicAlbum:
-                    return new List<HeaderMetadata>
-					{
-                        HeaderMetadata.Status,
-                        HeaderMetadata.Locked,
-                        HeaderMetadata.ImagePrimary,
-                        HeaderMetadata.ImageBackdrop,
-                        HeaderMetadata.ImageLogo,
-						HeaderMetadata.Name,
-						HeaderMetadata.AlbumArtist,
-						HeaderMetadata.DateAdded,
-						HeaderMetadata.ReleaseDate,
-						HeaderMetadata.Tracks,
-						HeaderMetadata.Year,
-						HeaderMetadata.Genres
-					};
-
-                case ReportIncludeItemTypes.MusicArtist:
-                    return new List<HeaderMetadata>
-					{
-                        HeaderMetadata.Status,
-                        HeaderMetadata.Locked,
-                        HeaderMetadata.ImagePrimary,
-                        HeaderMetadata.ImageBackdrop,
-                        HeaderMetadata.ImageLogo,
-						HeaderMetadata.MusicArtist,
-						HeaderMetadata.Countries,
-						HeaderMetadata.DateAdded,
-						HeaderMetadata.Year,
-						HeaderMetadata.Genres
-					};
-
-                case ReportIncludeItemTypes.Game:
-                    return new List<HeaderMetadata>
-					{
-                        HeaderMetadata.Status,
-                        HeaderMetadata.Locked,
-                        HeaderMetadata.ImagePrimary,
-                        HeaderMetadata.ImageBackdrop,
-                        HeaderMetadata.ImageLogo,
-						HeaderMetadata.Name,
-						HeaderMetadata.GameSystem,
-						HeaderMetadata.DateAdded,
-						HeaderMetadata.ReleaseDate,
-						HeaderMetadata.ParentalRating,
-						HeaderMetadata.CommunityRating,
-						HeaderMetadata.Players,
-						HeaderMetadata.Year,
-						HeaderMetadata.Genres,
-						HeaderMetadata.Trailers
-					};
-
-                case ReportIncludeItemTypes.Movie:
-                    return new List<HeaderMetadata>
-					{
-                        HeaderMetadata.Status,
-                        HeaderMetadata.Locked,
-                        HeaderMetadata.ImagePrimary,
-                        HeaderMetadata.ImageBackdrop,
-                        HeaderMetadata.ImageLogo,
-						HeaderMetadata.Name,
-						HeaderMetadata.DateAdded,
-						HeaderMetadata.ReleaseDate,
-						HeaderMetadata.Year,
-						HeaderMetadata.Genres,
-						HeaderMetadata.ParentalRating,
-						HeaderMetadata.CommunityRating,
-						HeaderMetadata.Runtime,
-						HeaderMetadata.Video,
-						HeaderMetadata.Resolution,
-						HeaderMetadata.Audio,
-						HeaderMetadata.Subtitles,
-						HeaderMetadata.Trailers,
-						HeaderMetadata.Specials
-					};
-
-                case ReportIncludeItemTypes.Book:
-                    return new List<HeaderMetadata>
-					{
-                        HeaderMetadata.Status,
-                        HeaderMetadata.Locked,
-                        HeaderMetadata.ImagePrimary,
-                        HeaderMetadata.ImageBackdrop,
-                        HeaderMetadata.ImageLogo,
-						HeaderMetadata.Name,
-						HeaderMetadata.DateAdded,
-						HeaderMetadata.ReleaseDate,
-						HeaderMetadata.Year,
-						HeaderMetadata.Genres,
-						HeaderMetadata.ParentalRating,
-						HeaderMetadata.CommunityRating
-					};
-
-                case ReportIncludeItemTypes.BoxSet:
-                    return new List<HeaderMetadata>
-					{
-                        HeaderMetadata.Status,
-                        HeaderMetadata.Locked,
-                        HeaderMetadata.ImagePrimary,
-                        HeaderMetadata.ImageBackdrop,
-                        HeaderMetadata.ImageLogo,
-						HeaderMetadata.Name,
-						HeaderMetadata.DateAdded,
-						HeaderMetadata.ReleaseDate,
-						HeaderMetadata.Year,
-						HeaderMetadata.Genres,
-						HeaderMetadata.ParentalRating,
-						HeaderMetadata.CommunityRating,
-						HeaderMetadata.Trailers
-					};
-
-                case ReportIncludeItemTypes.Audio:
-                    return new List<HeaderMetadata>
-					{
-                        HeaderMetadata.Status,
-                        HeaderMetadata.Locked,
-                        HeaderMetadata.ImagePrimary,
-                        HeaderMetadata.ImageBackdrop,
-                        HeaderMetadata.ImageLogo,
-						HeaderMetadata.Name,
-						HeaderMetadata.AudioAlbumArtist,
-						HeaderMetadata.AudioAlbum,
-						HeaderMetadata.Disc,
-						HeaderMetadata.Track,
-						HeaderMetadata.DateAdded,
-						HeaderMetadata.ReleaseDate,
-						HeaderMetadata.Year,
-						HeaderMetadata.Genres,
-						HeaderMetadata.ParentalRating,
-						HeaderMetadata.CommunityRating,
-						HeaderMetadata.Runtime,
-						HeaderMetadata.Audio
-					};
-
-                case ReportIncludeItemTypes.Episode:
-                    return new List<HeaderMetadata>
-					{
+                    {
                         HeaderMetadata.Status,
                         HeaderMetadata.Locked,
                         HeaderMetadata.ImagePrimary,
                         HeaderMetadata.ImageBackdrop,
                         HeaderMetadata.ImageLogo,
                         HeaderMetadata.Name,
-						HeaderMetadata.EpisodeSeries,
-						HeaderMetadata.Season,
+                        HeaderMetadata.Network,
+                        HeaderMetadata.DateAdded,
+                        HeaderMetadata.Year,
+                        HeaderMetadata.Genres,
+                        HeaderMetadata.ParentalRating,
+                        HeaderMetadata.CommunityRating,
+                        HeaderMetadata.Runtime,
+                        HeaderMetadata.Trailers,
+                        HeaderMetadata.Specials
+                    };
+
+                case ReportIncludeItemTypes.MusicAlbum:
+                    return new List<HeaderMetadata>
+                    {
+                        HeaderMetadata.Status,
+                        HeaderMetadata.Locked,
+                        HeaderMetadata.ImagePrimary,
+                        HeaderMetadata.ImageBackdrop,
+                        HeaderMetadata.ImageLogo,
+                        HeaderMetadata.Name,
+                        HeaderMetadata.AlbumArtist,
+                        HeaderMetadata.DateAdded,
+                        HeaderMetadata.ReleaseDate,
+                        HeaderMetadata.Tracks,
+                        HeaderMetadata.Year,
+                        HeaderMetadata.Genres
+                    };
+
+                case ReportIncludeItemTypes.MusicArtist:
+                    return new List<HeaderMetadata>
+                    {
+                        HeaderMetadata.Status,
+                        HeaderMetadata.Locked,
+                        HeaderMetadata.ImagePrimary,
+                        HeaderMetadata.ImageBackdrop,
+                        HeaderMetadata.ImageLogo,
+                        HeaderMetadata.MusicArtist,
+                        HeaderMetadata.Countries,
+                        HeaderMetadata.DateAdded,
+                        HeaderMetadata.Year,
+                        HeaderMetadata.Genres
+                    };
+
+                case ReportIncludeItemTypes.Game:
+                    return new List<HeaderMetadata>
+                    {
+                        HeaderMetadata.Status,
+                        HeaderMetadata.Locked,
+                        HeaderMetadata.ImagePrimary,
+                        HeaderMetadata.ImageBackdrop,
+                        HeaderMetadata.ImageLogo,
+                        HeaderMetadata.Name,
+                        HeaderMetadata.GameSystem,
+                        HeaderMetadata.DateAdded,
+                        HeaderMetadata.ReleaseDate,
+                        HeaderMetadata.ParentalRating,
+                        HeaderMetadata.CommunityRating,
+                        HeaderMetadata.Players,
+                        HeaderMetadata.Year,
+                        HeaderMetadata.Genres,
+                        HeaderMetadata.Trailers
+                    };
+
+                case ReportIncludeItemTypes.Movie:
+                    return new List<HeaderMetadata>
+                    {
+                        HeaderMetadata.Status,
+                        HeaderMetadata.Locked,
+                        HeaderMetadata.ImagePrimary,
+                        HeaderMetadata.ImageBackdrop,
+                        HeaderMetadata.ImageLogo,
+                        HeaderMetadata.Name,
+                        HeaderMetadata.DateAdded,
+                        HeaderMetadata.ReleaseDate,
+                        HeaderMetadata.Year,
+                        HeaderMetadata.Genres,
+                        HeaderMetadata.ParentalRating,
+                        HeaderMetadata.CommunityRating,
+                        HeaderMetadata.Runtime,
+                        HeaderMetadata.Video,
+                        HeaderMetadata.Resolution,
+                        HeaderMetadata.Audio,
+                        HeaderMetadata.Subtitles,
+                        HeaderMetadata.Trailers,
+                        HeaderMetadata.Specials
+                    };
+
+                case ReportIncludeItemTypes.Book:
+                    return new List<HeaderMetadata>
+                    {
+                        HeaderMetadata.Status,
+                        HeaderMetadata.Locked,
+                        HeaderMetadata.ImagePrimary,
+                        HeaderMetadata.ImageBackdrop,
+                        HeaderMetadata.ImageLogo,
+                        HeaderMetadata.Name,
+                        HeaderMetadata.DateAdded,
+                        HeaderMetadata.ReleaseDate,
+                        HeaderMetadata.Year,
+                        HeaderMetadata.Genres,
+                        HeaderMetadata.ParentalRating,
+                        HeaderMetadata.CommunityRating
+                    };
+
+                case ReportIncludeItemTypes.BoxSet:
+                    return new List<HeaderMetadata>
+                    {
+                        HeaderMetadata.Status,
+                        HeaderMetadata.Locked,
+                        HeaderMetadata.ImagePrimary,
+                        HeaderMetadata.ImageBackdrop,
+                        HeaderMetadata.ImageLogo,
+                        HeaderMetadata.Name,
+                        HeaderMetadata.DateAdded,
+                        HeaderMetadata.ReleaseDate,
+                        HeaderMetadata.Year,
+                        HeaderMetadata.Genres,
+                        HeaderMetadata.ParentalRating,
+                        HeaderMetadata.CommunityRating,
+                        HeaderMetadata.Trailers
+                    };
+
+                case ReportIncludeItemTypes.Audio:
+                    return new List<HeaderMetadata>
+                    {
+                        HeaderMetadata.Status,
+                        HeaderMetadata.Locked,
+                        HeaderMetadata.ImagePrimary,
+                        HeaderMetadata.ImageBackdrop,
+                        HeaderMetadata.ImageLogo,
+                        HeaderMetadata.Name,
+                        HeaderMetadata.AudioAlbumArtist,
+                        HeaderMetadata.AudioAlbum,
+                        HeaderMetadata.Disc,
+                        HeaderMetadata.Track,
+                        HeaderMetadata.DateAdded,
+                        HeaderMetadata.ReleaseDate,
+                        HeaderMetadata.Year,
+                        HeaderMetadata.Genres,
+                        HeaderMetadata.ParentalRating,
+                        HeaderMetadata.CommunityRating,
+                        HeaderMetadata.Runtime,
+                        HeaderMetadata.Audio
+                    };
+
+                case ReportIncludeItemTypes.Episode:
+                    return new List<HeaderMetadata>
+                    {
+                        HeaderMetadata.Status,
+                        HeaderMetadata.Locked,
+                        HeaderMetadata.ImagePrimary,
+                        HeaderMetadata.ImageBackdrop,
+                        HeaderMetadata.ImageLogo,
+                        HeaderMetadata.Name,
+                        HeaderMetadata.EpisodeSeries,
+                        HeaderMetadata.Season,
                         HeaderMetadata.EpisodeNumber,
                         HeaderMetadata.DateAdded,
-						HeaderMetadata.ReleaseDate,
-						HeaderMetadata.Year,
-						HeaderMetadata.Genres,
-						HeaderMetadata.ParentalRating,
-						HeaderMetadata.CommunityRating,
-						HeaderMetadata.Runtime,
-						HeaderMetadata.Video,
-						HeaderMetadata.Resolution,
-						HeaderMetadata.Audio,
-						HeaderMetadata.Subtitles,
-						HeaderMetadata.Trailers,
-						HeaderMetadata.Specials
-					};
+                        HeaderMetadata.ReleaseDate,
+                        HeaderMetadata.Year,
+                        HeaderMetadata.Genres,
+                        HeaderMetadata.ParentalRating,
+                        HeaderMetadata.CommunityRating,
+                        HeaderMetadata.Runtime,
+                        HeaderMetadata.Video,
+                        HeaderMetadata.Resolution,
+                        HeaderMetadata.Audio,
+                        HeaderMetadata.Subtitles,
+                        HeaderMetadata.Trailers,
+                        HeaderMetadata.Specials
+                    };
 
                 case ReportIncludeItemTypes.Video:
                 case ReportIncludeItemTypes.MusicVideo:
@@ -296,7 +296,7 @@ namespace EmbyReports.Api.Data
                 case ReportIncludeItemTypes.BaseItem:
                 default:
                     return new List<HeaderMetadata>
-					{
+                    {
                         HeaderMetadata.Status,
                         HeaderMetadata.Locked,
                         HeaderMetadata.ImagePrimary,
@@ -305,21 +305,21 @@ namespace EmbyReports.Api.Data
                         HeaderMetadata.ImagePrimary,
                         HeaderMetadata.ImageBackdrop,
                         HeaderMetadata.ImageLogo,
-						HeaderMetadata.Name,
-						HeaderMetadata.DateAdded,
-						HeaderMetadata.ReleaseDate,
-						HeaderMetadata.Year,
-						HeaderMetadata.Genres,
-						HeaderMetadata.ParentalRating,
-						HeaderMetadata.CommunityRating,
-						HeaderMetadata.Runtime,
-						HeaderMetadata.Video,
-						HeaderMetadata.Resolution,
-						HeaderMetadata.Audio,
-						HeaderMetadata.Subtitles,
-						HeaderMetadata.Trailers,
-						HeaderMetadata.Specials
-					};
+                        HeaderMetadata.Name,
+                        HeaderMetadata.DateAdded,
+                        HeaderMetadata.ReleaseDate,
+                        HeaderMetadata.Year,
+                        HeaderMetadata.Genres,
+                        HeaderMetadata.ParentalRating,
+                        HeaderMetadata.CommunityRating,
+                        HeaderMetadata.Runtime,
+                        HeaderMetadata.Video,
+                        HeaderMetadata.Resolution,
+                        HeaderMetadata.Audio,
+                        HeaderMetadata.Subtitles,
+                        HeaderMetadata.Trailers,
+                        HeaderMetadata.Specials
+                    };
 
             }
 
@@ -604,18 +604,16 @@ namespace EmbyReports.Api.Data
         /// <returns> The row. </returns>
         private ReportRow GetRow(BaseItem item)
         {
-            var hasTrailers = item as IHasTrailers;
-            var hasSpecialFeatures = item as IHasSpecialFeatures;
             var video = item as Video;
             ReportRow rRow = new ReportRow
             {
                 Id = item.Id.ToString("N"),
                 HasLockData = item.IsLocked,
-                HasLocalTrailer = hasTrailers != null ? hasTrailers.GetTrailerIds().Count() > 0 : false,
+                HasLocalTrailer = item.GetExtras(new[] { ExtraType.Trailer }).Any(),
                 HasImageTagsPrimary = item.ImageInfos != null && item.ImageInfos.Count(n => n.Type == ImageType.Primary) > 0,
                 HasImageTagsBackdrop = item.ImageInfos != null && item.ImageInfos.Count(n => n.Type == ImageType.Backdrop) > 0,
                 HasImageTagsLogo = item.ImageInfos != null && item.ImageInfos.Count(n => n.Type == ImageType.Logo) > 0,
-                HasSpecials = hasSpecialFeatures != null ? hasSpecialFeatures.SpecialFeatureIds.Length > 0 : false,
+                HasSpecials = item.GetDisplayExtras().Any(),
                 HasSubtitles = video != null ? video.HasSubtitles : false,
                 RowType = ReportHelper.GetRowType(item.GetClientTypeName())
             };
