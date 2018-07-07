@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-<PropertyGroup> <TargetFrameworks>netstandard2.0;</TargetFrameworks> <AssemblyVersion>1.0.13.0</AssemblyVersion> <FileVersion>1.0.13.0</FileVersion> </PropertyGroup>
+<PropertyGroup> <TargetFrameworks>netstandard2.0;</TargetFrameworks> <AssemblyVersion>1.0.14.0</AssemblyVersion> <FileVersion>1.0.14.0</FileVersion> </PropertyGroup>
 
 <ItemGroup>
   <None Remove="Web\reports.html" />
