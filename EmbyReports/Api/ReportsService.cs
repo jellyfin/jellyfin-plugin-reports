@@ -54,8 +54,6 @@ namespace EmbyReports.Api
 
         private readonly ILocalizationManager _localization;    ///< The localization
 
-        private readonly IActivityRepository _repo;
-
         /// <summary> Manager for user. </summary>
         private readonly IUserManager _userManager; ///< Manager for user
 
