@@ -6,6 +6,7 @@ using MediaBrowser.Controller.Library;
 using EmbyReports.Api.Common;
 using EmbyReports.Api.Data;
 using EmbyReports.Api.Model;
+using System;
 
 namespace EmbyReports.Api.Activities
 {
@@ -166,7 +167,7 @@ namespace EmbyReports.Api.Activities
                     option.Header.CanGroup = false;
                     option.Column = (i, r) =>
                     {
-                        if (!string.IsNullOrEmpty(i.UserId))
+                        if (!i.UserId.Equals(Guid.Empty))
                         {
                             MediaBrowser.Controller.Entities.User user = _userManager.GetUserById(i.UserId);
                             if (user != null)
@@ -190,7 +191,7 @@ namespace EmbyReports.Api.Activities
                 case HeaderMetadata.User:
                     option.Column = (i, r) =>
                     {
-                        if (!string.IsNullOrEmpty(i.UserId))
+                        if (!i.UserId.Equals(Guid.Empty))
                         {
                             MediaBrowser.Controller.Entities.User user = _userManager.GetUserById(i.UserId);
                             if (user != null)

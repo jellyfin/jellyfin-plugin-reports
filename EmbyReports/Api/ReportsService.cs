@@ -33,13 +33,12 @@ namespace EmbyReports.Api
         /// <param name="libraryManager"> Manager for library. </param>
         /// <param name="localization"> The localization. </param>
         /// <param name="activityManager"> Manager for activity. </param>
-        public ReportsService(IUserManager userManager, ILibraryManager libraryManager, ILocalizationManager localization, IActivityManager activityManager, IActivityRepository repo, IHttpResultFactory resultFactory)
+        public ReportsService(IUserManager userManager, ILibraryManager libraryManager, ILocalizationManager localization, IActivityManager activityManager, IHttpResultFactory resultFactory)
         {
             _userManager = userManager;
             _libraryManager = libraryManager;
             _localization = localization;
             _activityManager = activityManager;
-            _repo = repo;
             _resultFactory = resultFactory;
         }
 
@@ -410,9 +409,9 @@ namespace EmbyReports.Api
 
             QueryResult<ActivityLogEntry> queryResult;
             if (request.HasQueryLimit)
-                queryResult = _repo.GetActivityLogEntries(minDate, request.StartIndex, request.Limit);
+                queryResult = _activityManager.GetActivityLogEntries(minDate, request.StartIndex, request.Limit);
             else
-                queryResult = _repo.GetActivityLogEntries(minDate, request.StartIndex, null);
+                queryResult = _activityManager.GetActivityLogEntries(minDate, request.StartIndex, null);
             //var queryResult = _activityManager.GetActivityLogEntries(minDate, request.StartIndex, request.Limit);
 
             ReportActivitiesBuilder builder = new ReportActivitiesBuilder(_libraryManager, _userManager);
