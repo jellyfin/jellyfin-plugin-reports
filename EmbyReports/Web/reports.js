@@ -1,8 +1,11 @@
 ﻿define(['jQuery', 'libraryBrowser', 'loading', 'appRouter', 'fnchecked', 'emby-linkbutton', 'paper-icon-button-light', 'detailtablecss'], function ($, libraryBrowser, loading, appRouter) {
     'use strict';
 
-    if (!jQuery.mobile) {
-        jQuery.mobile = {};
+    if (!jQuery.mobile || !$.mobile.widgets) {
+
+        if (!jQuery.mobile) {
+            jQuery.mobile = {};
+        }
 
         (function ($, window, undefined) {
 
@@ -1266,22 +1269,22 @@
                 break;
             case "EmbeddedImage":
                 if (rRow.HasEmbeddedImage) {
-                    html += '<div class="libraryReportIndicator clearLibraryReportIndicator"><div class="ui-icon-check ui-btn-icon-notext"></div></div>';
+                    html += '<i class="md-icon">check</i>';
                 }
                 break;
             case "SubtitleImage":
                 if (rRow.HasSubtitles) {
-                    html += '<div class="libraryReportIndicator clearLibraryReportIndicator"><div class="ui-icon-check ui-btn-icon-notext"></div></div>';
+                    html += '<i class="md-icon">check</i>';
                 }
                 break;
             case "TrailersImage":
                 if (rRow.HasLocalTrailer) {
-                    html += '<div class="libraryReportIndicator clearLibraryReportIndicator"><div class="ui-icon-check ui-btn-icon-notext"></div></div>';
+                    html += '<i class="md-icon">check</i>';
                 }
                 break;
             case "SpecialsImage":
                 if (rRow.HasSpecials) {
-                    html += '<div class="libraryReportIndicator clearLibraryReportIndicator"><div class="ui-icon-check ui-btn-icon-notext"></div></div>';
+                    html += '<i class="md-icon" title="Missing primary image." style="color:red;">photo</i>';
                 }
                 break;
             case "LockDataImage":
@@ -1291,20 +1294,20 @@
                 break;
             case "TagsPrimaryImage":
                 if (!rRow.HasImageTagsPrimary) {
-                    html += '<a is="emby-linkbutton" class="button-link" href="edititemmetadata.html?id=' + rRow.Id + '"><img src="css/images/editor/missingprimaryimage.png" title="Missing primary image." style="width:18px"/></a>';
+                    html += '<a is="emby-linkbutton" class="button-link" href="edititemmetadata.html?id=' + rRow.Id + '"><i class="md-icon" title="Missing primary image." style="color:red;">photo</i></a>';
                 }
                 break;
             case "TagsBackdropImage":
                 if (!rRow.HasImageTagsBackdrop) {
                     if (rRow.RowType !== "Episode" && rRow.RowType !== "Season" && rRow.MediaType !== "Audio" && rRow.RowType !== "TvChannel" && rRow.RowType !== "MusicAlbum") {
-                        html += '<a is="emby-linkbutton" class="button-link" href="edititemmetadata.html?id=' + rRow.Id + '"><img src="css/images/editor/missingbackdrop.png" title="Missing backdrop image." style="width:18px"/></a>';
+                        html += '<a is="emby-linkbutton" class="button-link" href="edititemmetadata.html?id=' + rRow.Id + '"><i class="md-icon" title="Missing backdrop image." style="color:orange;">photo</i></a>';
                     }
                 }
                 break;
             case "TagsLogoImage":
                 if (!rRow.HasImageTagsLogo) {
                     if (rRow.RowType === "Movie" || rRow.RowType === "Trailer" || rRow.RowType === "Series" || rRow.RowType === "MusicArtist" || rRow.RowType === "BoxSet") {
-                        html += '<a is="emby-linkbutton" class="button-link" href="edititemmetadata.html?id=' + rRow.Id + '"><img src="css/images/editor/missinglogo.png" title="Missing logo image." style="width:18px"/></a>';
+                        html += '<a is="emby-linkbutton" class="button-link" href="edititemmetadata.html?id=' + rRow.Id + '"><i class="md-icon" title="Missing logo image.">photo</i></a>';
                     }
                 }
                 break;
@@ -1332,18 +1335,18 @@
                 }
 
                 if (!rRow.HasImageTagsPrimary) {
-                    html += '<img src="css/images/editor/missingprimaryimage.png" title="Missing primary image." style="width:18px"/>';
+                    html += '<i class="md-icon" title="Missing primary image." style="color:red;">photo</i>';
                 }
 
                 if (!rRow.HasImageTagsBackdrop) {
                     if (rRow.RowType !== "Episode" && rRow.RowType !== "Season" && rRow.MediaType !== "Audio" && rRow.RowType !== "TvChannel" && rRow.RowType !== "MusicAlbum") {
-                        html += '<img src="css/images/editor/missingbackdrop.png" title="Missing backdrop image." style="width:18px"/>';
+                        html += '<i class="md-icon" title="Missing backdrop image." style="color:orange;">photo</i>';
                     }
                 }
 
                 if (!rRow.HasImageTagsLogo) {
                     if (rRow.RowType === "Movie" || rRow.RowType === "Trailer" || rRow.RowType === "Series" || rRow.RowType === "MusicArtist" || rRow.RowType === "BoxSet") {
-                        html += '<img src="css/images/editor/missinglogo.png" title="Missing logo image." style="width:18px"/>';
+                        html += '<i class="md-icon" title="Missing logo image.">photo</i>';
                     }
                 }
                 break;
