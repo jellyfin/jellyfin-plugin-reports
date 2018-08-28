@@ -15,6 +15,7 @@ using EmbyReports.Api.Model;
 using EmbyReports.Api.Activities;
 using MediaBrowser.Model.Services;
 using MediaBrowser.Controller.Net;
+using MediaBrowser.Controller.Dto;
 
 namespace EmbyReports.Api
 {
@@ -149,7 +150,7 @@ namespace EmbyReports.Api
                 case ReportViewType.ReportData:
                     ReportIncludeItemTypes reportRowType = ReportHelper.GetRowType(request.IncludeItemTypes);
                     ReportBuilder dataBuilder = new ReportBuilder(_libraryManager);
-                    QueryResult<BaseItem> queryResult = GetQueryResult(request, user);
+                    QueryResult<BaseItem> queryResult = GetQueryResult(request, new DtoOptions(), user);
                     result = dataBuilder.GetResult(queryResult.Items, request);
                     result.TotalRecordCount = queryResult.TotalRecordCount;
                     break;
@@ -174,7 +175,7 @@ namespace EmbyReports.Api
 
         #endregion
 
-        private InternalItemsQuery GetItemsQuery(BaseReportRequest request, User user)
+        private InternalItemsQuery GetItemsQuery(BaseReportRequest request, DtoOptions dtoOptions, User user)
         {
             var query = new InternalItemsQuery(user)
             {
@@ -184,6 +185,8 @@ namespace EmbyReports.Api
                 ExcludeItemTypes = request.GetExcludeItemTypes(),
                 Recursive = request.Recursive,
                 OrderBy = request.GetOrderBy(),
+
+                IsFavorite = request.IsFavorite,
                 Limit = request.Limit,
                 StartIndex = request.StartIndex,
                 IsMissing = request.IsMissing,
@@ -193,60 +196,59 @@ namespace EmbyReports.Api
                 NameStartsWith = request.NameStartsWith,
                 NameStartsWithOrGreater = request.NameStartsWithOrGreater,
                 HasImdbId = request.HasImdbId,
-                IsPlaceHolder = request.IsPlaceHolder,
                 IsLocked = request.IsLocked,
-                IsHD = request.IsHD,
+                MinWidth = request.MinWidth,
+                MinHeight = request.MinHeight,
+                MaxWidth = request.MaxWidth,
+                MaxHeight = request.MaxHeight,
                 Is3D = request.Is3D,
                 HasTvdbId = request.HasTvdbId,
                 HasTmdbId = request.HasTmdbId,
                 HasOverview = request.HasOverview,
                 HasOfficialRating = request.HasOfficialRating,
                 HasParentalRating = request.HasParentalRating,
-                HasSpecialFeature = request.HasSpecialFeature,
+                HasExtra = request.HasSpecialFeature,
                 HasSubtitles = request.HasSubtitles,
                 HasThemeSong = request.HasThemeSong,
                 HasThemeVideo = request.HasThemeVideo,
                 HasTrailer = request.HasTrailer,
+                IsHD = request.IsHD,
+                Is4K = request.Is4K,
                 Tags = request.GetTags(),
                 OfficialRatings = request.GetOfficialRatings(),
                 Genres = request.GetGenres(),
-                GenreIds = request.GetGenreIds(),
-                StudioIds = request.GetStudioIds(),
-                Person = request.Person,
-                PersonIds = request.GetPersonIds(),
+                ArtistIds = ParseIds(request.ArtistIds, _libraryManager),
+                AlbumArtistIds = ParseIds(request.AlbumArtistIds, _libraryManager),
+                ContributingArtistIds = ParseIds(request.ContributingArtistIds, _libraryManager),
+                GenreIds = ParseIds(request.GenreIds, _libraryManager),
+                StudioIds = ParseIds(request.StudioIds, _libraryManager),
+                PersonIds = ParseIds(request.PersonIds, _libraryManager),
                 PersonTypes = request.GetPersonTypes(),
                 Years = request.GetYears(),
-                ImageTypes = request.GetImageTypes().ToArray(),
-                VideoTypes = request.GetVideoTypes().ToArray(),
+                ImageTypes = request.GetImageTypes(),
+                Containers = request.GetContainers(),
                 AdjacentTo = request.AdjacentTo,
-                ItemIds = request.GetItemIds(),
+                ItemIds = ParseIds(request.Ids, _libraryManager),
                 MinPlayers = request.MinPlayers,
                 MaxPlayers = request.MaxPlayers,
                 MinCommunityRating = request.MinCommunityRating,
                 MinCriticRating = request.MinCriticRating,
-                ParentId = string.IsNullOrWhiteSpace(request.ParentId) ? Guid.Empty : new Guid(request.ParentId),
+                ParentIds = ParseIds(request.ParentId, _libraryManager),
                 ParentIndexNumber = request.ParentIndexNumber,
-                EnableTotalRecordCount = request.EnableTotalRecordCount
+                EnableTotalRecordCount = request.EnableTotalRecordCount,
+                ExcludeItemIds = ParseIds(request.ExcludeItemIds, _libraryManager),
+                DtoOptions = dtoOptions,
+                SearchTerm = request.SearchTerm,
+                IsMovie = request.IsMovie,
+                IsSports = request.IsSports,
+                IsKids = request.IsKids,
+                IsNews = request.IsNews,
+                IsSeries = request.IsSeries
             };
 
-            if (request.Limit == -1)
-            {
-                query.Limit = null;
-            }
-
-            if (!string.IsNullOrWhiteSpace(request.Ids))
+            if (!string.IsNullOrWhiteSpace(request.Ids) || !string.IsNullOrWhiteSpace(request.SearchTerm))
             {
                 query.CollapseBoxSetItems = false;
-            }
-
-            query.IsFavorite = null;
-            if(request.IsFavorite == true)
-            {
-                query.IsFavorite = true;
-            }
-            else if (request.IsNotFavorite == true)
-            {
-                query.IsFavorite = false;
             }
 
             foreach (var filter in request.GetFilters())
@@ -256,8 +258,11 @@ namespace EmbyReports.Api
                     case ItemFilter.Dislikes:
                         query.IsLiked = false;
                         break;
+                    case ItemFilter.IsFavorite:
+                        query.IsFavorite = true;
+                        break;
                     case ItemFilter.IsFavoriteOrLikes:
-                        query.IsFavoriteOrLiked = true;
+                        query.IsFavorite = true;
                         break;
                     case ItemFilter.IsFolder:
                         query.IsFolder = true;
@@ -278,6 +283,16 @@ namespace EmbyReports.Api
                         query.IsLiked = true;
                         break;
                 }
+            }
+
+            if (!string.IsNullOrEmpty(request.MinDateLastSaved))
+            {
+                query.MinDateLastSaved = DateTime.Parse(request.MinDateLastSaved, null, DateTimeStyles.RoundtripKind).ToUniversalTime();
+            }
+
+            if (!string.IsNullOrEmpty(request.MinDateLastSavedForUser))
+            {
+                query.MinDateLastSavedForUser = DateTime.Parse(request.MinDateLastSavedForUser, null, DateTimeStyles.RoundtripKind).ToUniversalTime();
             }
 
             if (!string.IsNullOrEmpty(request.MinPremiereDate))
@@ -306,6 +321,17 @@ namespace EmbyReports.Api
                 }
             }
 
+            if (!string.IsNullOrEmpty(request.LocationTypes))
+            {
+                var requestedLocationTypes =
+                    request.LocationTypes.Split(',');
+
+                if (requestedLocationTypes.Length > 0 && requestedLocationTypes.Length < 4)
+                {
+                    query.IsVirtualItem = requestedLocationTypes.Contains(LocationType.Virtual.ToString());
+                }
+            }
+
             // Min official rating
             if (!string.IsNullOrWhiteSpace(request.MinOfficialRating))
             {
@@ -318,27 +344,45 @@ namespace EmbyReports.Api
                 query.MaxParentalRating = _localization.GetRatingLevel(request.MaxOfficialRating);
             }
 
-            query.CollapseBoxSetItems = false;
+            // ExcludeArtistIds
+            if (!string.IsNullOrWhiteSpace(request.ExcludeArtistIds))
+            {
+                query.ExcludeArtistIds = ParseIds(request.ExcludeArtistIds, _libraryManager);
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.AlbumIds))
+            {
+                query.AlbumIds = ParseIds(request.AlbumIds, _libraryManager);
+            }
+
+            // Apply default sorting if none requested
+            if (query.OrderBy.Length == 0)
+            {
+                // Albums by artist
+                if ((query.ArtistIds.Length > 0) && query.IncludeItemTypes.Length == 1 && string.Equals(query.IncludeItemTypes[0], "MusicAlbum", StringComparison.OrdinalIgnoreCase))
+                {
+                    query.OrderBy = new[]
+                    {
+                        new ValueTuple<string, SortOrder>(ItemSortBy.ProductionYear, SortOrder.Descending),
+                        new ValueTuple<string, SortOrder>(ItemSortBy.SortName, SortOrder.Ascending)
+                    };
+                }
+            }
 
             return query;
         }
 
-        private QueryResult<BaseItem> GetQueryResult(BaseReportRequest request, User user)
+        private QueryResult<BaseItem> GetQueryResult(BaseReportRequest request, DtoOptions dtoOptions, User user)
         {
-            // all report queries currently need this because it's not being specified
-            request.Recursive = true;
-
             var item = string.IsNullOrEmpty(request.ParentId) ?
-                user == null ? _libraryManager.RootFolder : user.RootFolder :
+                null :
                 _libraryManager.GetItemById(request.ParentId);
 
-            if (string.Equals(request.IncludeItemTypes, "Playlist", StringComparison.OrdinalIgnoreCase))
+            if (item == null)
             {
-                //item = user == null ? _libraryManager.RootFolder : user.RootFolder;
-            }
-            else if (string.Equals(request.IncludeItemTypes, "BoxSet", StringComparison.OrdinalIgnoreCase))
-            {
-                item = user == null ? _libraryManager.RootFolder : user.RootFolder;
+                item = string.IsNullOrEmpty(request.ParentId) ?
+                    user == null ? _libraryManager.RootFolder : _libraryManager.GetUserRootFolder() :
+                    _libraryManager.GetItemById(request.ParentId);
             }
 
             // Default list type = children
@@ -349,49 +393,48 @@ namespace EmbyReports.Api
                 folder = user == null ? _libraryManager.RootFolder : _libraryManager.GetUserRootFolder();
             }
 
-            if (!string.IsNullOrEmpty(request.Ids))
+            var hasCollectionType = folder as IHasCollectionType;
+            var isPlaylistQuery = (hasCollectionType != null && string.Equals(hasCollectionType.CollectionType, CollectionType.Playlists, StringComparison.OrdinalIgnoreCase));
+
+            if (isPlaylistQuery)
             {
                 request.Recursive = true;
-                var query = GetItemsQuery(request, user);
-                var result = folder.GetItems(query);
-
-                if (string.IsNullOrWhiteSpace(request.SortBy))
-                {
-                    var ids = query.ItemIds.ToList();
-
-                    // Try to preserve order
-                    result.Items = result.Items.OrderBy(i => ids.IndexOf(i.Id)).ToArray();
-                }
-
-                return result;
+                request.IncludeItemTypes = "Playlist";
             }
 
-            if (request.Recursive)
+            if (request.Recursive || !string.IsNullOrEmpty(request.Ids) || user == null)
             {
-                return folder.GetItems(GetItemsQuery(request, user));
-            }
-
-            if (user == null)
-            {
-                return folder.GetItems(GetItemsQuery(request, null));
+                return folder.GetItems(GetItemsQuery(request, dtoOptions, user));
             }
 
             var userRoot = item as UserRootFolder;
 
             if (userRoot == null)
             {
-                return folder.GetItems(GetItemsQuery(request, user));
+                return folder.GetItems(GetItemsQuery(request, dtoOptions, user));
             }
 
-            IEnumerable<BaseItem> items = folder.GetChildren(user, true);
-
-            var itemsArray = items.ToArray();
+            var itemsArray = folder.GetChildren(user).ToArray();
 
             return new QueryResult<BaseItem>
             {
                 Items = itemsArray,
                 TotalRecordCount = itemsArray.Length
             };
+        }
+
+        protected long[] ParseIds(string value, ILibraryManager libraryManager)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return Array.Empty<long>();
+            }
+
+            return value
+                .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(libraryManager.GetInternalId)
+                .Where(i => i != 0)
+                .ToArray();
         }
 
         #region [Private Methods]
@@ -424,7 +467,7 @@ namespace EmbyReports.Api
         private ReportResult GetReportResult(GetItemReport request, User user)
         {
             ReportBuilder reportBuilder = new ReportBuilder(_libraryManager);
-            QueryResult<BaseItem> queryResult = GetQueryResult(request, user);
+            QueryResult<BaseItem> queryResult = GetQueryResult(request, new DtoOptions(), user);
             ReportResult reportResult = reportBuilder.GetResult(queryResult.Items, request);
             reportResult.TotalRecordCount = queryResult.TotalRecordCount;
 

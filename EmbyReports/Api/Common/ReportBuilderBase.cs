@@ -89,27 +89,6 @@ namespace EmbyReports.Api.Common
                 return item.Name;
         }
 
-        /// <summary> Gets a genre. </summary>
-        /// <param name="name"> The name. </param>
-        /// <returns> The genre. </returns>
-        protected Genre GetGenre(string name)
-        {
-            if (string.IsNullOrEmpty(name))
-                return null;
-            return _libraryManager.GetGenre(name);
-        }
-
-        /// <summary> Gets genre identifier. </summary>
-        /// <param name="name"> The name. </param>
-        /// <returns> The genre identifier. </returns>
-        protected string GetGenreID(string name)
-        {
-            if (string.IsNullOrEmpty(name))
-                return string.Empty;
-            return string.Format("{0:N}",
-                    GetGenre(name).Id);
-        }
-
         /// <summary> Gets the headers. </summary>
         /// <typeparam name="T"> Generic type parameter. </typeparam>
         /// <param name="options"> Options for controlling the operation. </param>
@@ -199,7 +178,12 @@ namespace EmbyReports.Api.Common
         {
             if (string.IsNullOrEmpty(name))
                 return null;
-            return _libraryManager.GetPerson(name);
+            return _libraryManager.GetItemList(new InternalItemsQuery
+            {
+                Name = name,
+                IncludeItemTypes = new[] { typeof(Person).Name },
+
+            }).OfType<Person>().FirstOrDefault();
         }
 
         /// <summary> Gets person identifier. </summary>
@@ -239,7 +223,7 @@ namespace EmbyReports.Api.Common
 
                     if (this.DisplayTypeVisible(header.DisplayType, displayType))
                     {
-                       
+
                         if (!headersMetadataFiltered.Contains(header.FieldName) && displayType != ReportDisplayType.Export)
                         {
                             header.DisplayType = ReportDisplayType.None;
@@ -307,7 +291,12 @@ namespace EmbyReports.Api.Common
         {
             if (string.IsNullOrEmpty(name))
                 return null;
-            return _libraryManager.GetStudio(name);
+            return _libraryManager.GetItemList(new InternalItemsQuery
+            {
+                Name = name,
+                IncludeItemTypes = new[] { typeof(Studio).Name },
+
+            }).OfType<Studio>().FirstOrDefault();
         }
 
         /// <summary> Gets studio identifier. </summary>

@@ -61,7 +61,7 @@ namespace EmbyReports.Api
 
     }
 
-    public class BaseReportRequest : IReportsQuery
+    public abstract class BaseReportRequest : IReportsQuery
     {
         protected BaseReportRequest()
         {
@@ -112,6 +112,8 @@ namespace EmbyReports.Api
         [ApiMember(Name = "IsHD", Description = "Optional filter by items that are HD or not.", IsRequired = false, DataType = "bool", ParameterType = "query", Verb = "GET")]
         public bool? IsHD { get; set; }
 
+        public bool? Is4K { get; set; }
+
         [ApiMember(Name = "LocationTypes", Description = "Optional. If specified, results will be filtered based on LocationType. This allows multiple, comma delimeted.", IsRequired = false, DataType = "string", ParameterType = "query", Verb = "GET", AllowMultiple = true)]
         public string LocationTypes { get; set; }
 
@@ -157,9 +159,7 @@ namespace EmbyReports.Api
         [ApiMember(Name = "HasTvdbId", Description = "Optional filter by items that have a tvdb id or not.", IsRequired = false, DataType = "bool", ParameterType = "query", Verb = "GET")]
         public bool? HasTvdbId { get; set; }
 
-        [ApiMember(Name = "IsInBoxSet", Description = "Optional filter by items that are in boxsets, or not.", IsRequired = false, DataType = "bool", ParameterType = "query", Verb = "GET")]
-        public bool? IsInBoxSet { get; set; }
-
+        [ApiMember(Name = "ExcludeItemIds", Description = "Optional. If specified, results will be filtered by exxcluding item ids. This allows multiple, comma delimeted.", IsRequired = false, DataType = "string", ParameterType = "query", Verb = "GET", AllowMultiple = true)]
         public string ExcludeItemIds { get; set; }
 
         public bool EnableTotalRecordCount { get; set; }
@@ -184,6 +184,8 @@ namespace EmbyReports.Api
         /// <value><c>true</c> if recursive; otherwise, <c>false</c>.</value>
         [ApiMember(Name = "Recursive", Description = "When searching within folders, this determines whether or not the search will be recursive. true/false", IsRequired = false, DataType = "boolean", ParameterType = "query", Verb = "GET")]
         public bool Recursive { get; set; }
+
+        public string SearchTerm { get; set; }
 
         /// <summary>
         /// Gets or sets the sort order.
@@ -231,15 +233,23 @@ namespace EmbyReports.Api
         /// Gets or sets the Isfavorite option
         /// </summary>
         /// <value>IsFavorite</value>
-        [ApiMember(Name = "IsFavorite", Description = "Optional filter by items that are marked as favorite.", IsRequired = false, DataType = "bool", ParameterType = "query", Verb = "GET")]
-        public bool IsFavorite { get; set; }
+        [ApiMember(Name = "IsFavorite", Description = "Optional filter by items that are marked as favorite, or not.", IsRequired = false, DataType = "bool", ParameterType = "query", Verb = "GET")]
+        public bool? IsFavorite { get; set; }
 
-        /// <summary>
-        /// Gets or sets the IsNotFavorite option
-        /// </summary>
-        /// <value>IsFavorite</value>
-        [ApiMember(Name = "IsNotFavorite", Description = "Optional filter by items that are marked as not favorite.", IsRequired = false, DataType = "bool", ParameterType = "query", Verb = "GET")]
-        public bool IsNotFavorite { get; set; }
+        [ApiMember(Name = "IsMovie", Description = "Optional filter for movies.", IsRequired = false, DataType = "bool", ParameterType = "query", Verb = "GET,POST")]
+        public bool? IsMovie { get; set; }
+
+        [ApiMember(Name = "IsSeries", Description = "Optional filter for movies.", IsRequired = false, DataType = "bool", ParameterType = "query", Verb = "GET,POST")]
+        public bool? IsSeries { get; set; }
+
+        [ApiMember(Name = "IsNews", Description = "Optional filter for news.", IsRequired = false, DataType = "bool", ParameterType = "query", Verb = "GET,POST")]
+        public bool? IsNews { get; set; }
+
+        [ApiMember(Name = "IsKids", Description = "Optional filter for kids.", IsRequired = false, DataType = "bool", ParameterType = "query", Verb = "GET,POST")]
+        public bool? IsKids { get; set; }
+
+        [ApiMember(Name = "IsSports", Description = "Optional filter for sports.", IsRequired = false, DataType = "bool", ParameterType = "query", Verb = "GET,POST")]
+        public bool? IsSports { get; set; }
 
         /// <summary>
         /// Gets or sets the media types.
@@ -338,6 +348,10 @@ namespace EmbyReports.Api
         [ApiMember(Name = "ArtistIds", Description = "Optional. If specified, results will be filtered based on artist. This allows multiple, pipe delimeted.", IsRequired = false, DataType = "string", ParameterType = "query", Verb = "GET", AllowMultiple = true)]
         public string ArtistIds { get; set; }
 
+        public string AlbumArtistIds { get; set; }
+
+        public string ContributingArtistIds { get; set; }
+
         [ApiMember(Name = "Albums", Description = "Optional. If specified, results will be filtered based on album. This allows multiple, pipe delimeted.", IsRequired = false, DataType = "string", ParameterType = "query", Verb = "GET", AllowMultiple = true)]
         public string Albums { get; set; }
 
@@ -357,11 +371,14 @@ namespace EmbyReports.Api
         [ApiMember(Name = "VideoTypes", Description = "Optional filter by VideoType (videofile, dvd, bluray, iso). Allows multiple, comma delimeted.", IsRequired = false, DataType = "string", ParameterType = "query", Verb = "GET", AllowMultiple = true)]
         public string VideoTypes { get; set; }
 
+        [ApiMember(Name = "Containers", Description = "Optional filter by Container. Allows multiple, comma delimeted.", IsRequired = false, DataType = "string", ParameterType = "query", Verb = "GET", AllowMultiple = true)]
+        public string Containers { get; set; }
+
         /// <summary>
         /// Gets or sets the user id.
         /// </summary>
         /// <value>The user id.</value>
-        [ApiMember(Name = "UserId", Description = "User Id", IsRequired = false, DataType = "string", ParameterType = "path", Verb = "GET")]
+        [ApiMember(Name = "UserId", Description = "User Id", IsRequired = false, DataType = "string", ParameterType = "query", Verb = "GET")]
         public string UserId { get; set; }
 
         /// <summary>
@@ -382,6 +399,12 @@ namespace EmbyReports.Api
 
         [ApiMember(Name = "CollapseBoxSetItems", Description = "Whether or not to hide items behind their boxsets.", IsRequired = false, DataType = "bool", ParameterType = "query", Verb = "GET")]
         public bool? CollapseBoxSetItems { get; set; }
+
+        public int? MinWidth { get; set; }
+        public int? MinHeight { get; set; }
+        public int? MaxWidth { get; set; }
+        public int? MaxHeight { get; set; }
+
         /// <summary>
         /// Gets or sets the video formats.
         /// </summary>
@@ -430,11 +453,6 @@ namespace EmbyReports.Api
             return (IncludeItemTypes ?? string.Empty).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
-        public string[] GetExcludeItemIds()
-        {
-            return (ExcludeItemIds ?? string.Empty).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-        }
-
         public string[] GetExcludeItemTypes()
         {
             return (ExcludeItemTypes ?? string.Empty).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
@@ -445,56 +463,38 @@ namespace EmbyReports.Api
             return (Years ?? string.Empty).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
         }
 
-        public Guid[] GetGuids(string value)
-        {
-            return (value ?? string.Empty).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(i => new Guid(i)).ToArray();
-        }
-
         public string[] GetStudios()
         {
             return (Studios ?? string.Empty).Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
-        public Guid[] GetArtistIds()
+        public PersonType[] GetPersonTypes()
         {
-            return GetGuids(ArtistIds);
-        }
-
-        public Guid[] GetStudioIds()
-        {
-            return GetGuids(StudioIds);
-        }
-
-        public Guid[] GetGenreIds()
-        {
-            return GetGuids(GenreIds);
-        }
-
-        public string[] GetPersonTypes()
-        {
-            return (PersonTypes ?? string.Empty).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-        }
-
-        public Guid[] GetPersonIds()
-        {
-            return GetGuids(PersonIds);
-        }
-
-        public Guid[] GetItemIds()
-        {
-            return GetGuids(Ids);
-        }
-
-        public VideoType[] GetVideoTypes()
-        {
-            var val = VideoTypes;
+            var val = PersonTypes;
 
             if (string.IsNullOrEmpty(val))
             {
-                return new VideoType[] { };
+                return new PersonType[] { };
             }
 
-            return val.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(v => (VideoType)Enum.Parse(typeof(VideoType), v, true)).ToArray();
+            return val.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(v => (PersonType)Enum.Parse(typeof(PersonType), v, true)).ToArray();
+        }
+
+        public string[] GetContainers()
+        {
+            var val = Containers;
+
+            if (string.IsNullOrEmpty(val))
+            {
+                val = VideoTypes;
+            }
+
+            if (string.IsNullOrEmpty(val))
+            {
+                return Array.Empty<string>();
+            }
+
+            return val.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
         /// <summary>
@@ -544,7 +544,7 @@ namespace EmbyReports.Api
 
             if (string.IsNullOrEmpty(val))
             {
-                return new ValueTuple<string, MediaBrowser.Model.Entities.SortOrder>[] { };
+                return Array.Empty<ValueTuple<string, MediaBrowser.Model.Entities.SortOrder>>();
             }
 
             var vals = val.Split(',');
@@ -598,11 +598,9 @@ namespace EmbyReports.Api
         /// <value> The report columns. </value>
         [ApiMember(Name = "ReportColumns", Description = "Optional. The columns to show.", IsRequired = false, DataType = "string", ParameterType = "query", Verb = "GET")]
         public string ReportColumns { get; set; }
-
-     
     }
 
-	[Route("/Reports/Items", "GET", Summary = "Gets reports based on library items")]
+    [Route("/Reports/Items", "GET", Summary = "Gets reports based on library items")]
 	public class GetItemReport : BaseReportRequest, IReturn<ReportResult>
 	{
 
