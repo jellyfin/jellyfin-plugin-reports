@@ -67,6 +67,7 @@ namespace EmbyReports.Api
         {
             EnableImages = true;
             EnableTotalRecordCount = true;
+            Recursive = true;
         }
 
         /// <summary>
