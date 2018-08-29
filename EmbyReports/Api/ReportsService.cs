@@ -195,15 +195,12 @@ namespace EmbyReports.Api
                 NameLessThan = request.NameLessThan,
                 NameStartsWith = request.NameStartsWith,
                 NameStartsWithOrGreater = request.NameStartsWithOrGreater,
-                HasImdbId = request.HasImdbId,
                 IsLocked = request.IsLocked,
                 MinWidth = request.MinWidth,
                 MinHeight = request.MinHeight,
                 MaxWidth = request.MaxWidth,
                 MaxHeight = request.MaxHeight,
                 Is3D = request.Is3D,
-                HasTvdbId = request.HasTvdbId,
-                HasTmdbId = request.HasTmdbId,
                 HasOverview = request.HasOverview,
                 HasOfficialRating = request.HasOfficialRating,
                 HasParentalRating = request.HasParentalRating,
@@ -245,6 +242,48 @@ namespace EmbyReports.Api
                 IsNews = request.IsNews,
                 IsSeries = request.IsSeries
             };
+
+            var hasAnyProviderId = new List<string>();
+            var missingAnyProviderId = new List<string>();
+
+            if (request.HasImdbId.HasValue)
+            {
+                if (request.HasImdbId.Value)
+                {
+                    hasAnyProviderId.Add(MetadataProviders.Imdb.ToString());
+                }
+                else
+                {
+                    missingAnyProviderId.Add(MetadataProviders.Imdb.ToString());
+                }
+            }
+
+            if (request.HasTvdbId.HasValue)
+            {
+                if (request.HasTvdbId.Value)
+                {
+                    hasAnyProviderId.Add(MetadataProviders.Tvdb.ToString());
+                }
+                else
+                {
+                    missingAnyProviderId.Add(MetadataProviders.Tvdb.ToString());
+                }
+            }
+
+            if (request.HasTmdbId.HasValue)
+            {
+                if (request.HasTmdbId.Value)
+                {
+                    hasAnyProviderId.Add(MetadataProviders.Tmdb.ToString());
+                }
+                else
+                {
+                    missingAnyProviderId.Add(MetadataProviders.Tmdb.ToString());
+                }
+            }
+
+            query.HasAnyProviderId = hasAnyProviderId.ToArray();
+            query.MissingAnyProviderId = missingAnyProviderId.ToArray();
 
             if (!string.IsNullOrWhiteSpace(request.Ids) || !string.IsNullOrWhiteSpace(request.SearchTerm))
             {
