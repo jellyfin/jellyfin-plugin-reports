@@ -191,7 +191,6 @@ namespace EmbyReports.Api
                 StartIndex = request.StartIndex,
                 IsMissing = request.IsMissing,
                 IsUnaired = request.IsUnaired,
-                CollapseBoxSetItems = request.CollapseBoxSetItems,
                 NameLessThan = request.NameLessThan,
                 NameStartsWith = request.NameStartsWith,
                 NameStartsWithOrGreater = request.NameStartsWithOrGreater,
@@ -284,11 +283,6 @@ namespace EmbyReports.Api
 
             query.HasAnyProviderId = hasAnyProviderId.ToArray();
             query.MissingAnyProviderId = missingAnyProviderId.ToArray();
-
-            if (!string.IsNullOrWhiteSpace(request.Ids) || !string.IsNullOrWhiteSpace(request.SearchTerm))
-            {
-                query.CollapseBoxSetItems = false;
-            }
 
             foreach (var filter in request.GetFilters())
             {

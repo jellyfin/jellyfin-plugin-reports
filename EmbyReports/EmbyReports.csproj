@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-<PropertyGroup> <TargetFrameworks>netstandard2.0;</TargetFrameworks> <AssemblyVersion>1.0.19.0</AssemblyVersion> <FileVersion>1.0.19.0</FileVersion> </PropertyGroup>
+<PropertyGroup> <TargetFrameworks>netstandard2.0;</TargetFrameworks> <AssemblyVersion>1.0.20.0</AssemblyVersion> <FileVersion>1.0.20.0</FileVersion> </PropertyGroup>
 
 <ItemGroup>
   <None Remove="thumb.jpg" />
