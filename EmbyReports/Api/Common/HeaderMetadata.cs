@@ -19,7 +19,6 @@ namespace EmbyReports.Api.Common
 		Trailers,
 		Specials,
 		GameSystem,
-		Players,
 		AlbumArtist,
 		Album,
 		Disc,

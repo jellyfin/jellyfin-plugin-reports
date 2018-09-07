@@ -175,7 +175,6 @@ namespace EmbyReports.Api.Data
                         HeaderMetadata.ReleaseDate,
                         HeaderMetadata.ParentalRating,
                         HeaderMetadata.CommunityRating,
-                        HeaderMetadata.Players,
                         HeaderMetadata.Year,
                         HeaderMetadata.Genres,
                         HeaderMetadata.Trailers
@@ -492,13 +491,8 @@ namespace EmbyReports.Api.Data
                     break;
 
                 case HeaderMetadata.GameSystem:
-                    option.Column = (i, r) => this.GetObject<Game, string>(i, (x) => x.GameSystem);
+                    option.Column = (i, r) => this.GetObject<Game, string>(i, (x) => x.Album);
                     option.Header.SortField = "GameSystem,SortName";
-                    break;
-
-                case HeaderMetadata.Players:
-                    option.Column = (i, r) => this.GetObject<Game, int?>(i, (x) => x.PlayersSupported);
-                    option.Header.SortField = "Players,GameSystem,SortName";
                     break;
 
                 case HeaderMetadata.AlbumArtist:
