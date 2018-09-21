@@ -167,7 +167,7 @@ namespace EmbyReports.Api.Activities
                     option.Header.CanGroup = false;
                     option.Column = (i, r) =>
                     {
-                        if (!i.UserId.Equals(Guid.Empty))
+                        if (!string.IsNullOrEmpty(i.UserId))
                         {
                             MediaBrowser.Controller.Entities.User user = _userManager.GetUserById(i.UserId);
                             if (user != null)
@@ -191,7 +191,7 @@ namespace EmbyReports.Api.Activities
                 case HeaderMetadata.User:
                     option.Column = (i, r) =>
                     {
-                        if (!i.UserId.Equals(Guid.Empty))
+                        if (!string.IsNullOrEmpty(i.UserId))
                         {
                             MediaBrowser.Controller.Entities.User user = _userManager.GetUserById(i.UserId);
                             if (user != null)
