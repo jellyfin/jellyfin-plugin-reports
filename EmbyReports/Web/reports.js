@@ -1,4 +1,4 @@
-﻿define(['jQuery', 'libraryBrowser', 'loading', 'appRouter', 'fnchecked', 'emby-linkbutton', 'paper-icon-button-light', 'detailtablecss'], function ($, libraryBrowser, loading, appRouter) {
+﻿define(['jQuery', 'loading', 'appRouter', 'fnchecked', 'emby-linkbutton', 'paper-icon-button-light', 'detailtablecss'], function ($, loading, appRouter) {
     'use strict';
 
     if (!jQuery.mobile || !$.mobile.widgets) {
@@ -1211,7 +1211,7 @@
             result.Groups.map(function (group) {
                 html += '<tr style="background-color: rgb(51, 51, 51); color: rgba(255,255,255,.87);">';
                 html += '<th class="detailTableHeaderCell" scope="rowgroup" colspan="' + result.Headers.length + '">';
-                html += '<a class="lnkShowHideRows" data-group_id="' + row_count + '" data-group_state="' + current_state + '" style="cursor: pointer;">' +  current_pointer + '</a> ';
+                html += '<a class="lnkShowHideRows" data-group_id="' + row_count + '" data-group_state="' + current_state + '" style="cursor: pointer;">' + current_pointer + '</a> ';
                 html += (group.Name || '&nbsp;') + ' : ' + group.Rows.length;
                 html += '</th>';
                 html += '</tr>';
@@ -1395,6 +1395,40 @@
         });
     }
 
+    function getQueryPagingHtml(options) {
+        var startIndex = options.startIndex;
+        var limit = options.limit;
+        var totalRecordCount = options.totalRecordCount;
+
+        var html = '';
+
+        var recordsEnd = Math.min(startIndex + limit, totalRecordCount);
+
+        var showControls = limit < totalRecordCount;
+
+        html += '<div class="listPaging">';
+
+        if (showControls) {
+            html += '<span style="vertical-align:middle;">';
+
+            var startAtDisplay = totalRecordCount ? startIndex + 1 : 0;
+            html += startAtDisplay + '-' + recordsEnd + ' of ' + totalRecordCount;
+
+            html += '</span>';
+
+            html += '<div style="display:inline-block;">';
+
+            html += '<button is="paper-icon-button-light" class="btnPreviousPage autoSize" ' + (startIndex ? '' : 'disabled') + '><i class="md-icon">&#xE5C4;</i></button>';
+            html += '<button is="paper-icon-button-light" class="btnNextPage autoSize" ' + (startIndex + limit >= totalRecordCount ? 'disabled' : '') + '><i class="md-icon">&#xE5C8;</i></button>';
+
+            html += '</div>';
+        }
+
+        html += '</div>';
+
+        return html;
+    }
+
     function renderItems(page, result) {
 
         window.scrollTo(0, 0);
@@ -1412,7 +1446,7 @@
 
         var pagingHtml = "Total : " + result.TotalRecordCount;
         if (query.Limit != -1) {
-            pagingHtml = libraryBrowser.getQueryPagingHtml({
+            pagingHtml = getQueryPagingHtml({
                 startIndex: query.StartIndex,
                 limit: query.Limit,
                 totalRecordCount: result.TotalRecordCount,
@@ -1668,7 +1702,7 @@
                 value = filter.FieldName;
                 checked = filter.Visible;
             }
-            
+
             itemHtml += '<input id="' + id + '" type="checkbox" data-filter="' + value + '" class="' + cssClass + '"';
             if (checked)
                 itemHtml += ' checked="checked" ';
