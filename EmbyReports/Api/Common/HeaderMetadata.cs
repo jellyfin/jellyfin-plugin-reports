@@ -3,6 +3,7 @@ namespace EmbyReports.Api.Common
     public enum HeaderMetadata
 	{
 		None,
+		Path,
 		Name,
 		PremiereDate,
 		DateAdded,
