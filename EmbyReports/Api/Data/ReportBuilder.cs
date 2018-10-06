@@ -188,6 +188,7 @@ namespace EmbyReports.Api.Data
                         HeaderMetadata.ImagePrimary,
                         HeaderMetadata.ImageBackdrop,
                         HeaderMetadata.ImageLogo,
+                        HeaderMetadata.Path,
                         HeaderMetadata.Name,
                         HeaderMetadata.DateAdded,
                         HeaderMetadata.ReleaseDate,
@@ -270,6 +271,7 @@ namespace EmbyReports.Api.Data
                         HeaderMetadata.ImagePrimary,
                         HeaderMetadata.ImageBackdrop,
                         HeaderMetadata.ImageLogo,
+                        HeaderMetadata.Path,
                         HeaderMetadata.Name,
                         HeaderMetadata.EpisodeSeries,
                         HeaderMetadata.Season,
@@ -374,6 +376,12 @@ namespace EmbyReports.Api.Data
                     option.Header.ItemViewType = ItemViewType.TagsLogoImage;
                     option.Header.CanGroup = false;
                     option.Header.DisplayType = ReportDisplayType.Export;
+                    break;
+                    
+                case HeaderMetadata.Path:
+                    option.Column = (i, r) => i.Path;
+                    option.Header.ItemViewType = ItemViewType.Detail;
+                    option.Header.SortField = "SortName";
                     break;
 
                 case HeaderMetadata.Name:
