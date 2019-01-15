@@ -6,13 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="thumb.jpg" />
     <None Remove="Web\reports.html" />
     <None Remove="Web\reports.js" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="thumb.jpg" />
     <EmbeddedResource Include="Web\reports.html" />
     <EmbeddedResource Include="Web\reports.js" />
   </ItemGroup>

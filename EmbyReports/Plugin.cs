@@ -10,7 +10,7 @@ using MediaBrowser.Model.Drawing;
 
 namespace EmbyReports
 {
-    public class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages, IHasThumbImage
+    public class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
     {
         public Plugin(IApplicationPaths appPaths, IXmlSerializer xmlSerializer)
             : base(appPaths, xmlSerializer)
@@ -29,20 +29,6 @@ namespace EmbyReports
         public override Guid Id
         {
             get { return _id; }
-        }
-
-        public Stream GetThumbImage()
-        {
-            var type = GetType();
-            return type.Assembly.GetManifestResourceStream(type.Namespace + ".thumb.jpg");
-        }
-
-        public ImageFormat ThumbImageFormat
-        {
-            get
-            {
-                return ImageFormat.Jpg;
-            }
         }
 
         public IEnumerable<PluginPageInfo> GetPages()
