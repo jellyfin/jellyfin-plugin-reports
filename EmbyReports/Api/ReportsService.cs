@@ -184,7 +184,7 @@ namespace EmbyReports.Api
                 ExcludeItemTypes = request.GetExcludeItemTypes(),
                 Recursive = request.Recursive,
                 OrderBy = request.GetOrderBy(),
-                Limit = request.Limit,
+                IsFavorite = request.IsFavorite,
                 StartIndex = request.StartIndex,
                 IsMissing = request.IsMissing,
                 IsUnaired = request.IsUnaired,
@@ -317,6 +317,11 @@ namespace EmbyReports.Api
             }
 
             query.CollapseBoxSetItems = false;
+
+            if (request.Limit > -1 && request.Limit < int.MaxValue)
+            {
+                query.Limit = request.Limit;
+            }
 
             return query;
         }
