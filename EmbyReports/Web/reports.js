@@ -1177,7 +1177,7 @@
                 cellHtml += (header.Name || '&nbsp;');
                 if (header.SortField) {
                     cellHtml += '</a>';
-                    if (header.SortField === defaultSortBy) {
+                    if (header.SortField === query.SortBy) {
 
                         if (query.SortOrder === "Descending") {
                             cellHtml += '<span style="font-weight:bold;margin-left:5px;vertical-align:top;">&darr;</span>';
@@ -1256,7 +1256,7 @@
                 html += rItem.Name;
                 break;
             case "Detail":
-                html += '<a is="emby-linkbutton" class="button-link" href="' + appRouter.getRouteUrl({ Id: id, ServerId: serverId }) + '">' + rItem.Name + '</a>';
+                html += '<a target="_blank" class="button-link" href="index.html#!/' + appRouter.getRouteUrl({ Id: id, ServerId: serverId }) + '">' + rItem.Name + '</a>';
                 break;
             case "Edit":
                 html += '<a is="emby-linkbutton" class="button-link" href="edititemmetadata.html?id=' + rRow.Id + '">' + rItem.Name + '</a>';
