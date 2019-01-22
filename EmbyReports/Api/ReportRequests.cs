@@ -372,6 +372,7 @@ namespace EmbyReports.Api
         [ApiMember(Name = "VideoTypes", Description = "Optional filter by VideoType (videofile, dvd, bluray, iso). Allows multiple, comma delimeted.", IsRequired = false, DataType = "string", ParameterType = "query", Verb = "GET", AllowMultiple = true)]
         public string VideoTypes { get; set; }
 
+        // TODO UNUSED
         [ApiMember(Name = "Containers", Description = "Optional filter by Container. Allows multiple, comma delimeted.", IsRequired = false, DataType = "string", ParameterType = "query", Verb = "GET", AllowMultiple = true)]
         public string Containers { get; set; }
 
@@ -469,18 +470,19 @@ namespace EmbyReports.Api
             return (Studios ?? string.Empty).Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
-        public PersonType[] GetPersonTypes()
+        public string[] GetPersonTypes()
         {
             var val = PersonTypes;
 
             if (string.IsNullOrEmpty(val))
             {
-                return new PersonType[] { };
+                return Array.Empty<string>();
             }
 
-            return val.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(v => (PersonType)Enum.Parse(typeof(PersonType), v, true)).ToArray();
+            return val.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
+        // TODO UNUSED
         public string[] GetContainers()
         {
             var val = Containers;

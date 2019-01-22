@@ -203,7 +203,6 @@ namespace EmbyReports.Api
                 HasOverview = request.HasOverview,
                 HasOfficialRating = request.HasOfficialRating,
                 HasParentalRating = request.HasParentalRating,
-                HasExtra = request.HasSpecialFeature,
                 HasSubtitles = request.HasSubtitles,
                 HasThemeSong = request.HasThemeSong,
                 HasThemeVideo = request.HasThemeVideo,
@@ -222,14 +221,12 @@ namespace EmbyReports.Api
                 PersonTypes = request.GetPersonTypes(),
                 Years = request.GetYears(),
                 ImageTypes = request.GetImageTypes(),
-                Containers = request.GetContainers(),
                 AdjacentTo = request.AdjacentTo,
                 ItemIds = ParseIds(request.Ids, _libraryManager),
                 MinPlayers = request.MinPlayers,
                 MaxPlayers = request.MaxPlayers,
                 MinCommunityRating = request.MinCommunityRating,
                 MinCriticRating = request.MinCriticRating,
-                ParentIds = ParseIds(request.ParentId, _libraryManager),
                 ParentIndexNumber = request.ParentIndexNumber,
                 EnableTotalRecordCount = request.EnableTotalRecordCount,
                 ExcludeItemIds = ParseIds(request.ExcludeItemIds, _libraryManager),
@@ -281,7 +278,7 @@ namespace EmbyReports.Api
                 }
             }
 
-            query.HasAnyProviderId = hasAnyProviderId.ToArray();
+            query.HasAnyProviderId = hasAnyProviderId;
             query.MissingAnyProviderId = missingAnyProviderId.ToArray();
 
             foreach (var filter in request.GetFilters())
@@ -456,11 +453,11 @@ namespace EmbyReports.Api
             };
         }
 
-        protected long[] ParseIds(string value, ILibraryManager libraryManager)
+        protected Guid[] ParseIds(string value, ILibraryManager libraryManager)
         {
             if (string.IsNullOrEmpty(value))
             {
-                return Array.Empty<long>();
+                return Guid.Empty;
             }
 
             return value
