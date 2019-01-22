@@ -64,6 +64,6 @@ namespace EmbyReports.Api.Model
 
         /// <summary> Gets or sets the identifier of the user. </summary>
         /// <value> The identifier of the user. </value>
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
 	}
 }
