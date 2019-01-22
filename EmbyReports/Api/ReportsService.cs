@@ -239,47 +239,24 @@ namespace EmbyReports.Api
                 IsSeries = request.IsSeries
             };
 
-            var hasAnyProviderId = new List<string>();
-            var missingAnyProviderId = new List<string>();
+            var hasAnyProviderId = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-            if (request.HasImdbId.HasValue)
+            if (request.HasImdbId.HasValue && request.HasImdbId.Value)
             {
-                if (request.HasImdbId.Value)
-                {
-                    hasAnyProviderId.Add(MetadataProviders.Imdb.ToString());
-                }
-                else
-                {
-                    missingAnyProviderId.Add(MetadataProviders.Imdb.ToString());
-                }
+                hasAnyProviderId.Add(MetadataProviders.Imdb.ToString(), "");
             }
 
-            if (request.HasTvdbId.HasValue)
+            if (request.HasTvdbId.HasValue && request.HasTvdbId.Value)
             {
-                if (request.HasTvdbId.Value)
-                {
-                    hasAnyProviderId.Add(MetadataProviders.Tvdb.ToString());
-                }
-                else
-                {
-                    missingAnyProviderId.Add(MetadataProviders.Tvdb.ToString());
-                }
+                hasAnyProviderId.Add(MetadataProviders.Tvdb.ToString(), "");
             }
 
-            if (request.HasTmdbId.HasValue)
+            if (request.HasTmdbId.HasValue && request.HasTmdbId.Value)
             {
-                if (request.HasTmdbId.Value)
-                {
-                    hasAnyProviderId.Add(MetadataProviders.Tmdb.ToString());
-                }
-                else
-                {
-                    missingAnyProviderId.Add(MetadataProviders.Tmdb.ToString());
-                }
+                hasAnyProviderId.Add(MetadataProviders.Tmdb.ToString(), "");
             }
 
             query.HasAnyProviderId = hasAnyProviderId;
-            query.MissingAnyProviderId = missingAnyProviderId.ToArray();
 
             foreach (var filter in request.GetFilters())
             {
@@ -444,7 +421,7 @@ namespace EmbyReports.Api
                 return folder.GetItems(GetItemsQuery(request, dtoOptions, user));
             }
 
-            var itemsArray = folder.GetChildren(user).ToArray();
+            var itemsArray = folder.GetChildren(user, true).ToArray();
 
             return new QueryResult<BaseItem>
             {
@@ -457,7 +434,7 @@ namespace EmbyReports.Api
         {
             if (string.IsNullOrEmpty(value))
             {
-                return Guid.Empty;
+                return new Guid[] { };
             }
 
             return value
