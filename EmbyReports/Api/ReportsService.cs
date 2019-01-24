@@ -434,7 +434,7 @@ namespace EmbyReports.Api
         {
             if (string.IsNullOrEmpty(value))
             {
-                return new Guid[] { };
+                return Array.Empty<Guid>();
             }
 
             return value
