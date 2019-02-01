@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+<PropertyGroup> <TargetFrameworks>netstandard2.0;</TargetFrameworks> <AssemblyVersion>10.1.0.0</AssemblyVersion> <FileVersion>10.1.0.0</FileVersion> <RootNamespace>JellyfinReports</RootNamespace> </PropertyGroup>
+
+<ItemGroup>
+  <None Remove="Web\reports.html" />
+  <None Remove="Web\reports.js" />
+</ItemGroup>
+
+<ItemGroup>
+  <EmbeddedResource Include="Web\reports.html" />
+  <EmbeddedResource Include="Web\reports.js" />
+</ItemGroup>
+
+<ItemGroup>
+  <PackageReference Include="Jellyfin.Controller" Version="10.1.0" />
+</ItemGroup>
+
+</Project>
