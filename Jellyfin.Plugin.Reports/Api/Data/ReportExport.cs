@@ -1,8 +1,6 @@
 ﻿using System.Linq;
 using System.Text;
 using Jellyfin.Plugin.Reports.Api.Model;
-using Jellyfin.Plugin.Reports.Api.Common;
-using Jellyfin.Plugin.Reports.Api.Data;
 
 namespace Jellyfin.Plugin.Reports.Api.Data
 {
