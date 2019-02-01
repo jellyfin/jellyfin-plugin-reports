@@ -161,26 +161,6 @@ namespace EmbyReports.Api.Data
                         HeaderMetadata.Genres
                     };
 
-                case ReportIncludeItemTypes.Game:
-                    return new List<HeaderMetadata>
-                    {
-                        HeaderMetadata.Status,
-                        HeaderMetadata.Locked,
-                        HeaderMetadata.ImagePrimary,
-                        HeaderMetadata.ImageBackdrop,
-                        HeaderMetadata.ImageLogo,
-                        HeaderMetadata.Name,
-                        HeaderMetadata.GameSystem,
-                        HeaderMetadata.DateAdded,
-                        HeaderMetadata.ReleaseDate,
-                        HeaderMetadata.ParentalRating,
-                        HeaderMetadata.CommunityRating,
-                        HeaderMetadata.Players,
-                        HeaderMetadata.Year,
-                        HeaderMetadata.Genres,
-                        HeaderMetadata.Trailers
-                    };
-
                 case ReportIncludeItemTypes.Movie:
                     return new List<HeaderMetadata>
                     {
@@ -489,16 +469,6 @@ namespace EmbyReports.Api.Data
                 case HeaderMetadata.Specials:
                     option.Column = (i, r) => this.GetBoolString(r.HasSpecials);
                     option.Header.ItemViewType = ItemViewType.SpecialsImage;
-                    break;
-
-                case HeaderMetadata.GameSystem:
-                    option.Column = (i, r) => this.GetObject<Game, string>(i, (x) => x.GameSystem);
-                    option.Header.SortField = "GameSystem,SortName";
-                    break;
-
-                case HeaderMetadata.Players:
-                    option.Column = (i, r) => this.GetObject<Game, int?>(i, (x) => x.PlayersSupported);
-                    option.Header.SortField = "Players,GameSystem,SortName";
                     break;
 
                 case HeaderMetadata.AlbumArtist:

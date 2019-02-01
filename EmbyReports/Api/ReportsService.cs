@@ -220,8 +220,6 @@ namespace EmbyReports.Api
                 VideoTypes = request.GetVideoTypes().ToArray(),
                 AdjacentTo = request.AdjacentTo,
                 ItemIds = request.GetItemIds(),
-                MinPlayers = request.MinPlayers,
-                MaxPlayers = request.MaxPlayers,
                 MinCommunityRating = request.MinCommunityRating,
                 MinCriticRating = request.MinCriticRating,
                 ParentId = string.IsNullOrWhiteSpace(request.ParentId) ? Guid.Empty : new Guid(request.ParentId),

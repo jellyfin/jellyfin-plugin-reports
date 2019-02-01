@@ -7,7 +7,6 @@ namespace EmbyReports.Api.Common
 		Book,
 		BoxSet,
 		Episode,
-		Game,
 		Video,
 		Movie,
 		MusicVideo,
