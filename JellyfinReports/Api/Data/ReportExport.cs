@@ -162,7 +162,7 @@ namespace JellyfinReports.Api.Data
 							<head>
 							<meta http-equiv='X-UA-Compatible' content='IE=8, IE=9, IE=10' />
 							<meta charset='utf-8'>
-							<title>Emby Reports Export</title>";
+							<title>Jellyfin Reports Export</title>";
 			Html += "\n" + style + "\n";
 			Html += "</head>\n";
 			Html += "<body>\n";
