@@ -585,8 +585,7 @@ namespace EmbyReports.Api.Data
             var video = item as Video;
             ReportRow rRow = new ReportRow
             {
-                Id = item.InternalId.ToString(),
-                //GuidId = item.Id.ToString("N"),
+                Id = item.Id.ToString("N"),
                 HasLockData = item.IsLocked,
                 HasLocalTrailer = item.GetExtras(new[] { ExtraType.Trailer }).Any(),
                 HasImageTagsPrimary = item.ImageInfos != null && item.ImageInfos.Count(n => n.Type == ImageType.Primary) > 0,
