@@ -23,7 +23,7 @@ namespace Jellyfin.Plugin.Reports
 
         public PluginConfiguration PluginConfiguration => Configuration;
 
-        private Guid _id = new Guid("2FE79C34-C9DC-4D94-9DF2-2F3F36764414");
+        private Guid _id = new Guid("d4312cd9-5c90-4f38-82e8-51da566790e8");
         public override Guid Id
         {
             get { return _id; }
