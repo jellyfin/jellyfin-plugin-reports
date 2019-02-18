@@ -1,0 +1,13 @@
+---
+name: "jellyfin-plugin-reports"
+guid: "d4312cd9-5c90-4f38-82e8-51da566790e8"
+version: "1.0.0"
+nicename: "Reports"
+description: "Generate reports of your media library"
+overview: "Generate reports of your media library"
+category: "General"
+artifacts:
+  - "Jellyfin.Plugin.Reports.dll"
+build_type: "dotnet"
+dotnet_configuration: "Release"
+dotnet_framework: "netstandard2.0"
