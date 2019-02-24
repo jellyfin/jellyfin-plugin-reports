@@ -167,7 +167,7 @@ namespace Jellyfin.Plugin.Reports.Api.Activities
                     option.Header.CanGroup = false;
                     option.Column = (i, r) =>
                     {
-                        if (!i.UserId.Equals(Guid.Empty))
+                        if (i.UserId != Guid.Empty)
                         {
                             MediaBrowser.Controller.Entities.User user = _userManager.GetUserById(i.UserId);
                             if (user != null)
@@ -191,7 +191,7 @@ namespace Jellyfin.Plugin.Reports.Api.Activities
                 case HeaderMetadata.User:
                     option.Column = (i, r) =>
                     {
-                        if (!i.UserId.Equals(Guid.Empty))
+                        if (i.UserId != Guid.Empty)
                         {
                             MediaBrowser.Controller.Entities.User user = _userManager.GetUserById(i.UserId);
                             if (user != null)

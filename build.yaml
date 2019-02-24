@@ -1,7 +1,7 @@
 ---
 name: "jellyfin-plugin-reports"
 guid: "d4312cd9-5c90-4f38-82e8-51da566790e8"
-version: "1.0.0"
+version: "1.0.1"
 nicename: "Reports"
 description: "Generate reports of your media library"
 overview: "Generate reports of your media library"
