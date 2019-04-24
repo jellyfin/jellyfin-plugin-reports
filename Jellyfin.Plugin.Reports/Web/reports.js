@@ -1,4 +1,4 @@
-﻿define(['jQuery', 'libraryBrowser', 'loading', 'appRouter', 'fnchecked', 'emby-linkbutton', 'paper-icon-button-light', 'detailtablecss'], function ($, libraryBrowser, loading, appRouter) {
+﻿define(['jQuery', 'libraryBrowser', 'loading', 'appRouter', 'fnchecked', 'emby-button', 'paper-icon-button-light', 'detailtablecss'], function ($, libraryBrowser, loading, appRouter) {
     'use strict';
 
     if (!jQuery.mobile || !$.mobile.widgets) {
@@ -1171,7 +1171,7 @@
 
             if (header.ShowHeaderLabel) {
                 if (header.SortField) {
-                    cellHtml += '<a class="lnkColumnSort button-link" is="emby-linkbutton" href="#" data-sortfield="' + header.SortField + '" style="text-decoration:underline;">';
+                    cellHtml += '<a class="lnkColumnSort button-link" is="emby-button" href="#" data-sortfield="' + header.SortField + '" style="text-decoration:underline;">';
                 }
 
                 cellHtml += (header.Name || '&nbsp;');
@@ -1259,13 +1259,13 @@
                 html += '<a target="_blank" class="button-link" href="index.html#!/' + appRouter.getRouteUrl({ Id: id, ServerId: serverId }) + '">' + rItem.Name + '</a>';
                 break;
             case "Edit":
-                html += '<a is="emby-linkbutton" class="button-link" href="edititemmetadata.html?id=' + rRow.Id + '">' + rItem.Name + '</a>';
+                html += '<a is="emby-button" class="button-link" href="edititemmetadata.html?id=' + rRow.Id + '">' + rItem.Name + '</a>';
                 break;
             case "List":
-                html += '<a is="emby-linkbutton" class="button-link" href="itemlist.html?serverId=' + rItem.ServerId + '&id=' + rRow.Id + '">' + rItem.Name + '</a>';
+                html += '<a is="emby-button" class="button-link" href="itemlist.html?serverId=' + rItem.ServerId + '&id=' + rRow.Id + '">' + rItem.Name + '</a>';
                 break;
             case "ItemByNameDetails":
-                html += '<a is="emby-linkbutton" class="button-link" href="' + appRouter.getRouteUrl({ Id: id, ServerId: serverId }) + '">' + rItem.Name + '</a>';
+                html += '<a is="emby-button" class="button-link" href="' + appRouter.getRouteUrl({ Id: id, ServerId: serverId }) + '">' + rItem.Name + '</a>';
                 break;
             case "EmbeddedImage":
                 if (rRow.HasEmbeddedImage) {
@@ -1294,20 +1294,20 @@
                 break;
             case "TagsPrimaryImage":
                 if (!rRow.HasImageTagsPrimary) {
-                    html += '<a is="emby-linkbutton" class="button-link" href="edititemmetadata.html?id=' + rRow.Id + '"><i class="md-icon" title="Missing primary image." style="color:red;">photo</i></a>';
+                    html += '<a is="emby-button" class="button-link" href="edititemmetadata.html?id=' + rRow.Id + '"><i class="md-icon" title="Missing primary image." style="color:red;">photo</i></a>';
                 }
                 break;
             case "TagsBackdropImage":
                 if (!rRow.HasImageTagsBackdrop) {
                     if (rRow.RowType !== "Episode" && rRow.RowType !== "Season" && rRow.MediaType !== "Audio" && rRow.RowType !== "TvChannel" && rRow.RowType !== "MusicAlbum") {
-                        html += '<a is="emby-linkbutton" class="button-link" href="edititemmetadata.html?id=' + rRow.Id + '"><i class="md-icon" title="Missing backdrop image." style="color:orange;">photo</i></a>';
+                        html += '<a is="emby-button" class="button-link" href="edititemmetadata.html?id=' + rRow.Id + '"><i class="md-icon" title="Missing backdrop image." style="color:orange;">photo</i></a>';
                     }
                 }
                 break;
             case "TagsLogoImage":
                 if (!rRow.HasImageTagsLogo) {
                     if (rRow.RowType === "Movie" || rRow.RowType === "Trailer" || rRow.RowType === "Series" || rRow.RowType === "MusicArtist" || rRow.RowType === "BoxSet") {
-                        html += '<a is="emby-linkbutton" class="button-link" href="edititemmetadata.html?id=' + rRow.Id + '"><i class="md-icon" title="Missing logo image.">photo</i></a>';
+                        html += '<a is="emby-button" class="button-link" href="edititemmetadata.html?id=' + rRow.Id + '"><i class="md-icon" title="Missing logo image.">photo</i></a>';
                     }
                 }
                 break;
