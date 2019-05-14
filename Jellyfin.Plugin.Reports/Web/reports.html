@@ -1,4 +1,4 @@
-﻿<div id="libraryReportManagerPage" data-role="page" class="page type-interior reportsPage pluginConfigurationPage" data-title="Reports" data-controller="__plugin/reportsjs">
+﻿<div id="libraryReportManagerPage" data-role="page" class="page type-interior reportsPage pluginConfigurationPage data-require="emby-input,emby-button,emby-checkbox,emby-select"" data-title="Reports" data-controller="__plugin/reportsjs">
     <style>
 
         /* "page" containers - full-screen views, one should always be in view post-pageload */
@@ -317,14 +317,14 @@
         <div style="text-align: center;">
             <div class="viewControls">
                 <span style="margin-right: 10px; vertical-align: middle;">Report</span>
-                <div style="display: inline-block;">
-                    <select data-mini="true" data-inline="true" id="selectViewType">
+                <div class="selectContainer" style="display: inline-block;">
+                    <select is="emby-select" data-mini="true" data-inline="true" id="selectViewType">
                         <option value="ReportData">Media</option>
                         <option value="ReportActivities">Activity</option>
                     </select>
                 </div>
-                <div style="display: inline-block;" id="selectIncludeItemTypesBox">
-                    <select data-mini="true" data-inline="true" id="selectIncludeItemTypes" name="selectIncludeItemTypes">
+                <div class="selectContainer" style="display: inline-block;" id="selectIncludeItemTypesBox">
+                    <select is="emby-select" data-mini="true" data-inline="true" id="selectIncludeItemTypes" name="selectIncludeItemTypes">
                         <option value="MusicAlbum">Albums</option>
                         <option value="MusicArtist">Artists</option>
                         <option value="Book">Books</option>
@@ -363,11 +363,13 @@
 
                 <div class="tabView viewTab" id="tabViewBox">
                     <br />
-                    <div id="selectReportGroupingBox">
-                        <label for="selectViewGrouping">Grouping</label>
-                        <select id="selectReportGroup"></select>
-                        <br />
-                        <input type="checkbox" id="chkStartCollapsed" /> <label for="chkPlayed">Start Collapsed</label><br />
+                    <div class="selectContainer" id="selectReportGroupingBox">
+                          <select is="emby-select" id="selectReportGroup" label="Grouping:"></select>
+                          <br />
+                         <label class="checkboxContainer">
+                        <input is="emby-checkbox" type="checkbox" id="chkStartCollapsed" />
+                        <span>Start Collapsed</span>
+                      </label>
                     </div>
                     <br />
                     <div id="selectPageSizeBox" style="display: none;">
