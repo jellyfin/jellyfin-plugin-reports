@@ -354,17 +354,17 @@
         <div data-role="panel" id="viewPanel" class="viewPanel" data-position="right" data-display="overlay" data-position-fixed="true">
             <form>
                 <div class="viewPanelTabs">
-                    <button is="emby-button" type="button" id="tabView" data-role="button" class="raised button-cancel block viewTabButton ui-btn-active" data-tab="tabView">View</button>
-                    <button is="emby-button" type="button" id="tabFilter" data-role="button" class="raised button-cancel block viewTabButton" data-tab="tabFilter">Filter</button>
+                    <button is="emby-button" type="button" id="tabView" data-role="button" class="raised viewTabButton ui-btn-active" data-tab="tabView">View</button>
+                    <button is="emby-button" type="button" id="tabFilter" data-role="button" class="raised viewTabButton" data-tab="tabFilter">Filter</button>
                 </div>
                 <div class="tabView viewTab" id="tabViewBox">
                     <div class="selectContainer" id="selectReportGroupingBox">
                           <select is="emby-select" id="selectReportGroup" label="Grouping:"></select>
-                         <label class="checkboxContainer">
+                    </div>
+                    <label class="checkboxContainer">
                         <input is="emby-checkbox" type="checkbox" id="chkStartCollapsed" />
                         <span>Start Collapsed</span>
-                      </label>
-                    </div>
+                    </label>
                     <div class="selectContainer" id="selectPageSizeBox" style="display: none;">
                          <select is="emby-select" id="selectPageSize" label="Page size:" class="selectPageSize">
                             <option value="20">20</option>
@@ -379,13 +379,13 @@
                     <div id="exportReportBox">
                         <fieldset>
                             <label>Export</label><br>
-                            <button is="emby-button" type="button" class="raised button-cancel block" name="btnReportExportExcel" id="btnReportExportExcel" data-icon="arrow-d">Excel</button>
-                            <button is="emby-button" type="button" class="raised button-cancel block" name="btnReportExportCsv" id="btnReportExportCsv" data-icon="arrow-d">CSV</button>
+                            <button is="emby-button" type="button" class="raised block" name="btnReportExportExcel" id="btnReportExportExcel" data-icon="arrow-d">Excel</button>
+                            <button is="emby-button" type="button" class="raised block" name="btnReportExportCsv" id="btnReportExportCsv" data-icon="arrow-d">CSV</button>
                         </fieldset>
                     </div>
                     <div data-role="collapsible" data-collapsed="true" class="reportsColumns" id="grpReportsColumns">
                         <h2>Columns</h2>
-                        <button type="button" class="raised button-cancel block" is="emby-button" name="btnResetReportColumns" id="btnResetReportColumns" data-icon="refresh">Reset</button>
+                        <button type="button" class="raised block" is="emby-button" name="btnResetReportColumns" id="btnResetReportColumns" data-icon="refresh">Reset</button>
                         <div class="filterOptions">
                         </div>
                     </div>
