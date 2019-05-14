@@ -1378,7 +1378,7 @@
             var selected = "None";
 
             $('#selectReportGroup', page).find('option').remove().end();
-            $('#selectReportGroup', page).append('<option value="None"></option>');
+            $('#selectReportGroup', page).append('<option value="None">None</option>');
 
             result.map(function (header) {
                 if ((header.DisplayType === "Screen" || header.DisplayType === "ScreenExport") && header.CanGroup) {
@@ -1668,7 +1668,7 @@
                 value = filter.FieldName;
                 checked = filter.Visible;
             }
-            
+
             itemHtml += '<input id="' + id + '" type="checkbox" data-filter="' + value + '" class="' + cssClass + '"';
             if (checked)
                 itemHtml += ' checked="checked" ';
