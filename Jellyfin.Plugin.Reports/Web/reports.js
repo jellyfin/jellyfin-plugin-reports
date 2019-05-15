@@ -1171,12 +1171,12 @@
 
             if (header.ShowHeaderLabel) {
                 if (header.SortField) {
-                    cellHtml += '<a class="lnkColumnSort button-link" is="emby-button" href="#" data-sortfield="' + header.SortField + '" style="text-decoration:underline;">';
+                    cellHtml += '<button class="lnkColumnSort button-link" is="emby-button" data-sortfield="' + header.SortField + '" style="text-decoration:underline;">';
                 }
 
                 cellHtml += (header.Name || '&nbsp;');
                 if (header.SortField) {
-                    cellHtml += '</a>';
+                    cellHtml += '</button>';
                     if (header.SortField === query.SortBy) {
 
                         if (query.SortOrder === "Descending") {

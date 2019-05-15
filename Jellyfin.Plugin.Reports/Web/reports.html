@@ -303,13 +303,13 @@
             bottom: 0;
             -webkit-overflow-scrolling: touch;
         }
-        
+
         .reporContainer {
             overflow-x: scroll;
             overflow-y: hidden;
             white-space: nowrap;
         }
-        
+
         .tblLibraryReport img {
             height: 18px;
             margin-right: 10px;
@@ -320,15 +320,15 @@
         }
     </style>
     <div class="content-primary">
-        <div>
+        <div style="text-align: center;">
             <div class="viewControls">
-                <div class="selectContainer" style="display: inline-block;">
+                <div class="selectContainer selectContainer-inline">
                     <select is="emby-select" label="Report:" id="selectViewType">
                         <option value="ReportData">Media</option>
                         <option value="ReportActivities">Activity</option>
                     </select>
                 </div>
-                <div class="selectContainer" style="display: inline-block;" id="selectIncludeItemTypesBox">
+                <div class="selectContainer selectContainer-inline" id="selectIncludeItemTypesBox">
                     <select is="emby-select" id="selectIncludeItemTypes" label="Mediatype:" name="selectIncludeItemTypes">
                         <option value="MusicAlbum">Albums</option>
                         <option value="MusicArtist">Artists</option>
