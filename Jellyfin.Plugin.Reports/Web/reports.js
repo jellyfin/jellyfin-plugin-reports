@@ -1256,7 +1256,7 @@
                 html += rItem.Name;
                 break;
             case "Detail":
-                html += '<a target="_blank" class="button-link" href="index.html#!/' + appRouter.getRouteUrl({ Id: id, ServerId: serverId }) + '">' + rItem.Name + '</a>';
+               html += '<a target="_blank" class="button-link" href="index.html#!/edititemmetadata.html?' + appRouter.getRouteUrl({ Id: id, ServerId: serverId }) + '"><i class="md-icon">mode_edit</i></a> <a target="_blank" class="button-link" href="index.html#!/' + appRouter.getRouteUrl({ Id: id, ServerId: serverId }) + '">' + rItem.Name + '</a>';
                 break;
             case "Edit":
                 html += '<a is="emby-button" class="button-link" href="edititemmetadata.html?id=' + rRow.Id + '">' + rItem.Name + '</a>';
