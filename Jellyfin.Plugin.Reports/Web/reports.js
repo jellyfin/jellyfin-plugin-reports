@@ -1171,12 +1171,12 @@
 
             if (header.ShowHeaderLabel) {
                 if (header.SortField) {
-                    cellHtml += '<a class="lnkColumnSort button-link" is="emby-button" href="#" data-sortfield="' + header.SortField + '" style="text-decoration:underline;">';
+                    cellHtml += '<button class="lnkColumnSort button-link" is="emby-button" data-sortfield="' + header.SortField + '" style="text-decoration:underline;">';
                 }
 
                 cellHtml += (header.Name || '&nbsp;');
                 if (header.SortField) {
-                    cellHtml += '</a>';
+                    cellHtml += '</button>';
                     if (header.SortField === query.SortBy) {
 
                         if (query.SortOrder === "Descending") {
@@ -1256,7 +1256,7 @@
                 html += rItem.Name;
                 break;
             case "Detail":
-                html += '<a target="_blank" class="button-link" href="index.html#!/' + appRouter.getRouteUrl({ Id: id, ServerId: serverId }) + '">' + rItem.Name + '</a>';
+               html += '<a target="_blank" class="button-link" href="index.html#!/edititemmetadata.html?' + appRouter.getRouteUrl({ Id: id, ServerId: serverId }) + '"><i class="md-icon">mode_edit</i></a> <a target="_blank" class="button-link" href="index.html#!/' + appRouter.getRouteUrl({ Id: id, ServerId: serverId }) + '">' + rItem.Name + '</a>';
                 break;
             case "Edit":
                 html += '<a is="emby-button" class="button-link" href="edititemmetadata.html?id=' + rRow.Id + '">' + rItem.Name + '</a>';
@@ -1378,7 +1378,7 @@
             var selected = "None";
 
             $('#selectReportGroup', page).find('option').remove().end();
-            $('#selectReportGroup', page).append('<option value="None"></option>');
+            $('#selectReportGroup', page).append('<option value="None">None</option>');
 
             result.map(function (header) {
                 if ((header.DisplayType === "Screen" || header.DisplayType === "ScreenExport") && header.CanGroup) {
@@ -1668,7 +1668,7 @@
                 value = filter.FieldName;
                 checked = filter.Visible;
             }
-            
+
             itemHtml += '<input id="' + id + '" type="checkbox" data-filter="' + value + '" class="' + cssClass + '"';
             if (checked)
                 itemHtml += ' checked="checked" ';
