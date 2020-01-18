@@ -2,7 +2,7 @@
 name: "jellyfin-plugin-reports"
 guid: "d4312cd9-5c90-4f38-82e8-51da566790e8"
 version: "4" # Please increment with each pull request
-jellyfin_version: "10.3.0" # The earliest binary-compatible version
+jellyfin_version: "10.4.3" # The earliest binary-compatible version
 owner: "jellyfin"
 nicename: "Reports"
 description: "Generate reports of your media library"
