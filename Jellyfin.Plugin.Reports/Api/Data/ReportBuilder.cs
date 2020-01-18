@@ -33,7 +33,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
         /// <param name="items"> The items. </param>
         /// <param name="request"> The request. </param>
         /// <returns> The report result. </returns>
-        public ReportResult GetResult(BaseItem[] items, IReportsQuery request)
+        public ReportResult GetResult(IReadOnlyList<BaseItem> items, IReportsQuery request)
         {
             ReportIncludeItemTypes reportRowType = ReportHelper.GetRowType(request.IncludeItemTypes);
             ReportDisplayType displayType = ReportHelper.GetReportDisplayType(request.DisplayType);
