@@ -10,14 +10,14 @@ These reports can be exported to Excel and CSV formats.
 ## Build & Installation Process
 
 1. Clone this repository
-2. Ensure you have .NET Core SDK setup and installed
-3. Build the plugin with following command:
+2. Ensure you have .NET Core SDK set up and installed
+3. Build the plugin with your favorite IDE or the `dotnet` command.
 
 ```
 dotnet publish --configuration Release --output bin
 ```
 
-4. Place the resulting `Jellyfin.Plugin.Reports.dll` file in a folder called `plugins/` inside your Jellyfin installation / data directory.
+4. Place the resulting `Jellyfin.Plugin.Reports.dll` file in a folder called `plugins/` inside your Jellyfin data directory.
 
 ### Screenshot
 
