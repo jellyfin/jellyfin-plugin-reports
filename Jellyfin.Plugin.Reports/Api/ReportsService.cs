@@ -108,7 +108,7 @@ namespace Jellyfin.Plugin.Reports.Api
                 return null;
 
             request.DisplayType = "Screen";
-            var user = !string.IsNullOrWhiteSpace(request.UserId) ? _userManager.GetUserById(request.UserId) : null;
+            var user = !string.IsNullOrWhiteSpace(request.UserId) ? _userManager.GetUserById(new Guid(request.UserId)) : null;
             var reportResult = GetReportResult(request, user);
 
             return reportResult;
@@ -142,7 +142,7 @@ namespace Jellyfin.Plugin.Reports.Api
             headers["Content-Disposition"] = string.Format("attachment; filename=\"{0}\"", filename);
             headers["Content-Encoding"] = "UTF-8";
 
-            var user = !string.IsNullOrWhiteSpace(request.UserId) ? _userManager.GetUserById(request.UserId) : null;
+            var user = !string.IsNullOrWhiteSpace(request.UserId) ? _userManager.GetUserById(new Guid(request.UserId)) : null;
             ReportResult result = null;
             switch (reportViewType)
             {
