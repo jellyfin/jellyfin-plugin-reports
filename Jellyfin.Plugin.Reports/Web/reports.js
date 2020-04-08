@@ -1,4 +1,4 @@
-﻿define(['jQuery', 'libraryBrowser', 'loading', 'appRouter', 'fnchecked', 'emby-button', 'paper-icon-button-light', 'detailtablecss'], function ($, libraryBrowser, loading, appRouter) {
+define(['jQuery', 'libraryBrowser', 'loading', 'appRouter', 'fnchecked', 'emby-button', 'paper-icon-button-light', 'detailtablecss'], function ($, libraryBrowser, loading, appRouter) {
     'use strict';
 
     if (!jQuery.mobile || !$.mobile.widgets) {
@@ -1256,7 +1256,7 @@
                 html += rItem.Name;
                 break;
             case "Detail":
-               html += '<a target="_blank" class="button-link" href="index.html#!/edititemmetadata.html?' + appRouter.getRouteUrl({ Id: id, ServerId: serverId }) + '"><i class="md-icon">mode_edit</i></a> <a target="_blank" class="button-link" href="index.html#!/' + appRouter.getRouteUrl({ Id: id, ServerId: serverId }) + '">' + rItem.Name + '</a>';
+               html += '<a target="_blank" class="button-link" href="index.html#!/edititemmetadata.html?' + appRouter.getRouteUrl({ Id: id, ServerId: serverId }) + '"><i class="material-icons mode_edit"></i></a> <a target="_blank" class="button-link" href="index.html#!/' + appRouter.getRouteUrl({ Id: id, ServerId: serverId }) + '">' + rItem.Name + '</a>';
                 break;
             case "Edit":
                 html += '<a is="emby-button" class="button-link" href="edititemmetadata.html?id=' + rRow.Id + '">' + rItem.Name + '</a>';
@@ -1269,45 +1269,45 @@
                 break;
             case "EmbeddedImage":
                 if (rRow.HasEmbeddedImage) {
-                    html += '<i class="md-icon">check</i>';
+                    html += '<i class="material-icons check"></i>';
                 }
                 break;
             case "SubtitleImage":
                 if (rRow.HasSubtitles) {
-                    html += '<i class="md-icon">check</i>';
+                    html += '<i class="material-icons check"></i>';
                 }
                 break;
             case "TrailersImage":
                 if (rRow.HasLocalTrailer) {
-                    html += '<i class="md-icon">check</i>';
+                    html += '<i class="material-icons check"></i>';
                 }
                 break;
             case "SpecialsImage":
                 if (rRow.HasSpecials) {
-                    html += '<i class="md-icon" title="Missing primary image." style="color:red;">photo</i>';
+                    html += '<i class="material-icons photo" title="Missing primary image." style="color:red;"></i>';
                 }
                 break;
             case "LockDataImage":
                 if (rRow.HasLockData) {
-                    html += '<i class="md-icon">lock</i>';
+                    html += '<i class="material-icons lock"></i>';
                 }
                 break;
             case "TagsPrimaryImage":
                 if (!rRow.HasImageTagsPrimary) {
-                    html += '<a is="emby-button" class="button-link" href="edititemmetadata.html?id=' + rRow.Id + '"><i class="md-icon" title="Missing primary image." style="color:red;">photo</i></a>';
+                    html += '<a is="emby-button" class="button-link" href="edititemmetadata.html?id=' + rRow.Id + '"><i class="material-icons photo" title="Missing primary image." style="color:red;"></i></a>';
                 }
                 break;
             case "TagsBackdropImage":
                 if (!rRow.HasImageTagsBackdrop) {
                     if (rRow.RowType !== "Episode" && rRow.RowType !== "Season" && rRow.MediaType !== "Audio" && rRow.RowType !== "TvChannel" && rRow.RowType !== "MusicAlbum") {
-                        html += '<a is="emby-button" class="button-link" href="edititemmetadata.html?id=' + rRow.Id + '"><i class="md-icon" title="Missing backdrop image." style="color:orange;">photo</i></a>';
+                        html += '<a is="emby-button" class="button-link" href="edititemmetadata.html?id=' + rRow.Id + '"><i class="material-icons photo" title="Missing backdrop image." style="color:orange;"></i></a>';
                     }
                 }
                 break;
             case "TagsLogoImage":
                 if (!rRow.HasImageTagsLogo) {
                     if (rRow.RowType === "Movie" || rRow.RowType === "Trailer" || rRow.RowType === "Series" || rRow.RowType === "MusicArtist" || rRow.RowType === "BoxSet") {
-                        html += '<a is="emby-button" class="button-link" href="edititemmetadata.html?id=' + rRow.Id + '"><i class="md-icon" title="Missing logo image.">photo</i></a>';
+                        html += '<a is="emby-button" class="button-link" href="edititemmetadata.html?id=' + rRow.Id + '"><i class="material-icons photo" title="Missing logo image."></i></a>';
                     }
                 }
                 break;
@@ -1327,26 +1327,26 @@
                 break;
             case "StatusImage":
                 if (rRow.HasLockData) {
-                    html += '<i class="md-icon">lock</i>';
+                    html += '<i class="material-icons lock"></i>';
                 }
 
                 if (!rRow.HasLocalTrailer && rRow.RowType === "Movie") {
-                    html += '<i title="Missing local trailer." class="md-icon">videocam</i>';
+                    html += '<i title="Missing local trailer." class="material-icons videocam"></i>';
                 }
 
                 if (!rRow.HasImageTagsPrimary) {
-                    html += '<i class="md-icon" title="Missing primary image." style="color:red;">photo</i>';
+                    html += '<i class="material-icons photo" title="Missing primary image." style="color:red;"></i>';
                 }
 
                 if (!rRow.HasImageTagsBackdrop) {
                     if (rRow.RowType !== "Episode" && rRow.RowType !== "Season" && rRow.MediaType !== "Audio" && rRow.RowType !== "TvChannel" && rRow.RowType !== "MusicAlbum") {
-                        html += '<i class="md-icon" title="Missing backdrop image." style="color:orange;">photo</i>';
+                        html += '<i class="material-icons photo" title="Missing backdrop image." style="color:orange;"></i>';
                     }
                 }
 
                 if (!rRow.HasImageTagsLogo) {
                     if (rRow.RowType === "Movie" || rRow.RowType === "Trailer" || rRow.RowType === "Series" || rRow.RowType === "MusicArtist" || rRow.RowType === "BoxSet") {
-                        html += '<i class="md-icon" title="Missing logo image.">photo</i>';
+                        html += '<i class="material-icons photo" title="Missing logo image."></i>';
                     }
                 }
                 break;

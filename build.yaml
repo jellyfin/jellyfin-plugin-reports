@@ -1,7 +1,7 @@
 ---
 name: "jellyfin-plugin-reports"
 guid: "d4312cd9-5c90-4f38-82e8-51da566790e8"
-version: "5"
+version: "6"
 jellyfin_version: "10.5.0"
 owner: "jellyfin"
 nicename: "Reports"
