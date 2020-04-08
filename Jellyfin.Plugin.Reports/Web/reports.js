@@ -1294,7 +1294,7 @@ define(['jQuery', 'libraryBrowser', 'loading', 'appRouter', 'fnchecked', 'emby-b
                 break;
             case "TagsPrimaryImage":
                 if (!rRow.HasImageTagsPrimary) {
-                    html += '<a is="emby-button" class="button-link" href="edititemmetadata.html?id=' + rRow.Id + '"><i class="material-icons photo" title="Missing primary image." style="color:red;"> </i></a>';
+                    html += '<a is="emby-button" class="button-link" href="edititemmetadata.html?id=' + rRow.Id + '"><i class="material-icons photo" title="Missing primary image." style="color:red;"></i></a>';
                 }
                 break;
             case "TagsBackdropImage":
