@@ -1,15 +1,13 @@
 ---
-name: "jellyfin-plugin-reports"
+name: "Reports"
 guid: "d4312cd9-5c90-4f38-82e8-51da566790e8"
-version: "6"
-jellyfin_version: "10.5.0"
+version: "6.0.0.0"
+targetAbi: "10.5.0.0"
 owner: "jellyfin"
-nicename: "Reports"
-description: "Generate reports of your media library"
 overview: "Generate reports of your media library"
+description: "Generate reports of your media library"
 category: "General"
 artifacts:
-  - "Jellyfin.Plugin.Reports.dll"
-build_type: "dotnet"
-dotnet_configuration: "Release"
-dotnet_framework: "netstandard2.1"
+- "Jellyfin.Plugin.Reports.dll"
+changelog: >
+  changelog

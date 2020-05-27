@@ -1449,7 +1449,7 @@ define(['jQuery', 'libraryBrowser', 'loading', 'appRouter', 'fnchecked', 'emby-b
             $('#selectReportGroupingBox', page).show();
             $('#grpReportsColumns', page).show();
 
-            var initial_state = $('#chkStartCollapsed', page).prop('checked');
+            var initial_state = $('#chkStartCollapsed', page).checked;
             html += getTable(result, initial_state);
 
             $('.reporContainer', page).html(html).trigger('create');
@@ -1582,37 +1582,37 @@ define(['jQuery', 'libraryBrowser', 'loading', 'appRouter', 'fnchecked', 'emby-b
 
         });
 
-        $('#chk3D', page).checked(query.Is3D == true);
-        $('#chkHD', page).checked(query.IsHD == true);
-        $('#chkSD', page).checked(query.IsHD == false);
+        $('#chk3D', page).checked = query.Is3D == true;
+        $('#chkHD', page).checked = query.IsHD == true;
+        $('#chkSD', page).checked = query.IsHD == false;
 
-        $('#chkSubtitle', page).checked(query.HasSubtitles == true);
-        $('#chkTrailer', page).checked(query.HasTrailer == true);
-        $('#chkMissingTrailer', page).checked(query.HasTrailer == false);
-        $('#chkSpecialFeature', page).checked(query.HasSpecialFeature == true);
-        $('#chkThemeSong', page).checked(query.HasThemeSong == true);
-        $('#chkThemeVideo', page).checked(query.HasThemeVideo == true);
+        $('#chkSubtitle', page).checked = query.HasSubtitles == true;
+        $('#chkTrailer', page).checked = query.HasTrailer == true;
+        $('#chkMissingTrailer', page).checked = query.HasTrailer == false;
+        $('#chkSpecialFeature', page).checked = query.HasSpecialFeature == true;
+        $('#chkThemeSong', page).checked = query.HasThemeSong == true;
+        $('#chkThemeVideo', page).checked = query.HasThemeVideo == true;
 
         $('#selectPageSize', page).val(query.Limit);
 
         //Management
-        $('#chkMissingRating', page).checked(query.HasOfficialRating == false);
-        $('#chkMissingOverview', page).checked(query.HasOverview == false);
-        $('#chkIsLocked', page).checked(query.IsLocked == true);
-        $('#chkMissingImdbId', page).checked(query.HasImdbId == false);
-        $('#chkMissingTmdbId', page).checked(query.HasTmdbId == false);
-        $('#chkMissingTvdbId', page).checked(query.HasTvdbId == false);
+        $('#chkMissingRating', page).checked = query.HasOfficialRating == false;
+        $('#chkMissingOverview', page).checked = query.HasOverview == false;
+        $('#chkIsLocked', page).checked = query.IsLocked == true;
+        $('#chkMissingImdbId', page).checked = query.HasImdbId == false;
+        $('#chkMissingTmdbId', page).checked = query.HasTmdbId == false;
+        $('#chkMissingTvdbId', page).checked = query.HasTvdbId == false;
 
         //Episodes
-        $('#chkSpecialEpisode', page).checked(query.ParentIndexNumber == 0);
-        $('#chkMissingEpisode', page).checked(query.IsMissing == true);
-        $('#chkFutureEpisode', page).checked(query.IsUnaired == true);
+        $('#chkSpecialEpisode', page).checked = query.ParentIndexNumber == 0;
+        $('#chkMissingEpisode', page).checked = query.IsMissing == true;
+        $('#chkFutureEpisode', page).checked = query.IsUnaired == true;
 
         $('#selectIncludeItemTypes').val(query.IncludeItemTypes);
 
         // isfavorite
-        $('#isFavorite').checked(query.IsFavorite == true);
-        $('#isNotFavorite').checked(query.IsNotFavorite == true);
+        $('#isFavorite').checked = query.IsFavorite == true;
+        $('#isNotFavorite').checked = query.IsNotFavorite == true;
 
 
     }
