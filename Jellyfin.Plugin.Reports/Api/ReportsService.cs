@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Globalization;
 using System.Linq;
 using System;
+using Jellyfin.Data.Entities;
 using Jellyfin.Plugin.Reports.Api.Activities;
 using Jellyfin.Plugin.Reports.Api.Common;
 using Jellyfin.Plugin.Reports.Api.Data;
@@ -331,9 +332,12 @@ namespace Jellyfin.Plugin.Reports.Api
             // all report queries currently need this because it's not being specified
             request.Recursive = true;
 
-            var item = string.IsNullOrEmpty(request.ParentId) ?
-                user == null ? _libraryManager.RootFolder : user.RootFolder :
-                _libraryManager.GetItemById(request.ParentId);
+            BaseItem item = null;
+
+            if (!string.IsNullOrEmpty(request.ParentId))
+            {
+                item = _libraryManager.GetItemById(request.ParentId);
+            }
 
             if (string.Equals(request.IncludeItemTypes, "Playlist", StringComparison.OrdinalIgnoreCase))
             {
@@ -341,15 +345,15 @@ namespace Jellyfin.Plugin.Reports.Api
             }
             else if (string.Equals(request.IncludeItemTypes, "BoxSet", StringComparison.OrdinalIgnoreCase))
             {
-                item = user == null ? _libraryManager.RootFolder : user.RootFolder;
+                item = _libraryManager.GetUserRootFolder();
             }
 
             // Default list type = children
 
-            var folder = item as Folder;
-            if (folder == null)
+            Folder folder = item as Folder;
+            if (folder is null)
             {
-                folder = user == null ? _libraryManager.RootFolder : _libraryManager.GetUserRootFolder();
+                folder = _libraryManager.GetUserRootFolder();
             }
 
             if (!string.IsNullOrEmpty(request.Ids))
@@ -404,16 +408,11 @@ namespace Jellyfin.Plugin.Reports.Api
         /// <returns> The report activities. </returns>
         private ReportResult GetReportActivities(IReportsDownload request)
         {
-            DateTime? minDate = string.IsNullOrWhiteSpace(request.MinDate) ?
-            (DateTime?)null :
-            DateTime.Parse(request.MinDate, null, DateTimeStyles.RoundtripKind).ToUniversalTime();
-
             QueryResult<ActivityLogEntry> queryResult;
             if (request.HasQueryLimit)
-                queryResult = _activityManager.GetActivityLogEntries(minDate, request.StartIndex, request.Limit);
+                queryResult = _activityManager.GetPagedResult(request.StartIndex, request.Limit);
             else
-                queryResult = _activityManager.GetActivityLogEntries(minDate, request.StartIndex, null);
-            //var queryResult = _activityManager.GetActivityLogEntries(minDate, request.StartIndex, request.Limit);
+                queryResult = _activityManager.GetPagedResult(request.StartIndex, null);
 
             ReportActivitiesBuilder builder = new ReportActivitiesBuilder(_libraryManager, _userManager);
             var result = builder.GetResult(queryResult, request);
