@@ -1611,8 +1611,8 @@ define(['jQuery', 'libraryBrowser', 'loading', 'appRouter', 'fnchecked', 'emby-b
         $('#selectIncludeItemTypes').val(query.IncludeItemTypes);
 
         // isfavorite
-        $('#isFavorite').checked = query.IsFavorite == true;
-        $('#isNotFavorite').checked = query.IsNotFavorite == true;
+        document.getElementById('isFavorite').checked = query.IsFavorite == true;
+        document.getElementById('isNotFavorite').checked = query.IsNotFavorite == true;
 
 
     }
