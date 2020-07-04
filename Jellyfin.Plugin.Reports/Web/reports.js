@@ -1449,7 +1449,7 @@ define(['jQuery', 'libraryBrowser', 'loading', 'appRouter', 'fnchecked', 'emby-b
             $('#selectReportGroupingBox', page).show();
             $('#grpReportsColumns', page).show();
 
-            var initial_state = $('#chkStartCollapsed', page).checked;
+            var initial_state = document.getElementById('chkStartCollapsed').checked;
             html += getTable(result, initial_state);
 
             $('.reporContainer', page).html(html).trigger('create');
@@ -1582,31 +1582,31 @@ define(['jQuery', 'libraryBrowser', 'loading', 'appRouter', 'fnchecked', 'emby-b
 
         });
 
-        $('#chk3D', page).checked = query.Is3D == true;
-        $('#chkHD', page).checked = query.IsHD == true;
-        $('#chkSD', page).checked = query.IsHD == false;
+        document.getElementById('chk3D').checked = query.Is3D == true;
+        document.getElementById('chkHD').checked = query.IsHD == true;
+        document.getElementById('chkSD').checked = query.IsHD == false;
 
-        $('#chkSubtitle', page).checked = query.HasSubtitles == true;
-        $('#chkTrailer', page).checked = query.HasTrailer == true;
-        $('#chkMissingTrailer', page).checked = query.HasTrailer == false;
-        $('#chkSpecialFeature', page).checked = query.HasSpecialFeature == true;
-        $('#chkThemeSong', page).checked = query.HasThemeSong == true;
-        $('#chkThemeVideo', page).checked = query.HasThemeVideo == true;
+        document.getElementById('chkSubtitle').checked = query.HasSubtitles == true;
+        document.getElementById('chkTrailer').checked = query.HasTrailer == true;
+        document.getElementById('chkMissingTrailer').checked = query.HasTrailer == false;
+        document.getElementById('chkSpecialFeature').checked = query.HasSpecialFeature == true;
+        document.getElementById('chkThemeSong').checked = query.HasThemeSong == true;
+        document.getElementById('chkThemeVideo').checked = query.HasThemeVideo == true;
 
         $('#selectPageSize', page).val(query.Limit);
 
         //Management
-        $('#chkMissingRating', page).checked = query.HasOfficialRating == false;
-        $('#chkMissingOverview', page).checked = query.HasOverview == false;
-        $('#chkIsLocked', page).checked = query.IsLocked == true;
-        $('#chkMissingImdbId', page).checked = query.HasImdbId == false;
-        $('#chkMissingTmdbId', page).checked = query.HasTmdbId == false;
-        $('#chkMissingTvdbId', page).checked = query.HasTvdbId == false;
+        document.getElementById('chkMissingRating').checked = query.HasOfficialRating == false;
+        document.getElementById('chkMissingOverview').checked = query.HasOverview == false;
+        document.getElementById('chkIsLocked').checked = query.IsLocked == true;
+        document.getElementById('chkMissingImdbId').checked = query.HasImdbId == false;
+        document.getElementById('chkMissingTmdbId').checked = query.HasTmdbId == false;
+        document.getElementById('chkMissingTvdbId').checked = query.HasTvdbId == false;
 
         //Episodes
-        $('#chkSpecialEpisode', page).checked = query.ParentIndexNumber == 0;
-        $('#chkMissingEpisode', page).checked = query.IsMissing == true;
-        $('#chkFutureEpisode', page).checked = query.IsUnaired == true;
+        document.getElementById('chkSpecialEpisode').checked = query.ParentIndexNumber == 0;
+        document.getElementById('chkMissingEpisode').checked = query.IsMissing == true;
+        document.getElementById('chkFutureEpisode').checked = query.IsUnaired == true;
 
         $('#selectIncludeItemTypes').val(query.IncludeItemTypes);
 
