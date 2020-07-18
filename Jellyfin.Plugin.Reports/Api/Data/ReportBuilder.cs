@@ -591,7 +591,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                 HasImageTagsPrimary = item.ImageInfos != null && item.ImageInfos.Count(n => n.Type == ImageType.Primary) > 0,
                 HasImageTagsBackdrop = item.ImageInfos != null && item.ImageInfos.Count(n => n.Type == ImageType.Backdrop) > 0,
                 HasImageTagsLogo = item.ImageInfos != null && item.ImageInfos.Count(n => n.Type == ImageType.Logo) > 0,
-                HasSpecials = item.GetDisplayExtras().Any(),
+                HasSpecials = item.GetExtras(BaseItem.DisplayExtraTypes).Any(),
                 HasSubtitles = video != null ? video.HasSubtitles : false,
                 RowType = ReportHelper.GetRowType(item.GetClientTypeName())
             };

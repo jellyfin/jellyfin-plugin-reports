@@ -169,7 +169,7 @@ namespace Jellyfin.Plugin.Reports.Api.Activities
                     {
                         if (i.UserId != Guid.Empty)
                         {
-                            MediaBrowser.Controller.Entities.User user = _userManager.GetUserById(i.UserId);
+                            Jellyfin.Data.Entities.User user = _userManager.GetUserById(i.UserId);
                             if (user != null)
                             {
                                 var dto = _userManager.GetUserDto(user);
@@ -193,9 +193,9 @@ namespace Jellyfin.Plugin.Reports.Api.Activities
                     {
                         if (i.UserId != Guid.Empty)
                         {
-                            MediaBrowser.Controller.Entities.User user = _userManager.GetUserById(i.UserId);
+                            Jellyfin.Data.Entities.User user = _userManager.GetUserById(i.UserId);
                             if (user != null)
-                                return user.Name;
+                                return user.Username;
                         }
                         return string.Empty;
                     };
