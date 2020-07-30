@@ -1,4 +1,4 @@
-define(['jQuery', 'libraryBrowser', 'loading', 'appRouter', 'fnchecked', 'emby-button', 'paper-icon-button-light', 'detailtablecss'], function ($, libraryBrowser, loading, appRouter) {
+define(['jQuery', 'libraryBrowser', 'loading', 'appRouter', 'emby-button', 'paper-icon-button-light', 'detailtablecss'], function ($, libraryBrowser, loading, appRouter) {
     'use strict';
 
     if (!jQuery.mobile || !$.mobile.widgets) {
