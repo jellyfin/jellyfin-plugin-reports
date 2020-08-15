@@ -2,11 +2,9 @@
 using MediaBrowser.Controller.Library;
 using MediaBrowser.Model.Querying;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Globalization;
 using System.Linq;
 using System;
-using Jellyfin.Data.Entities;
 using Jellyfin.Plugin.Reports.Api.Activities;
 using Jellyfin.Plugin.Reports.Api.Common;
 using Jellyfin.Plugin.Reports.Api.Data;
@@ -14,18 +12,14 @@ using Jellyfin.Plugin.Reports.Api.Model;
 using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Activity;
 using MediaBrowser.Model.Globalization;
-using MediaBrowser.Model.Services;
-using MediaBrowser.Controller.Net;
+using User = Jellyfin.Data.Entities.User;
 
 namespace Jellyfin.Plugin.Reports.Api
 {
     /// <summary> The reports service. </summary>
     /// <seealso cref="T:MediaBrowser.Api.BaseApiService"/>
-    public class ReportsService : IService, IRequiresRequest
+    public class ReportsService
     {
-        public IRequest Request { get; set; }
-        private IHttpResultFactory _resultFactory;
-
         #region [Constructors]
 
         /// <summary>
@@ -34,13 +28,12 @@ namespace Jellyfin.Plugin.Reports.Api
         /// <param name="libraryManager"> Manager for library. </param>
         /// <param name="localization"> The localization. </param>
         /// <param name="activityManager"> Manager for activity. </param>
-        public ReportsService(IUserManager userManager, ILibraryManager libraryManager, ILocalizationManager localization, IActivityManager activityManager, IHttpResultFactory resultFactory)
+        public ReportsService(IUserManager userManager, ILibraryManager libraryManager, ILocalizationManager localization, IActivityManager activityManager)
         {
             _userManager = userManager;
             _libraryManager = libraryManager;
             _localization = localization;
             _activityManager = activityManager;
-            _resultFactory = resultFactory;
         }
 
         #endregion
@@ -118,10 +111,10 @@ namespace Jellyfin.Plugin.Reports.Api
         /// <summary> Gets the given request. </summary>
         /// <param name="request"> The request. </param>
         /// <returns> A Task&lt;object&gt; </returns>
-        public object Get(GetReportDownload request)
+        public (string content, string contentType, Dictionary<string,string> headers) Get(GetReportDownload request)
         {
             if (string.IsNullOrEmpty(request.IncludeItemTypes))
-                return null;
+                return (null, null, null);
 
             request.DisplayType = "Export";
             ReportViewType reportViewType = ReportHelper.GetReportViewType(request.ReportView);
@@ -170,7 +163,7 @@ namespace Jellyfin.Plugin.Reports.Api
                     break;
             }
 
-            return _resultFactory.GetResult(returnResult, contentType, headers);
+            return (returnResult, contentType, headers);
         }
 
         #endregion
