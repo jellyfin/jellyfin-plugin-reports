@@ -21,6 +21,7 @@ namespace Jellyfin.Plugin.Reports.Api
 {
     /// <summary> The reports service. </summary>
     /// <seealso cref="T:MediaBrowser.Api.BaseApiService"/>
+    [Authenticated]
     public class ReportsService : IService, IRequiresRequest
     {
         public IRequest Request { get; set; }
