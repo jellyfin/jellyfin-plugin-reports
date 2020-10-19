@@ -1,7 +1,7 @@
 ---
 name: "Reports"
 guid: "d4312cd9-5c90-4f38-82e8-51da566790e8"
-version: "9.0.0.0"
+version: "10.0.0.0"
 targetAbi: "10.6.0.0"
 owner: "jellyfin"
 overview: "Generate reports of your media library"

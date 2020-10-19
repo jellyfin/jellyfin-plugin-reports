@@ -1361,6 +1361,7 @@ define(['jQuery', 'libraryBrowser', 'loading', 'appRouter', 'emby-button', 'pape
 
         query.UserId = Dashboard.getCurrentUserId();
         query.HasQueryLimit = false;
+        query.api_key = ApiClient.accessToken();
         var url = ApiClient.getUrl("Reports/Items/Download", query);
 
         if (url) {
