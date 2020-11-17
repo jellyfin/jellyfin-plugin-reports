@@ -12,6 +12,7 @@ namespace Jellyfin.Plugin.Reports.Api
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize(Policy = "DefaultAuthorization")]
     [Produces(MediaTypeNames.Application.Json)]
     public class ReportsController : ControllerBase
     {
