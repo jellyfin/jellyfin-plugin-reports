@@ -150,7 +150,7 @@ namespace Jellyfin.Plugin.Reports.Api
                     result.TotalRecordCount = queryResult.TotalRecordCount;
                     break;
                 case ReportViewType.ReportActivities:
-                    result = await GetReportActivities(request);
+                    result = await GetReportActivities(request).ConfigureAwait(false);
                     break;
             }
 
