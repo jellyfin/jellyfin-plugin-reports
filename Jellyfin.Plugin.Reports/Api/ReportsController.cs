@@ -435,7 +435,7 @@ namespace Jellyfin.Plugin.Reports.Api
                 ExportType = exportType,
                 MinDate = minDate
             };
-            var (content, contentType, headers) = await _reportsService.Get(request);
+            var (content, contentType, headers) = await _reportsService.Get(request).ConfigureAwait(false);
 
             foreach (var (key, value) in headers)
             {
