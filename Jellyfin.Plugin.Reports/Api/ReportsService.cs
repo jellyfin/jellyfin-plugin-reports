@@ -409,7 +409,7 @@ namespace Jellyfin.Plugin.Reports.Api
                 Limit = request.HasQueryLimit ? request.Limit : null
             };
 
-            var queryResult = await _activityManager.GetPagedResultAsync(activityLogQuery);
+            var queryResult = await _activityManager.GetPagedResultAsync(activityLogQuery).ConfigureAwait(false);
             ReportActivitiesBuilder builder = new ReportActivitiesBuilder(_libraryManager, _userManager);
             var result = builder.GetResult(queryResult, request);
             result.TotalRecordCount = queryResult.TotalRecordCount;
