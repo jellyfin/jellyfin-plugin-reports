@@ -63,7 +63,7 @@ namespace Jellyfin.Plugin.Reports.Api
         public async Task<object> Get(GetActivityLogs request)
         {
             request.DisplayType = "Screen";
-            ReportResult result = await GetReportActivities(request);
+            ReportResult result = await GetReportActivities(request).CongureAwait(false);
             return result;
         }
 
