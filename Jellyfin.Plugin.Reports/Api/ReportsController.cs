@@ -257,7 +257,7 @@ namespace Jellyfin.Plugin.Reports.Api
                 IncludeItemTypes = includeItemTypes
             };
 
-            return Ok(await _reportsService.Get(request));
+            return Ok(await _reportsService.Get(request).ConfigureAwait(false));
         }
         
         /// <summary>
