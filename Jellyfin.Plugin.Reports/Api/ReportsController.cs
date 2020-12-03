@@ -1,11 +1,13 @@
 ﻿#nullable enable
 
 using System.Net.Mime;
+using System.Threading.Tasks;
 using Jellyfin.Plugin.Reports.Api.Common;
 using Jellyfin.Plugin.Reports.Api.Model;
 using MediaBrowser.Controller.Library;
 using MediaBrowser.Model.Activity;
 using MediaBrowser.Model.Globalization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Jellyfin.Plugin.Reports.Api
@@ -231,7 +233,7 @@ namespace Jellyfin.Plugin.Reports.Api
         /// Gets activities entries.
         /// </summary>
         [HttpGet("Activities")]
-        public ActionResult GetActivityLogs(
+        public async Task<ActionResult> GetActivityLogs(
             [FromQuery] string? reportView,
             [FromQuery] string? displayType,
             [FromQuery] bool? hasQueryLimit,
@@ -255,14 +257,14 @@ namespace Jellyfin.Plugin.Reports.Api
                 IncludeItemTypes = includeItemTypes
             };
 
-            return Ok(_reportsService.Get(request));
+            return Ok(await _reportsService.Get(request).ConfigureAwait(false));
         }
         
         /// <summary>
         /// Downloads report.
         /// </summary>
         [HttpGet("Items/Download")]
-        public ActionResult<ReportResult> GetReportDownload(
+        public async Task<ActionResult<ReportResult>> GetReportDownload(
             [FromQuery] string maxOfficialRating,
             [FromQuery] bool? hasThemeSong,
             [FromQuery] bool? hasThemeVideo,
@@ -433,14 +435,14 @@ namespace Jellyfin.Plugin.Reports.Api
                 ExportType = exportType,
                 MinDate = minDate
             };
-            var result = _reportsService.Get(request);
+            var (content, contentType, headers) = await _reportsService.Get(request).ConfigureAwait(false);
 
-            foreach (var header in result.headers)
+            foreach (var (key, value) in headers)
             {
-                Response.Headers.Add(header.Key, header.Value);
+                Response.Headers.Add(key, value);
             }
             
-            return Content(result.content, result.contentType);
+            return Content(content, contentType);
         }
     }
 }

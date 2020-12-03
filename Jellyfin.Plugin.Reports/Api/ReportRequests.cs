@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using MediaBrowser.Model.Services;
 using System;
 using System.Linq;
+using Jellyfin.Data.Enums;
 using Jellyfin.Plugin.Reports.Api.Common;
 using Jellyfin.Plugin.Reports.Api.Model;
 using MediaBrowser.Model.Entities;
@@ -539,7 +539,7 @@ namespace Jellyfin.Plugin.Reports.Api
 
             if (string.IsNullOrEmpty(val))
             {
-                return new ValueTuple<string, MediaBrowser.Model.Entities.SortOrder>[] { };
+                return new ValueTuple<string, SortOrder>[] { };
             }
 
             var vals = val.Split(',');
@@ -550,16 +550,16 @@ namespace Jellyfin.Plugin.Reports.Api
 
             var sortOrders = requestedSortOrder.Split(',');
 
-            var result = new ValueTuple<string, MediaBrowser.Model.Entities.SortOrder>[vals.Length];
+            var result = new ValueTuple<string, SortOrder>[vals.Length];
 
             for (var i = 0; i < vals.Length; i++)
             {
                 var sortOrderIndex = sortOrders.Length > i ? i : 0;
 
                 var sortOrderValue = sortOrders.Length > sortOrderIndex ? sortOrders[sortOrderIndex] : null;
-                var sortOrder = string.Equals(sortOrderValue, "Descending", StringComparison.OrdinalIgnoreCase) ? MediaBrowser.Model.Entities.SortOrder.Descending : MediaBrowser.Model.Entities.SortOrder.Ascending;
+                var sortOrder = string.Equals(sortOrderValue, "Descending", StringComparison.OrdinalIgnoreCase) ? Jellyfin.Data.Enums.SortOrder.Descending : Jellyfin.Data.Enums.SortOrder.Ascending;
 
-                result[i] = new ValueTuple<string, MediaBrowser.Model.Entities.SortOrder>(vals[i], sortOrder);
+                result[i] = new ValueTuple<string, SortOrder>(vals[i], sortOrder);
             }
 
             return result;
@@ -597,12 +597,12 @@ namespace Jellyfin.Plugin.Reports.Api
      
     }
 
-	public class GetItemReport : BaseReportRequest, IReturn<ReportResult>
+	public class GetItemReport : BaseReportRequest
 	{
 
 	}
 
-    public class GetReportHeaders : IReturn<List<ReportHeader>>, IReportsHeader
+    public class GetReportHeaders : IReportsHeader
     {
         /// <summary> Gets or sets the report view. </summary>
         /// <value> The report view. </value>
@@ -641,7 +641,7 @@ namespace Jellyfin.Plugin.Reports.Api
 
 	}
 
-    public class GetActivityLogs : IReturn<ReportResult>, IReportsQuery, IReportsDownload
+    public class GetActivityLogs : IReportsDownload
     {
         /// <summary> Gets or sets the report view. </summary>
         /// <value> The report view. </value>

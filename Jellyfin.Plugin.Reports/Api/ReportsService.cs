@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System;
+using System.Threading.Tasks;
+using Jellyfin.Data.Queries;
 using Jellyfin.Plugin.Reports.Api.Activities;
 using Jellyfin.Plugin.Reports.Api.Common;
 using Jellyfin.Plugin.Reports.Api.Data;
@@ -58,10 +60,10 @@ namespace Jellyfin.Plugin.Reports.Api
         /// <summary> Gets the given request. </summary>
         /// <param name="request"> The request. </param>
         /// <returns> A Task&lt;object&gt; </returns>
-        public object Get(GetActivityLogs request)
+        public async Task<object> Get(GetActivityLogs request)
         {
             request.DisplayType = "Screen";
-            ReportResult result = GetReportActivities(request);
+            ReportResult result = await GetReportActivities(request).CongureAwait(false);
             return result;
         }
 
@@ -111,7 +113,7 @@ namespace Jellyfin.Plugin.Reports.Api
         /// <summary> Gets the given request. </summary>
         /// <param name="request"> The request. </param>
         /// <returns> A Task&lt;object&gt; </returns>
-        public (string content, string contentType, Dictionary<string,string> headers) Get(GetReportDownload request)
+        public async Task<(string content, string contentType, Dictionary<string,string> headers)> Get(GetReportDownload request)
         {
             if (string.IsNullOrEmpty(request.IncludeItemTypes))
                 return (null, null, null);
@@ -148,7 +150,7 @@ namespace Jellyfin.Plugin.Reports.Api
                     result.TotalRecordCount = queryResult.TotalRecordCount;
                     break;
                 case ReportViewType.ReportActivities:
-                    result = GetReportActivities(request);
+                    result = await GetReportActivities(request).ConfigureAwait(false);
                     break;
             }
 
@@ -399,14 +401,15 @@ namespace Jellyfin.Plugin.Reports.Api
         /// <summary> Gets report activities. </summary>
         /// <param name="request"> The request. </param>
         /// <returns> The report activities. </returns>
-        private ReportResult GetReportActivities(IReportsDownload request)
+        private async Task<ReportResult> GetReportActivities(IReportsDownload request)
         {
-            QueryResult<ActivityLogEntry> queryResult;
-            if (request.HasQueryLimit)
-                queryResult = _activityManager.GetPagedResult(request.StartIndex, request.Limit);
-            else
-                queryResult = _activityManager.GetPagedResult(request.StartIndex, null);
+            var activityLogQuery = new ActivityLogQuery
+            {
+                StartIndex = request.StartIndex,
+                Limit = request.HasQueryLimit ? request.Limit : null
+            };
 
+            var queryResult = await _activityManager.GetPagedResultAsync(activityLogQuery).ConfigureAwait(false);
             ReportActivitiesBuilder builder = new ReportActivitiesBuilder(_libraryManager, _userManager);
             var result = builder.GetResult(queryResult, request);
             result.TotalRecordCount = queryResult.TotalRecordCount;
