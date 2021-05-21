@@ -1393,6 +1393,31 @@ if (!jQuery.mobile || !$.mobile.widgets) {
         });
     }
 
+    function getQueryPagingHtml(options) {
+        const startIndex = options.startIndex;
+        const limit = options.limit;
+        const totalRecordCount = options.totalRecordCount;
+        let html = '';
+        const recordsEnd = Math.min(startIndex + limit, totalRecordCount);
+        const showControls = limit < totalRecordCount;
+
+        html += '<div class="listPaging">';
+        if (showControls) {
+            html += '<span style="vertical-align:middle;">';
+            const startAtDisplay = totalRecordCount ? startIndex + 1 : 0;
+            html += startAtDisplay + '-' + recordsEnd + ' of ' + totalRecordCount;
+            html += '</span>';
+            html += '<div style="display:inline-block;">';
+            html += '<button is="paper-icon-button-light" class="btnPreviousPage autoSize" ' + (startIndex ? '' : 'disabled') + '><span class="material-icons arrow_back"></span></button>';
+            html += '<button is="paper-icon-button-light" class="btnNextPage autoSize" ' + (startIndex + limit >= totalRecordCount ? 'disabled' : '') + '><span class="material-icons arrow_forward"></span></button>';
+            html += '</div>';
+        }
+
+        html += '</div>';
+
+        return html;
+    }
+
     function renderItems(page, result) {
 
         window.scrollTo(0, 0);
@@ -1410,7 +1435,7 @@ if (!jQuery.mobile || !$.mobile.widgets) {
 
         var pagingHtml = "Total : " + result.TotalRecordCount;
         if (query.Limit != -1) {
-            pagingHtml = LibraryBrowser.getQueryPagingHtml({
+            pagingHtml = getQueryPagingHtml({
                 startIndex: query.StartIndex,
                 limit: query.Limit,
                 totalRecordCount: result.TotalRecordCount,
