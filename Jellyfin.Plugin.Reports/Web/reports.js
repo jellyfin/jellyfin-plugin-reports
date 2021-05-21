@@ -1,7 +1,4 @@
-define(['jQuery', 'libraryBrowser', 'loading', 'appRouter', 'emby-button', 'paper-icon-button-light', 'detailtablecss'], function ($, libraryBrowser, loading, appRouter) {
-    'use strict';
-
-    if (!jQuery.mobile || !$.mobile.widgets) {
+if (!jQuery.mobile || !$.mobile.widgets) {
 
         if (!jQuery.mobile) {
             jQuery.mobile = {};
@@ -1870,7 +1867,7 @@ define(['jQuery', 'libraryBrowser', 'loading', 'appRouter', 'emby-button', 'pape
         onPageShow: onPageReportColumnsShow
     };
 
-    return function (page, params) {
+    export default function (page, params) {
 
         $(page).trigger('create');
 
@@ -2237,4 +2234,3 @@ define(['jQuery', 'libraryBrowser', 'loading', 'appRouter', 'emby-button', 'pape
             updateFilterControls(this);
         });
     };
-});
