@@ -1253,7 +1253,7 @@ if (!jQuery.mobile || !$.mobile.widgets) {
                 html += rItem.Name;
                 break;
             case "Detail":
-               html += '<a is="emby-linkbutton" class="button-link" href="' + appRouter.getRouteUrl({ Id: id, ServerId: serverId }) + '">' + rItem.Name + '</a>';
+               html += '<a is="emby-linkbutton" class="button-link" href="' + Emby.Page.getRouteUrl({ Id: id, ServerId: serverId }) + '">' + rItem.Name + '</a>';
                 break;
             case "Edit":
                 html += '<a is="emby-button" class="button-link" href="edititemmetadata.html?id=' + rRow.Id + '">' + rItem.Name + '</a>';
@@ -1262,7 +1262,7 @@ if (!jQuery.mobile || !$.mobile.widgets) {
                 html += '<a is="emby-button" class="button-link" href="itemlist.html?serverId=' + rItem.ServerId + '&id=' + rRow.Id + '">' + rItem.Name + '</a>';
                 break;
             case "ItemByNameDetails":
-                html += '<a is="emby-button" class="button-link" href="' + appRouter.getRouteUrl({ Id: id, ServerId: serverId }) + '">' + rItem.Name + '</a>';
+                html += '<a is="emby-button" class="button-link" href="' + Emby.Page.getRouteUrl({ Id: id, ServerId: serverId }) + '">' + rItem.Name + '</a>';
                 break;
             case "EmbeddedImage":
                 if (rRow.HasEmbeddedImage) {
@@ -1410,7 +1410,7 @@ if (!jQuery.mobile || !$.mobile.widgets) {
 
         var pagingHtml = "Total : " + result.TotalRecordCount;
         if (query.Limit != -1) {
-            pagingHtml = libraryBrowser.getQueryPagingHtml({
+            pagingHtml = LibraryBrowser.getQueryPagingHtml({
                 startIndex: query.StartIndex,
                 limit: query.Limit,
                 totalRecordCount: result.TotalRecordCount,
@@ -1517,7 +1517,7 @@ if (!jQuery.mobile || !$.mobile.widgets) {
     }
 
     function reloadItems(page) {
-        loading.show();
+        Loading.show();
 
         query.UserId = Dashboard.getCurrentUserId();
         var url = "";
@@ -1539,7 +1539,7 @@ if (!jQuery.mobile || !$.mobile.widgets) {
         });
 
 
-        loading.hide();
+        Loading.hide();
     }
 
     function updateFilterControls(page) {
