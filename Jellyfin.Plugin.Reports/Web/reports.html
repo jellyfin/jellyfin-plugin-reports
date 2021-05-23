@@ -1,6 +1,5 @@
 ﻿<div id="libraryReportManagerPage" data-role="page" class="page type-interior reportsPage pluginConfigurationPage" data-title="Reports" data-controller="__plugin/reportsjs">
     <style>
-
         /* "page" containers - full-screen views, one should always be in view post-pageload */
         .ui-mobile [data-role=dialog] {
             top: 0;
@@ -13,11 +12,12 @@
 
         /* preset breakpoint to switch to stacked grid styles below 35em (560px) */
         @media (max-width: 35em) {
-            .ui-responsive > .ui-block-a,
-            .ui-responsive > .ui-block-b,
-            .ui-responsive > .ui-block-c,
-            .ui-responsive > .ui-block-d,
-            .ui-responsive > .ui-block-e {
+
+            .ui-responsive>.ui-block-a,
+            .ui-responsive>.ui-block-b,
+            .ui-responsive>.ui-block-c,
+            .ui-responsive>.ui-block-d,
+            .ui-responsive>.ui-block-e {
                 width: 100%;
                 float: none;
             }
@@ -40,12 +40,13 @@
             overflow: hidden;
             visibility: hidden;
             left: 0;
-            clip: rect(1px,1px,1px,1px);
+            clip: rect(1px, 1px, 1px, 1px);
         }
 
         .ui-panel-fixed {
             position: fixed;
-            bottom: -1px; /* Fixes gap on Chrome for Android */
+            bottom: -1px;
+            /* Fixes gap on Chrome for Android */
             padding-bottom: 1px;
         }
 
@@ -58,7 +59,8 @@
         }
 
         .ui-panel-display-overlay {
-            z-index: 1001; /* Fixed toolbars have z-index 1000 */
+            z-index: 1001;
+            /* Fixed toolbars have z-index 1000 */
         }
 
         .ui-panel-inner {
@@ -107,12 +109,14 @@
         }
 
         /* Fix for Windows Phone issue #6349: unset the transition for transforms in case of fixed toolbars. */
-        @media screen and ( max-device-width: 768px ) {
+        @media screen and (max-device-width: 768px) {
+
             .ui-page-header-fixed .ui-panel-animate.ui-panel-wrapper,
             .ui-page-footer-fixed .ui-panel-animate.ui-panel-wrapper,
             .ui-panel-animate.ui-panel-fixed-toolbar {
                 -ms-transition: none;
             }
+
             /* We need a transitionend event ... */
             .ui-panel-animate.ui-panel-fixed-toolbar {
                 -ms-transition: -ms-transform 1ms;
@@ -123,7 +127,7 @@
         /* Hardware acceleration for smoother transitions on WebKit browsers */
         .ui-panel-animate.ui-panel:not(.ui-panel-display-reveal) {
             -webkit-backface-visibility: hidden;
-            -webkit-transform: translate3d(0,0,0);
+            -webkit-transform: translate3d(0, 0, 0);
         }
 
         /* Panel positioning (for overlay and push) */
@@ -131,48 +135,57 @@
         .ui-panel-position-left {
             left: -17em;
         }
+
         /* Panel left closed animated */
         .ui-panel-animate.ui-panel-position-left.ui-panel-display-overlay,
         .ui-panel-animate.ui-panel-position-left.ui-panel-display-push {
             left: 0;
-            -webkit-transform: translate3d(-17em,0,0);
-            -moz-transform: translate3d(-17em,0,0);
-            transform: translate3d(-17em,0,0);
+            -webkit-transform: translate3d(-17em, 0, 0);
+            -moz-transform: translate3d(-17em, 0, 0);
+            transform: translate3d(-17em, 0, 0);
         }
+
         /* Panel left open */
-        .ui-panel-position-left.ui-panel-display-reveal, /* Unset "panel left closed" for reveal */
+        .ui-panel-position-left.ui-panel-display-reveal,
+        /* Unset "panel left closed" for reveal */
         .ui-panel-open.ui-panel-position-left {
             left: 0;
         }
+
         /* Panel left open animated */
         .ui-panel-animate.ui-panel-open.ui-panel-position-left.ui-panel-display-overlay,
         .ui-panel-animate.ui-panel-open.ui-panel-position-left.ui-panel-display-push {
-            -webkit-transform: translate3d(0,0,0);
-            transform: translate3d(0,0,0);
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
             -moz-transform: none;
         }
+
         /* Panel right closed */
         .ui-panel-position-right {
             right: -17em;
         }
+
         /* Panel right closed animated */
         .ui-panel-animate.ui-panel-position-right.ui-panel-display-overlay,
         .ui-panel-animate.ui-panel-position-right.ui-panel-display-push {
             right: 0;
-            -webkit-transform: translate3d(17em,0,0);
-            -moz-transform: translate3d(17em,0,0);
-            transform: translate3d(17em,0,0);
+            -webkit-transform: translate3d(17em, 0, 0);
+            -moz-transform: translate3d(17em, 0, 0);
+            transform: translate3d(17em, 0, 0);
         }
+
         /* Panel right open */
-        .ui-panel-position-right.ui-panel-display-reveal, /* Unset "panel right closed" for reveal */
+        .ui-panel-position-right.ui-panel-display-reveal,
+        /* Unset "panel right closed" for reveal */
         .ui-panel-position-right.ui-panel-open {
             right: 0;
         }
+
         /* Panel right open animated */
         .ui-panel-animate.ui-panel-open.ui-panel-position-right.ui-panel-display-overlay,
         .ui-panel-animate.ui-panel-open.ui-panel-position-right.ui-panel-display-push {
-            -webkit-transform: translate3d(0,0,0);
-            transform: translate3d(0,0,0);
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
             -moz-transform: none;
         }
 
@@ -182,26 +195,29 @@
             left: 17em;
             right: -17em;
         }
+
         /* Panel left open animated */
         .ui-panel-animate.ui-panel-page-content-position-left {
             left: 0;
             right: 0;
-            -webkit-transform: translate3d(17em,0,0);
-            -moz-transform: translate3d(17em,0,0);
-            transform: translate3d(17em,0,0);
+            -webkit-transform: translate3d(17em, 0, 0);
+            -moz-transform: translate3d(17em, 0, 0);
+            transform: translate3d(17em, 0, 0);
         }
+
         /* Panel right open */
         .ui-panel-page-content-position-right {
             left: -17em;
             right: 17em;
         }
+
         /* Panel right open animated */
         .ui-panel-animate.ui-panel-page-content-position-right {
             left: 0;
             right: 0;
-            -webkit-transform: translate3d(-17em,0,0);
-            -moz-transform: translate3d(-17em,0,0);
-            transform: translate3d(-17em,0,0);
+            -webkit-transform: translate3d(-17em, 0, 0);
+            -moz-transform: translate3d(-17em, 0, 0);
+            transform: translate3d(-17em, 0, 0);
         }
 
         /* Dismiss model open */
@@ -215,27 +231,27 @@
 
         /* Shadows and borders */
         .ui-panel-display-reveal {
-            -webkit-box-shadow: inset -5px 0 5px rgba(0,0,0,.15);
-            -moz-box-shadow: inset -5px 0 5px rgba(0,0,0,.15);
-            box-shadow: inset -5px 0 5px rgba(0,0,0,.15);
+            -webkit-box-shadow: inset -5px 0 5px rgba(0, 0, 0, .15);
+            -moz-box-shadow: inset -5px 0 5px rgba(0, 0, 0, .15);
+            box-shadow: inset -5px 0 5px rgba(0, 0, 0, .15);
         }
 
         .ui-panel-position-right.ui-panel-display-reveal {
-            -webkit-box-shadow: inset 5px 0 5px rgba(0,0,0,.15);
-            -moz-box-shadow: inset 5px 0 5px rgba(0,0,0,.15);
-            box-shadow: inset 5px 0 5px rgba(0,0,0,.15);
+            -webkit-box-shadow: inset 5px 0 5px rgba(0, 0, 0, .15);
+            -moz-box-shadow: inset 5px 0 5px rgba(0, 0, 0, .15);
+            box-shadow: inset 5px 0 5px rgba(0, 0, 0, .15);
         }
 
         .ui-panel-display-overlay {
-            -webkit-box-shadow: 5px 0 5px rgba(0,0,0,.15);
-            -moz-box-shadow: 5px 0 5px rgba(0,0,0,.15);
-            box-shadow: 5px 0 5px rgba(0,0,0,.15);
+            -webkit-box-shadow: 5px 0 5px rgba(0, 0, 0, .15);
+            -moz-box-shadow: 5px 0 5px rgba(0, 0, 0, .15);
+            box-shadow: 5px 0 5px rgba(0, 0, 0, .15);
         }
 
         .ui-panel-position-right.ui-panel-display-overlay {
-            -webkit-box-shadow: -5px 0 5px rgba(0,0,0,.15);
-            -moz-box-shadow: -5px 0 5px rgba(0,0,0,.15);
-            box-shadow: -5px 0 5px rgba(0,0,0,.15);
+            -webkit-box-shadow: -5px 0 5px rgba(0, 0, 0, .15);
+            -moz-box-shadow: -5px 0 5px rgba(0, 0, 0, .15);
+            box-shadow: -5px 0 5px rgba(0, 0, 0, .15);
         }
 
         .ui-panel-open.ui-panel-position-left.ui-panel-display-push {
@@ -273,16 +289,22 @@
             }
 
             .ui-responsive-panel .ui-panel-dismiss-display-push,
-            .ui-responsive-panel.ui-page-active ~ .ui-panel-dismiss-display-push {
+            .ui-responsive-panel.ui-page-active~.ui-panel-dismiss-display-push {
                 display: none;
             }
         }
 
         /* Page and overlay */
         .reportsPage .ui-panel-wrapper {
-            background-color: #252525 /*{b-page-background-color}*/;
-            border-color: #454545 /*{b-page-border}*/;
-            color: #fff /*{b-page-color}*/;
+            background-color: #252525
+            /*{b-page-background-color}*/
+            ;
+            border-color: #454545
+            /*{b-page-border}*/
+            ;
+            color: #fff
+            /*{b-page-color}*/
+            ;
         }
 
         /* Fixes the issue of jqm panels altering the page background. */
@@ -290,7 +312,7 @@
             background: none !important;
         }
 
-        .ui-panel fieldset + fieldset {
+        .ui-panel fieldset+fieldset {
             margin-top: 2em;
         }
 
@@ -318,6 +340,7 @@
         .tblLibraryReport .md-icon {
             font-size: 1.2em;
         }
+
     </style>
     <div class="content-primary">
         <div style="text-align: center;">
@@ -348,238 +371,220 @@
                     <span class="material-icons more_vert"></span>
                 </button>
             </div>
-            <div class="listTopPaging">
-            </div>
+            <div class="listTopPaging"></div>
         </div>
+
         <div class="reporContainer" style="height:auto"></div>
 
-        <div class="listBottomPaging">
-        </div>
+        <div class="listBottomPaging"></div>
 
         <div data-role="panel" id="viewPanel" class="viewPanel ui-panel ui-panel-position-right ui-panel-display-overlay ui-body-inherit ui-panel-animate dialog ui-panel-closed ui-panel-fixed" data-position="right" data-display="overlay" data-position-fixed="true">
             <div class="ui-panel-inner">
-            <form>
-                <div class="viewPanelTabs">
-                    <button is="paper-icon-button-light" class="btnPanelClose autoSize" tabindex="-1">
-                        <span class="material-icons close"></span>
-                    </button>
-                    <button is="emby-button" type="button" id="tabView" data-role="button" class="raised viewTabButton ui-btn-active" data-tab="tabView">View</button>
-                    <button is="emby-button" type="button" id="tabFilter" data-role="button" class="raised viewTabButton" data-tab="tabFilter">Filter</button>
-                </div>
-                <br>
-                <div class="tabView viewTab" id="tabViewBox">
-                    <h2>Settings</h2>
-                    <div class="selectContainer" id="selectReportGroupingBox">
-                          <select is="emby-select" id="selectReportGroup" label="Grouping:"></select>
+                <form>
+                    <div class="viewPanelTabs">
+                        <button is="paper-icon-button-light" class="btnPanelClose autoSize" tabindex="-1">
+                            <span class="material-icons close"></span>
+                        </button>
+                        <button is="emby-button" type="button" id="tabView" data-role="button" class="raised viewTabButton ui-btn-active" data-tab="tabView">View</button>
+                        <button is="emby-button" type="button" id="tabFilter" data-role="button" class="raised viewTabButton" data-tab="tabFilter">Filter</button>
                     </div>
-                    <label class="checkboxContainer">
-                        <input is="emby-checkbox" type="checkbox" id="chkStartCollapsed" />
-                        <span>Start Collapsed</span>
-                    </label>
-                    <div class="selectContainer" id="selectPageSizeBox">
-                         <select is="emby-select" id="selectPageSize" label="Page size:" class="selectPageSize">
-                            <option value="20">20</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                            <option value="200">200</option>
-                            <option value="300">300</option>
-                            <option value="500">500</option>
-                            <option value="-1">All</option>
-                        </select>
-                    </div>
-                    <div id="exportReportBox">
-                        <fieldset>
-                            <label>Export</label><br>
-                            <button is="emby-button" type="button" class="raised block" name="btnReportExportExcel" id="btnReportExportExcel" data-icon="arrow-d">Excel</button>
-                            <button is="emby-button" type="button" class="raised block" name="btnReportExportCsv" id="btnReportExportCsv" data-icon="arrow-d">CSV</button>
-                        </fieldset>
-                    </div>
-                    <div data-role="collapsible" data-collapsed="true" class="reportsColumns" id="grpReportsColumns">
-                        <h2>Columns</h2>
-                        <button type="button" class="raised block" is="emby-button" name="btnResetReportColumns" id="btnResetReportColumns" data-icon="refresh">Reset</button>
-                        <div class="filterOptions">
+                    <br>
+                    <div class="tabView viewTab" id="tabViewBox">
+                        <h2>Settings</h2>
+                        <div class="selectContainer" id="selectReportGroupingBox">
+                            <select is="emby-select" id="selectReportGroup" label="Grouping:"></select>
+                        </div>
+                        <label class="checkboxContainer">
+                            <input is="emby-checkbox" type="checkbox" id="chkStartCollapsed" />
+                            <span>Start Collapsed</span>
+                        </label>
+                        <div class="selectContainer" id="selectPageSizeBox">
+                            <select is="emby-select" id="selectPageSize" label="Page size:" class="selectPageSize">
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                                <option value="200">200</option>
+                                <option value="300">300</option>
+                                <option value="500">500</option>
+                                <option value="-1">All</option>
+                            </select>
+                        </div>
+                        <div id="exportReportBox">
+                            <fieldset>
+                                <label>Export</label><br>
+                                <button is="emby-button" type="button" class="raised block" name="btnReportExportExcel" id="btnReportExportExcel" data-icon="arrow-d">Excel</button>
+                                <button is="emby-button" type="button" class="raised block" name="btnReportExportCsv" id="btnReportExportCsv" data-icon="arrow-d">CSV</button>
+                            </fieldset>
+                        </div>
+                        <div data-role="collapsible" data-collapsed="true" class="reportsColumns" id="grpReportsColumns">
+                            <h2>Columns</h2>
+                            <button type="button" class="raised block" is="emby-button" name="btnResetReportColumns" id="btnResetReportColumns" data-icon="refresh">Reset</button>
+                            <div class="filterOptions"></div>
                         </div>
                     </div>
-                </div>
-
-                <div class="tabFilter viewTab hide" id="tabFilterBox">
-
-                    <h2>Filters</h2>
-                    <div>
-                        <input class="chkStandardFilter" type="checkbox" name="chkPlayed" id="chkPlayed" data-filter="IsPlayed">
-                        <label for="chkPlayed">Played</label><br />
-
-                        <input class="chkStandardFilter" type="checkbox" name="chkUnplayed" id="chkUnplayed" data-filter="IsUnPlayed">
-                        <label for="chkUnplayed">Unplayed</label><br />
-
-                        <input class="chkStandardFilter" type="checkbox" name="chkResumable" id="chkResumable" data-filter="IsResumable">
-                        <label for="chkResumable">Resumable</label><br />
-
-                        <input class="chkStandardFilter" type="checkbox" name="chkLikes" id="chkLikes" data-filter="Likes">
-                        <label for="chkLikes">Likes</label><br />
-
-                        <input class="chkStandardFilter" type="checkbox" name="chkDislikes" id="chkDislikes" data-filter="Dislikes">
-                        <label for="chkDislikes">Dislikes</label><br />
-
-                        <input class="chkIsFavorite" type="checkbox" name="chkFavorite" id="chkIsFavorite" data-filter="IsFavorite">
-                        <label for="chkIsFavorite">Favorite</label><br />
-
-                        <input class="chkIsNotFavorite" type="checkbox" name="chkNotFavorite" id="chkIsNotFavorite" data-filter="IsNotFavorite">
-                        <label for="chkIsNotFavorite">Not Favorite</label><br />
-
-                    </div>
-
-                    <div data-role="collapsible" data-collapsed="true" data-mini="true">
-                        <h2>Management</h2>
+                    <div class="tabFilter viewTab hide" id="tabFilterBox">
+                        <h2>Filters</h2>
                         <div>
-                            <input class="chkIsLocked" type="checkbox" id="chkIsLocked">
-                            <label for="chkIsLocked">Locked</label><br />
-
-                            <input class="chkMissingOverview" type="checkbox" name="chkMissingOverview" id="chkMissingOverview">
-                            <label for="chkMissingOverview">Missing Overview</label><br />
-
-                            <input class="chkMissingRating" type="checkbox" name="chkMissingRating" id="chkMissingRating">
-                            <label for="chkMissingRating">Missing parental rating</label><br />
-
-                            <input class="chkMissingImdbId" type="checkbox" name="chkMissingImdbId" id="chkMissingImdbId">
-                            <label for="chkMissingImdbId">Missing Imdb id</label><br />
-
-                            <input class="chkMissingTmdbId" type="checkbox" name="chkMissingTmdbId" id="chkMissingTmdbId">
-                            <label for="chkMissingTmdbId">Missing MovieDb id</label><br />
-
-                            <input class="chkMissingTvdbId" type="checkbox" name="chkMissingTvdbId" id="chkMissingTvdbId">
-                            <label for="chkMissingTvdbId">Missing Tvdb id</label><br />
+                            <input class="chkStandardFilter" type="checkbox" name="chkPlayed" id="chkPlayed" data-filter="IsPlayed">
+                            <label for="chkPlayed">Played</label>
+                            <br />
+                            <input class="chkStandardFilter" type="checkbox" name="chkUnplayed" id="chkUnplayed" data-filter="IsUnPlayed">
+                            <label for="chkUnplayed">Unplayed</label>
+                            <br />
+                            <input class="chkStandardFilter" type="checkbox" name="chkResumable" id="chkResumable" data-filter="IsResumable">
+                            <label for="chkResumable">Resumable</label>
+                            <br />
+                            <input class="chkStandardFilter" type="checkbox" name="chkLikes" id="chkLikes" data-filter="Likes">
+                            <label for="chkLikes">Likes</label>
+                            <br />
+                            <input class="chkStandardFilter" type="checkbox" name="chkDislikes" id="chkDislikes" data-filter="Dislikes">
+                            <label for="chkDislikes">Dislikes</label>
+                            <br />
+                            <input class="chkIsFavorite" type="checkbox" name="chkFavorite" id="chkIsFavorite" data-filter="IsFavorite">
+                            <label for="chkIsFavorite">Favorite</label>
+                            <br />
+                            <input class="chkIsNotFavorite" type="checkbox" name="chkNotFavorite" id="chkIsNotFavorite" data-filter="IsNotFavorite">
+                            <label for="chkIsNotFavorite">Not Favorite</label>
+                            <br />
+                        </div>
+                        <div data-role="collapsible" data-collapsed="true" data-mini="true">
+                            <h2>Management</h2>
+                            <div>
+                                <input class="chkIsLocked" type="checkbox" id="chkIsLocked">
+                                <label for="chkIsLocked">Locked</label>
+                                <br />
+                                <input class="chkMissingOverview" type="checkbox" name="chkMissingOverview" id="chkMissingOverview">
+                                <label for="chkMissingOverview">Missing Overview</label>
+                                <br />
+                                <input class="chkMissingRating" type="checkbox" name="chkMissingRating" id="chkMissingRating">
+                                <label for="chkMissingRating">Missing parental rating</label>
+                                <br />
+                                <input class="chkMissingImdbId" type="checkbox" name="chkMissingImdbId" id="chkMissingImdbId">
+                                <label for="chkMissingImdbId">Missing Imdb id</label>
+                                <br />
+                                <input class="chkMissingTmdbId" type="checkbox" name="chkMissingTmdbId" id="chkMissingTmdbId">
+                                <label for="chkMissingTmdbId">Missing MovieDb id</label>
+                                <br />
+                                <input class="chkMissingTvdbId" type="checkbox" name="chkMissingTvdbId" id="chkMissingTvdbId">
+                                <label for="chkMissingTvdbId">Missing Tvdb id</label>
+                                <br />
+                            </div>
+                        </div>
+                        <div data-role="collapsible" data-collapsed="true" data-mini="true" id="GroupStatus">
+                            <h2>Status</h2>
+                            <div>
+                                <input class="chkStatus" type="checkbox" name="chkStatusContinuing" id="chkStatusContinuing" data-filter="Continuing">
+                                <label for="chkStatusContinuing">Continuing</label><br />
+                                <input class="chkStatus" type="checkbox" name="chkStatusEnded" id="chkStatusEnded" data-filter="Ended">
+                                <label for="chkStatusEnded">Ended</label><br />
+                            </div>
+                        </div>
+                        <div data-role="collapsible" data-collapsed="true" data-mini="true" id="GroupAirDays">
+                            <h2>Air Days</h2>
+                            <div>
+                                <input class="chkAirDays" type="checkbox" name="chkSunday" id="chkSunday" data-filter="Sunday">
+                                <label for="chkSunday">Sunday</label>
+                                <br />
+                                <input class="chkAirDays" type="checkbox" name="chkMonday" id="chkMonday" data-filter="Monday">
+                                <label for="chkMonday">Monday</label>
+                                <br />
+                                <input class="chkAirDays" type="checkbox" name="chkTuesday" id="chkTuesday" data-filter="Tuesday">
+                                <label for="chkTuesday">Tuesday</label>
+                                <br />
+                                <input class="chkAirDays" type="checkbox" name="chkWednesday" id="chkWednesday" data-filter="Wednesday">
+                                <label for="chkWednesday">Wednesday</label>
+                                <br />
+                                <input class="chkAirDays" type="checkbox" name="chkThursday" id="chkThursday" data-filter="Thursday">
+                                <label for="chkThursday">Thursday</label>
+                                <br />
+                                <input class="chkAirDays" type="checkbox" name="chkFriday" id="chkFriday" data-filter="Friday">
+                                <label for="chkFriday">Friday</label>
+                                <br />
+                                <input class="chkAirDays" type="checkbox" name="chkSaturday" id="chkSaturday" data-filter="Saturday">
+                                <label for="chkSaturday">Saturday</label>
+                                <br />
+                            </div>
+                        </div>
+                        <div data-role="collapsible" data-collapsed="true" data-mini="true" id="GroupEpisodes">
+                            <h2>Episodes</h2>
+                            <div>
+                                <input type="checkbox" name="chkSpecialEpisode" id="chkSpecialEpisode">
+                                <label for="chkSpecialEpisode">Specials</label>
+                                <br />
+                                <input type="checkbox" name="chkMissingEpisode" id="chkMissingEpisode">
+                                <label for="chkMissingEpisode">Missing episodes</label>
+                                <br />
+                                <input type="checkbox" name="chkFutureEpisode" id="chkFutureEpisode">
+                                <label for="chkFutureEpisode">Future episodes</label>
+                                <br />
+                            </div>
+                        </div>
+                        <div data-role="collapsible" data-collapsed="true" data-mini="true">
+                            <h2>Features</h2>
+                            <div>
+                                <input class="chkFeatureFilter" type="checkbox" name="chkSubtitle" id="chkSubtitle">
+                                <label for="chkSubtitle">Subtitles</label>
+                                <br />
+                                <input class="chkFeatureFilter" type="checkbox" name="chkTrailer" id="chkTrailer">
+                                <label for="chkTrailer">Trailer</label>
+                                <br />
+                                <input class="chkFeatureFilter" type="checkbox" name="chkMissingTrailer" id="chkMissingTrailer">
+                                <label for="chkMissingTrailer">No Trailer</label>
+                                <br />
+                                <input class="chkFeatureFilter" type="checkbox" name="chkSpecialFeature" id="chkSpecialFeature">
+                                <label for="chkSpecialFeature">Extras</label>
+                                <br />
+                                <input class="chkFeatureFilter" type="checkbox" name="chkThemeSong" id="chkThemeSong">
+                                <label for="chkThemeSong">Theme Song</label>
+                                <br />
+                                <input class="chkFeatureFilter" type="checkbox" name="chkThemeVideo" id="chkThemeVideo">
+                                <label for="chkThemeVideo">Theme Video</label>
+                                <br />
+                            </div>
+                        </div>
+                        <div data-role="collapsible" data-collapsed="true" data-mini="true" class="genreFilters">
+                            <h2>Genres</h2>
+                            <div class="filterOptions"></div>
+                        </div>
+                        <div data-role="collapsible" data-collapsed="true" data-mini="true" class="officialRatingFilters">
+                            <h2>Parental Ratings</h2>
+                            <div class="filterOptions"></div>
+                        </div>
+                        <div data-role="collapsible" data-collapsed="true" data-mini="true" class="tagFilters">
+                            <h2>Tags</h2>
+                            <div class="filterOptions">
+                            </div>
+                        </div>
+                        <div data-role="collapsible" data-collapsed="true" data-mini="true">
+                            <h2>Video Types</h2>
+                            <div>
+                                <input class="chkVideoTypeFilter" type="checkbox" name="chkBluray" id="chkBluray" data-filter="Bluray">
+                                <label for="chkBluray">Blu-ray</label>
+                                <br />
+                                <input class="chkVideoTypeFilter" type="checkbox" name="chkDvd" id="chkDvd" data-filter="Dvd">
+                                <label for="chkDvd">DVD</label>
+                                <br />
+                                <input class="chkVideoTypeFilter" type="checkbox" name="chkIso" id="chkIso" data-filter="Iso">
+                                <label for="chkIso">ISO</label>
+                                <br />
+                                <input class="chkHDFilter" type="checkbox" name="chkHD" id="chkHD" data-filter="IsHD">
+                                <label for="chkHD">HD</label>
+                                <br />
+                                <input class="chkSDFilter" type="checkbox" name="chkSD" id="chkSD" data-filter="IsHD">
+                                <label for="chkSD">SD</label>
+                                <br />
+                                <input class="chk3DFilter" type="checkbox" name="chk3D" id="chk3D" data-filter="Digital3D,Sbs3D">
+                                <label for="chk3D">3D</label>
+                                <br />
+                            </div>
+                        </div>
+                        <div data-role="collapsible" data-collapsed="true" data-mini="true" class="yearFilters">
+                            <h2>Years</h2>
+                            <div class="filterOptions"></div>
                         </div>
                     </div>
-
-                    <div data-role="collapsible" data-collapsed="true" data-mini="true" id="GroupStatus">
-                        <h2>Status</h2>
-                        <div>
-                            <input class="chkStatus" type="checkbox" name="chkStatusContinuing" id="chkStatusContinuing" data-filter="Continuing">
-                            <label for="chkStatusContinuing">Continuing</label><br />
-                            <input class="chkStatus" type="checkbox" name="chkStatusEnded" id="chkStatusEnded" data-filter="Ended">
-                            <label for="chkStatusEnded">Ended</label><br />
-                        </div>
-                    </div>
-
-                    <div data-role="collapsible" data-collapsed="true" data-mini="true" id="GroupAirDays">
-                        <h2>Air Days</h2>
-
-                        <div>
-                            <input class="chkAirDays" type="checkbox" name="chkSunday" id="chkSunday" data-filter="Sunday">
-                            <label for="chkSunday">Sunday</label><br />
-                            <input class="chkAirDays" type="checkbox" name="chkMonday" id="chkMonday" data-filter="Monday">
-                            <label for="chkMonday">Monday</label><br />
-                            <input class="chkAirDays" type="checkbox" name="chkTuesday" id="chkTuesday" data-filter="Tuesday">
-                            <label for="chkTuesday">Tuesday</label><br />
-                            <input class="chkAirDays" type="checkbox" name="chkWednesday" id="chkWednesday" data-filter="Wednesday">
-                            <label for="chkWednesday">Wednesday</label><br />
-                            <input class="chkAirDays" type="checkbox" name="chkThursday" id="chkThursday" data-filter="Thursday">
-                            <label for="chkThursday">Thursday</label><br />
-                            <input class="chkAirDays" type="checkbox" name="chkFriday" id="chkFriday" data-filter="Friday">
-                            <label for="chkFriday">Friday</label><br />
-                            <input class="chkAirDays" type="checkbox" name="chkSaturday" id="chkSaturday" data-filter="Saturday">
-                            <label for="chkSaturday">Saturday</label><br />
-                        </div>
-                    </div>
-                    <div data-role="collapsible" data-collapsed="true" data-mini="true" id="GroupEpisodes">
-                        <h2>Episodes</h2>
-                        <div>
-                            <input type="checkbox" name="chkSpecialEpisode" id="chkSpecialEpisode">
-                            <label for="chkSpecialEpisode">Specials</label><br />
-
-                            <input type="checkbox" name="chkMissingEpisode" id="chkMissingEpisode">
-                            <label for="chkMissingEpisode">Missing episodes</label><br />
-
-                            <input type="checkbox" name="chkFutureEpisode" id="chkFutureEpisode">
-                            <label for="chkFutureEpisode">Future episodes</label><br />
-                        </div>
-                    </div>
-                    <div data-role="collapsible" data-collapsed="true" data-mini="true">
-                        <h2>Features</h2>
-
-                        <div>
-
-                            <input class="chkFeatureFilter" type="checkbox" name="chkSubtitle" id="chkSubtitle">
-                            <label for="chkSubtitle">Subtitles</label><br />
-
-                            <input class="chkFeatureFilter" type="checkbox" name="chkTrailer" id="chkTrailer">
-                            <label for="chkTrailer">Trailer</label><br />
-
-                            <input class="chkFeatureFilter" type="checkbox" name="chkMissingTrailer" id="chkMissingTrailer">
-                            <label for="chkMissingTrailer">No Trailer</label><br />
-
-                            <input class="chkFeatureFilter" type="checkbox" name="chkSpecialFeature" id="chkSpecialFeature">
-                            <label for="chkSpecialFeature">Extras</label><br />
-
-                            <input class="chkFeatureFilter" type="checkbox" name="chkThemeSong" id="chkThemeSong">
-                            <label for="chkThemeSong">Theme Song</label><br />
-
-                            <input class="chkFeatureFilter" type="checkbox" name="chkThemeVideo" id="chkThemeVideo">
-                            <label for="chkThemeVideo">Theme Video</label><br />
-                        </div>
-                    </div>
-
-                    <div data-role="collapsible" data-collapsed="true" data-mini="true" class="genreFilters">
-                        <h2>Genres</h2>
-
-                        <div class="filterOptions">
-                        </div>
-                    </div>
-
-                    <div data-role="collapsible" data-collapsed="true" data-mini="true" class="officialRatingFilters">
-                        <h2>Parental Ratings</h2>
-
-                        <div class="filterOptions">
-                        </div>
-                    </div>
-
-                    <div data-role="collapsible" data-collapsed="true" data-mini="true" class="tagFilters">
-                        <h2>Tags</h2>
-
-                        <div class="filterOptions">
-                        </div>
-                    </div>
-
-                    <div data-role="collapsible" data-collapsed="true" data-mini="true">
-                        <h2>Video Types</h2>
-
-                        <div>
-
-                            <input class="chkVideoTypeFilter" type="checkbox" name="chkBluray" id="chkBluray" data-filter="Bluray">
-                            <label for="chkBluray">Blu-ray</label><br />
-
-                            <input class="chkVideoTypeFilter" type="checkbox" name="chkDvd" id="chkDvd" data-filter="Dvd">
-                            <label for="chkDvd">DVD</label><br />
-
-                            <input class="chkVideoTypeFilter" type="checkbox" name="chkIso" id="chkIso" data-filter="Iso">
-                            <label for="chkIso">ISO</label><br />
-
-                            <input class="chkHDFilter" type="checkbox" name="chkHD" id="chkHD" data-filter="IsHD">
-                            <label for="chkHD">HD</label><br />
-
-                            <input class="chkSDFilter" type="checkbox" name="chkSD" id="chkSD" data-filter="IsHD">
-                            <label for="chkSD">SD</label><br />
-
-                            <input class="chk3DFilter" type="checkbox" name="chk3D" id="chk3D" data-filter="Digital3D,Sbs3D">
-                            <label for="chk3D">3D</label><br />
-                        </div>
-                    </div>
-
-                    <div data-role="collapsible" data-collapsed="true" data-mini="true" class="yearFilters">
-                        <h2>Years</h2>
-
-                        <div class="filterOptions">
-                        </div>
-                    </div>
-
-                </div>
-
-            </form>
+                </form>
             </div>
-
-
         </div>
-
     </div>
 </div>
