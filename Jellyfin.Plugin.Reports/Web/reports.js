@@ -207,7 +207,7 @@ function getItem(rHeader, rRow, rItem) {
     return html;
 }
 
-function ExportReport(page, e) {
+function ExportReport() {
     query.UserId = Dashboard.getCurrentUserId();
     query.HasQueryLimit = false;
     query.api_key = ApiClient.accessToken();
@@ -226,14 +226,18 @@ function loadGroupByFilters(page) {
     ApiClient.getJSON(url).then(function (result) {
         let selected = 'None';
 
-        $('#selectReportGroup', page).find('option').remove().end();
-        $('#selectReportGroup', page).append('<option value="None">None</option>');
-
+        const selectReportGroup = page.querySelector('#selectReportGroup');
+        const elems = selectReportGroup.querySelectorAll('option');
+        for (let i = 0, length = elems.length; i < length; i++) {
+            const parent = elems[i].parentNode;
+            parent.removeChild(elems[i]);
+        }
+        selectReportGroup.insertAdjacentHTML('beforeend', '<option value="None">None</option>');
         result.map(function (header) {
             if ((header.DisplayType === 'Screen' || header.DisplayType === 'ScreenExport') && header.CanGroup) {
                 if (header.FieldName.length > 0) {
                     const option = '<option value="' + header.FieldName + '">' + header.Name + '</option>';
-                    $('#selectReportGroup', page).append(option);
+                    selectReportGroup.insertAdjacentHTML('beforeend', option);
                     if (query.GroupBy === header.FieldName)
                         selected = header.FieldName;
                 }
@@ -352,7 +356,6 @@ function renderItems(page, result) {
 
         for (const elem of page.querySelectorAll('.lnkColumnSort')) {
             elem.addEventListener('click', function () {
-
                 const order = this.getAttribute('data-sortfield');
 
                 if (query.SortBy === order) {
@@ -428,21 +431,18 @@ function updateFilterControls(context) {
     }
 
     for (const elem of context.querySelectorAll('.chkVideoTypeFilter')) {
-
         const filters = ',' + (query.VideoTypes || '');
         const filterName = elem.getAttribute('data-filter');
 
         elem.checked = filters.indexOf(',' + filterName) != -1;
     }
     for (const elem of context.querySelectorAll('.chkStatus')) {
-
         const filters = ',' + (query.SeriesStatus || '');
         const filterName = elem.getAttribute('data-filter');
 
         elem.checked = filters.indexOf(',' + filterName) != -1;
     }
     for (const elem of context.querySelectorAll('.chkAirDays')) {
-
         const filters = ',' + (query.AirDays || '');
         const filterName = elem.getAttribute('data-filter');
 
@@ -570,7 +570,6 @@ function renderColumnss(context, result) {
 function onFiltersLoaded(context, query, reloadItemsFn) {
     for (const elem of context.querySelectorAll('.chkGenreFilter')) {
         elem.addEventListener('change', function () {
-
             const filterName = elem.getAttribute('data-filter');
             let filters = query.Genres || '';
             const delimiter = '|';
@@ -590,7 +589,6 @@ function onFiltersLoaded(context, query, reloadItemsFn) {
 
     for (const elem of context.querySelectorAll('.chkTagFilter')) {
         elem.addEventListener('change', function () {
-
             const filterName = elem.getAttribute('data-filter');
             let filters = query.Tags || '';
             const delimiter = '|';
@@ -610,7 +608,6 @@ function onFiltersLoaded(context, query, reloadItemsFn) {
 
     for (const elem of context.querySelectorAll('.chkYearFilter')) {
         elem.addEventListener('change', function () {
-
             const filterName = elem.getAttribute('data-filter');
             let filters = query.Years || '';
             const delimiter = ',';
@@ -630,7 +627,6 @@ function onFiltersLoaded(context, query, reloadItemsFn) {
 
     for (const elem of context.querySelectorAll('.chkOfficialRatingFilter')) {
         elem.addEventListener('change', function () {
-
             const filterName = elem.getAttribute('data-filter');
             let filters = query.OfficialRatings || '';
             const delimiter = '|';
@@ -652,7 +648,6 @@ function onFiltersLoaded(context, query, reloadItemsFn) {
 function onColumnsLoaded(context, query, reloadItemsFn) {
     for (const elem of context.querySelectorAll('.chkReportColumns')) {
         elem.addEventListener('change', function () {
-
             const filterName = elem.getAttribute('data-filter');
             let filters = query.ReportColumns || '';
             const delimiter = '|';
@@ -728,8 +723,7 @@ window.QueryReportColumns = {
     onPageShow: onPageReportColumnsShow
 };
 
-export default function (view, params) {
-
+export default function (view) {
     view.dispatchEvent(new CustomEvent('create'));
 
     view.querySelector('#selectIncludeItemTypes').addEventListener('change', function () {
@@ -776,7 +770,7 @@ export default function (view, params) {
         ExportReport(view, e);
     });
 
-    view.querySelector('#btnResetReportColumns').addEventListener('click', function (e) {
+    view.querySelector('#btnResetReportColumns').addEventListener('click', function () {
         query.ReportColumns = null;
         query.StartIndex = 0;
         filtersLoaded = false;
@@ -792,7 +786,6 @@ export default function (view, params) {
 
     const chkIsFavorite = view.querySelector('#chkIsFavorite');
     chkIsFavorite.addEventListener('change', () => {
-
         if (this.checked) {
             query.IsFavorite = true;
         } else {
@@ -802,7 +795,6 @@ export default function (view, params) {
     });
     const chkIsNotFavorite = view.querySelector('#chkIsNotFavorite');
     chkIsNotFavorite.addEventListener('change', () => {
-
         if (this.checked) {
             query.IsNotFavorite = true;
         } else {
@@ -812,7 +804,6 @@ export default function (view, params) {
     });
     for (const elem of view.querySelectorAll('.chkStandardFilter')) {
         elem.addEventListener('change', function () {
-
             const filterName = elem.getAttribute('data-filter');
             let filters = query.Filters || '';
 
@@ -831,7 +822,6 @@ export default function (view, params) {
 
     for (const elem of view.querySelectorAll('.chkVideoTypeFilter')) {
         elem.addEventListener('change', function () {
-
             const filterName = elem.getAttribute('data-filter');
             let filters = query.VideoTypes || '';
 
@@ -850,7 +840,6 @@ export default function (view, params) {
 
     const chk3D = view.querySelector('#chk3D');
     chk3D.addEventListener('change', () => {
-
         query.StartIndex = 0;
         query.Is3D = this.checked ? true : null;
 
@@ -859,7 +848,6 @@ export default function (view, params) {
 
     const chkHD = view.querySelector('#chkHD');
     chkHD.addEventListener('change', () => {
-
         query.StartIndex = 0;
         query.IsHD = this.checked ? true : null;
 
@@ -868,7 +856,6 @@ export default function (view, params) {
 
     const chkSD = view.querySelector('#chkSD');
     chkSD.addEventListener('change', () => {
-
         query.StartIndex = 0;
         query.IsHD = this.checked ? false : null;
 
@@ -877,7 +864,6 @@ export default function (view, params) {
 
     const chkSubtitle = view.querySelector('#chkSubtitle');
     chkSubtitle.addEventListener('change', () => {
-
         query.StartIndex = 0;
         query.HasSubtitles = this.checked ? true : null;
 
@@ -886,7 +872,6 @@ export default function (view, params) {
 
     const chkTrailer = view.querySelector('#chkTrailer');
     chkTrailer.addEventListener('change', () => {
-
         query.StartIndex = 0;
         query.HasTrailer = this.checked ? true : null;
 
@@ -895,7 +880,6 @@ export default function (view, params) {
 
     const chkMissingTrailer = view.querySelector('#chkMissingTrailer');
     chkMissingTrailer.addEventListener('change', () => {
-
         query.StartIndex = 0;
         query.HasTrailer = this.checked ? false : null;
 
@@ -904,7 +888,6 @@ export default function (view, params) {
 
     const chkSpecialFeature = view.querySelector('#chkSpecialFeature');
     chkSpecialFeature.addEventListener('change', () => {
-
         query.StartIndex = 0;
         query.HasSpecialFeature = this.checked ? true : null;
 
@@ -913,7 +896,6 @@ export default function (view, params) {
 
     const chkThemeSong = view.querySelector('#chkThemeSong');
     chkThemeSong.addEventListener('change', () => {
-
         query.StartIndex = 0;
         query.HasThemeSong = this.checked ? true : null;
 
@@ -922,7 +904,6 @@ export default function (view, params) {
 
     const chkThemeVideo = view.querySelector('#chkThemeVideo');
     chkThemeVideo.addEventListener('change', () => {
-
         query.StartIndex = 0;
         query.HasThemeVideo = this.checked ? true : null;
 
@@ -932,7 +913,6 @@ export default function (view, params) {
     //Management
     const chkIsLocked = view.querySelector('#chkIsLocked');
     chkIsLocked.addEventListener('change', () => {
-
         query.StartIndex = 0;
         query.IsLocked = this.checked ? true : null;
 
@@ -941,7 +921,6 @@ export default function (view, params) {
 
     const chkMissingOverview = view.querySelector('#chkMissingOverview');
     chkMissingOverview.addEventListener('change', () => {
-
         query.StartIndex = 0;
         query.HasOverview = this.checked ? false : null;
 
@@ -950,7 +929,6 @@ export default function (view, params) {
 
     const chkMissingRating = view.querySelector('#chkMissingRating');
     chkMissingRating.addEventListener('change', () => {
-
         query.StartIndex = 0;
         query.HasOfficialRating = this.checked ? false : null;
 
@@ -959,7 +937,6 @@ export default function (view, params) {
 
     const chkMissingImdbId = view.querySelector('#chkMissingImdbId');
     chkMissingImdbId.addEventListener('change', () => {
-
         query.StartIndex = 0;
         query.HasImdbId = this.checked ? false : null;
 
@@ -968,7 +945,6 @@ export default function (view, params) {
 
     const chkMissingTmdbId = view.querySelector('#chkMissingImdbId');
     chkMissingTmdbId.addEventListener('change', () => {
-
         query.StartIndex = 0;
         query.HasTmdbId = this.checked ? false : null;
 
@@ -977,7 +953,6 @@ export default function (view, params) {
 
     const chkMissingTvdbId = view.querySelector('#chkMissingTvdbId');
     chkMissingTvdbId.addEventListener('change', () => {
-
         query.StartIndex = 0;
         query.HasTvdbId = this.checked ? false : null;
 
@@ -987,7 +962,6 @@ export default function (view, params) {
     //Episodes
     const chkMissingEpisode = view.querySelector('#chkMissingEpisode');
     chkMissingEpisode.addEventListener('change', () => {
-
         query.StartIndex = 0;
         query.IsMissing = this.checked ? true : false;
 
@@ -996,7 +970,6 @@ export default function (view, params) {
 
     const chkFutureEpisode = view.querySelector('#chkFutureEpisode');
     chkFutureEpisode.addEventListener('change', () => {
-
         query.StartIndex = 0;
 
         if (this.checked) {
@@ -1012,7 +985,6 @@ export default function (view, params) {
 
     const chkSpecialEpisode = view.querySelector('#chkSpecialEpisode');
     chkSpecialEpisode.addEventListener('change', () => {
-
         query.ParentIndexNumber = this.checked ? 0 : null;
 
         reloadItems(view);
@@ -1020,7 +992,6 @@ export default function (view, params) {
 
     for (const elem of view.querySelectorAll('.chkAirDays')) {
         elem.addEventListener('change', function () {
-
             const filterName = elem.getAttribute('data-filter');
             let filters = query.AirDays || '';
 
@@ -1038,7 +1009,6 @@ export default function (view, params) {
 
     for (const elem of view.querySelectorAll('.chkStatus')) {
         elem.addEventListener('change', function () {
-
             const filterName = elem.getAttribute('data-filter');
             let filters = query.SeriesStatus || '';
 
