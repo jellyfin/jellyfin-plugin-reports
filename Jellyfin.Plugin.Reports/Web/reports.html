@@ -344,7 +344,7 @@
                         <option value="Audio">Songs</option>
                     </select>
                 </div>
-                <button is="paper-icon-button-light" class="btnToggle autoSize" tabindex="-1">
+                <button is="paper-icon-button-light" class="btnPanelOpen autoSize" tabindex="-1">
                     <span class="material-icons more_vert"></span>
                 </button>
             </div>
@@ -357,8 +357,12 @@
         </div>
 
         <div data-role="panel" id="viewPanel" class="viewPanel ui-panel ui-panel-position-right ui-panel-display-overlay ui-body-inherit ui-panel-animate dialog ui-panel-closed ui-panel-fixed" data-position="right" data-display="overlay" data-position-fixed="true">
+            <div class="ui-panel-inner">
             <form>
                 <div class="viewPanelTabs">
+                    <button is="paper-icon-button-light" class="btnPanelClose autoSize" tabindex="-1">
+                        <span class="material-icons close"></span>
+                    </button>
                     <button is="emby-button" type="button" id="tabView" data-role="button" class="raised viewTabButton ui-btn-active" data-tab="tabView">View</button>
                     <button is="emby-button" type="button" id="tabFilter" data-role="button" class="raised viewTabButton" data-tab="tabFilter">Filter</button>
                 </div>
@@ -572,6 +576,9 @@
                 </div>
 
             </form>
+            </div>
+
+
         </div>
 
     </div>

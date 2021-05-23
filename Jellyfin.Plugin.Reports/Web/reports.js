@@ -1024,19 +1024,17 @@ export default function (view) {
         });
     }
 
-    view.querySelector('.btnToggle').addEventListener('click', function () {
+    view.querySelector('.btnPanelOpen').addEventListener('click', function () {
         const viewPanel = view.querySelector('.viewPanel');
-        if (viewPanel.classList.contains('ui-panel-closed')) {
-            viewPanel.classList.add('ui-panel-open');
-            viewPanel.classList.remove('ui-panel-closed');
-            viewPanel.classList.remove('ui-panel-fixed');
-            viewPanel.classList.remove('hide');
-            reloadFiltersIfNeeded(view);
-        } else {
-            viewPanel.classList.add('ui-panel-closed');
-            viewPanel.classList.add('ui-panel-fixed');
-            viewPanel.classList.remove('ui-panel-open');
-        }
+        viewPanel.classList.add('ui-panel-open');
+        viewPanel.classList.remove('ui-panel-closed');
+        reloadFiltersIfNeeded(view);
+    });
+
+    view.querySelector('.btnPanelClose').addEventListener('click', () => {
+        const viewPanel = view.querySelector('.viewPanel');
+        viewPanel.classList.add('ui-panel-closed');
+        viewPanel.classList.remove('ui-panel-open');
     });
 
     const openTabs = ({ target }) => {
