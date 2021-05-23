@@ -344,8 +344,8 @@
                         <option value="Audio">Songs</option>
                     </select>
                 </div>
-                <button is="paper-icon-button-light" onclick="jQuery('.viewPanel').panel('toggle');" class="autoSize" tabindex="-1">
-                    <i class="material-icons more_vert"></i>
+                <button is="paper-icon-button-light" class="btnToggle autoSize" tabindex="-1">
+                    <span class="material-icons more_vert"></span>
                 </button>
             </div>
             <div class="listTopPaging">
@@ -356,7 +356,7 @@
         <div class="listBottomPaging">
         </div>
 
-        <div data-role="panel" id="viewPanel" class="viewPanel" data-position="right" data-display="overlay" data-position-fixed="true">
+        <div data-role="panel" id="viewPanel" class="viewPanel ui-panel ui-panel-position-right ui-panel-display-overlay ui-body-inherit ui-panel-animate dialog ui-panel-closed ui-panel-fixed" data-position="right" data-display="overlay" data-position-fixed="true">
             <form>
                 <div class="viewPanelTabs">
                     <button is="emby-button" type="button" id="tabView" data-role="button" class="raised viewTabButton ui-btn-active" data-tab="tabView">View</button>
@@ -372,7 +372,7 @@
                         <input is="emby-checkbox" type="checkbox" id="chkStartCollapsed" />
                         <span>Start Collapsed</span>
                     </label>
-                    <div class="selectContainer" id="selectPageSizeBox" style="display: none;">
+                    <div class="selectContainer" id="selectPageSizeBox">
                          <select is="emby-select" id="selectPageSize" label="Page size:" class="selectPageSize">
                             <option value="20">20</option>
                             <option value="50">50</option>
