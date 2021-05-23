@@ -786,7 +786,7 @@ export default function (view) {
 
     const chkIsFavorite = view.querySelector('#chkIsFavorite');
     chkIsFavorite.addEventListener('change', () => {
-        if (this.checked) {
+        if (chkIsFavorite.checked) {
             query.IsFavorite = true;
         } else {
             query.IsFavorite = false;
@@ -795,7 +795,7 @@ export default function (view) {
     });
     const chkIsNotFavorite = view.querySelector('#chkIsNotFavorite');
     chkIsNotFavorite.addEventListener('change', () => {
-        if (this.checked) {
+        if (chkIsNotFavorite.checked) {
             query.IsNotFavorite = true;
         } else {
             query.IsNotFavorite = false;
@@ -841,7 +841,7 @@ export default function (view) {
     const chk3D = view.querySelector('#chk3D');
     chk3D.addEventListener('change', () => {
         query.StartIndex = 0;
-        query.Is3D = this.checked ? true : null;
+        query.Is3D = chk3D.checked ? true : null;
 
         reloadItems(view);
     });
@@ -849,7 +849,7 @@ export default function (view) {
     const chkHD = view.querySelector('#chkHD');
     chkHD.addEventListener('change', () => {
         query.StartIndex = 0;
-        query.IsHD = this.checked ? true : null;
+        query.IsHD = chkHD.checked ? true : null;
 
         reloadItems(view);
     });
@@ -857,7 +857,7 @@ export default function (view) {
     const chkSD = view.querySelector('#chkSD');
     chkSD.addEventListener('change', () => {
         query.StartIndex = 0;
-        query.IsHD = this.checked ? false : null;
+        query.IsHD = chkSD.checked ? false : null;
 
         reloadItems(view);
     });
@@ -865,7 +865,7 @@ export default function (view) {
     const chkSubtitle = view.querySelector('#chkSubtitle');
     chkSubtitle.addEventListener('change', () => {
         query.StartIndex = 0;
-        query.HasSubtitles = this.checked ? true : null;
+        query.HasSubtitles = chkSubtitle.checked ? true : null;
 
         reloadItems(view);
     });
@@ -873,7 +873,7 @@ export default function (view) {
     const chkTrailer = view.querySelector('#chkTrailer');
     chkTrailer.addEventListener('change', () => {
         query.StartIndex = 0;
-        query.HasTrailer = this.checked ? true : null;
+        query.HasTrailer = chkTrailer.checked ? true : null;
 
         reloadItems(view);
     });
@@ -881,7 +881,7 @@ export default function (view) {
     const chkMissingTrailer = view.querySelector('#chkMissingTrailer');
     chkMissingTrailer.addEventListener('change', () => {
         query.StartIndex = 0;
-        query.HasTrailer = this.checked ? false : null;
+        query.HasTrailer = chkMissingTrailer.checked ? false : null;
 
         reloadItems(view);
     });
@@ -889,7 +889,7 @@ export default function (view) {
     const chkSpecialFeature = view.querySelector('#chkSpecialFeature');
     chkSpecialFeature.addEventListener('change', () => {
         query.StartIndex = 0;
-        query.HasSpecialFeature = this.checked ? true : null;
+        query.HasSpecialFeature = chkSpecialFeature.checked ? true : null;
 
         reloadItems(view);
     });
@@ -897,7 +897,7 @@ export default function (view) {
     const chkThemeSong = view.querySelector('#chkThemeSong');
     chkThemeSong.addEventListener('change', () => {
         query.StartIndex = 0;
-        query.HasThemeSong = this.checked ? true : null;
+        query.HasThemeSong = chkThemeSong.checked ? true : null;
 
         reloadItems(view);
     });
@@ -905,7 +905,7 @@ export default function (view) {
     const chkThemeVideo = view.querySelector('#chkThemeVideo');
     chkThemeVideo.addEventListener('change', () => {
         query.StartIndex = 0;
-        query.HasThemeVideo = this.checked ? true : null;
+        query.HasThemeVideo = chkThemeVideo.checked ? true : null;
 
         reloadItems(view);
     });
@@ -914,7 +914,7 @@ export default function (view) {
     const chkIsLocked = view.querySelector('#chkIsLocked');
     chkIsLocked.addEventListener('change', () => {
         query.StartIndex = 0;
-        query.IsLocked = this.checked ? true : null;
+        query.IsLocked = chkIsLocked.checked ? true : null;
 
         reloadItems(view);
     });
@@ -922,7 +922,7 @@ export default function (view) {
     const chkMissingOverview = view.querySelector('#chkMissingOverview');
     chkMissingOverview.addEventListener('change', () => {
         query.StartIndex = 0;
-        query.HasOverview = this.checked ? false : null;
+        query.HasOverview = chkMissingOverview.checked ? false : null;
 
         reloadItems(view);
     });
@@ -930,7 +930,7 @@ export default function (view) {
     const chkMissingRating = view.querySelector('#chkMissingRating');
     chkMissingRating.addEventListener('change', () => {
         query.StartIndex = 0;
-        query.HasOfficialRating = this.checked ? false : null;
+        query.HasOfficialRating = chkMissingRating.checked ? false : null;
 
         reloadItems(view);
     });
@@ -938,15 +938,15 @@ export default function (view) {
     const chkMissingImdbId = view.querySelector('#chkMissingImdbId');
     chkMissingImdbId.addEventListener('change', () => {
         query.StartIndex = 0;
-        query.HasImdbId = this.checked ? false : null;
+        query.HasImdbId = chkMissingImdbId.checked ? false : null;
 
         reloadItems(view);
     });
 
-    const chkMissingTmdbId = view.querySelector('#chkMissingImdbId');
+    const chkMissingTmdbId = view.querySelector('#chkMissingTmdbId');
     chkMissingTmdbId.addEventListener('change', () => {
         query.StartIndex = 0;
-        query.HasTmdbId = this.checked ? false : null;
+        query.HasTmdbId = chkMissingTmdbId.checked ? false : null;
 
         reloadItems(view);
     });
@@ -954,7 +954,7 @@ export default function (view) {
     const chkMissingTvdbId = view.querySelector('#chkMissingTvdbId');
     chkMissingTvdbId.addEventListener('change', () => {
         query.StartIndex = 0;
-        query.HasTvdbId = this.checked ? false : null;
+        query.HasTvdbId = chkMissingTvdbId.checked ? false : null;
 
         reloadItems(view);
     });
@@ -963,7 +963,7 @@ export default function (view) {
     const chkMissingEpisode = view.querySelector('#chkMissingEpisode');
     chkMissingEpisode.addEventListener('change', () => {
         query.StartIndex = 0;
-        query.IsMissing = this.checked ? true : false;
+        query.IsMissing = chkMissingEpisode.checked ? true : false;
 
         reloadItems(view);
     });
@@ -972,7 +972,7 @@ export default function (view) {
     chkFutureEpisode.addEventListener('change', () => {
         query.StartIndex = 0;
 
-        if (this.checked) {
+        if (chkFutureEpisode.checked) {
             query.IsUnaired = true;
             query.IsVirtualUnaired = null;
         } else {
@@ -985,7 +985,7 @@ export default function (view) {
 
     const chkSpecialEpisode = view.querySelector('#chkSpecialEpisode');
     chkSpecialEpisode.addEventListener('change', () => {
-        query.ParentIndexNumber = this.checked ? 0 : null;
+        query.ParentIndexNumber = chkSpecialEpisode.checked ? 0 : null;
 
         reloadItems(view);
     });
