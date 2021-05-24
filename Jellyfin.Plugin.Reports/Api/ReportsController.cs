@@ -257,7 +257,6 @@ namespace Jellyfin.Plugin.Reports.Api
         /// </summary>
         [HttpGet("Items/Download")]
         public async Task<ActionResult<ReportResult>> GetReportDownload(
-            [FromQuery] string maxOfficialRating,
             [FromQuery] bool? hasThemeSong,
             [FromQuery] bool? hasThemeVideo,
             [FromQuery] bool? hasSubtitles,
@@ -409,7 +408,6 @@ namespace Jellyfin.Plugin.Reports.Api
                 IsHD = isHd,
                 IsNotFavorite = isNotFavorite ?? false,
                 IsPlaceHolder = isPlaceHolder,
-                MaxOfficialRating = maxOfficialRating,
                 MaxPremiereDate = maxPremiereDate,
                 MinCommunityRating = minCommunityRating,
                 MinCriticRating = minCriticRating,
