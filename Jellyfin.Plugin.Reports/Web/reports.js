@@ -1,5 +1,4 @@
 const defaultSortBy = 'SortName';
-const topItems = 5;
 
 const query = {
     StartIndex: 0,
@@ -227,10 +226,9 @@ function loadGroupByFilters(page) {
         let selected = 'None';
 
         const selectReportGroup = page.querySelector('#selectReportGroup');
-        const elems = selectReportGroup.querySelectorAll('option');
-        for (let i = 0, length = elems.length; i < length; i++) {
-            const parent = elems[i].parentNode;
-            parent.removeChild(elems[i]);
+        for (const elem of selectReportGroup.querySelectorAll('option')) {
+            const parent = elem.parentNode;
+            parent.removeChild(elem);
         }
         selectReportGroup.insertAdjacentHTML('beforeend', '<option value="None">None</option>');
         result.map(function (header) {
@@ -298,27 +296,19 @@ function renderItems(page, result) {
     }
 
     if (query.ReportView === 'ReportData' || query.ReportView === 'ReportActivities') {
-        const listTopPaging = page.querySelector('.listTopPaging');
-        listTopPaging.innerHTML = pagingHtml;
-        listTopPaging.dispatchEvent(new Event('create'));
-        listTopPaging.classList.remove('hide');
+        for (const paging of page.querySelectorAll('.paging')) {
+            paging.innerHTML = pagingHtml;
+            paging.dispatchEvent(new Event('create'));
+        }
 
-        const listBottomPaging = page.querySelector('.listBottomPaging');
-        listBottomPaging.innerHTML = pagingHtml;
-        listBottomPaging.dispatchEvent(new Event('create'));
-        listBottomPaging.classList.remove('hide');
-
-        const btnNextPage = page.querySelector('.btnNextPage');
-        const btnPreviousPage = page.querySelector('.btnPreviousPage');
-
-        if (btnNextPage) {
+        for (const btnNextPage of page.querySelectorAll('.btnNextPage')) {
             btnNextPage.addEventListener('click', function () {
                 query.StartIndex += query.Limit;
                 reloadItems(page);
             });
         }
 
-        if (btnPreviousPage) {
+        for (const btnPreviousPage of page.querySelectorAll('.btnPreviousPage')) {
             btnPreviousPage.addEventListener('click', function () {
                 query.StartIndex -= query.Limit;
                 reloadItems(page);
@@ -394,7 +384,6 @@ function renderItems(page, result) {
             page.querySelector('#GroupEpisodes').classList.remove('hide');
             break;
     }
-    //page.querySelector('.viewPanel').refresh;
 }
 
 function reloadItems(page) {
@@ -540,12 +529,9 @@ function renderOptions(context, selector, cssClass, items) {
     }).join('');
 
     html += '</div>';
-    elem.querySelector('.filterOptions').innerHTML = html;
-    /*elem.querySelector('.filterOptions');
-    elem.innerHtml = html;
-    elem.dispatchEvent(new Event('create'));*/
 
-    //$('.filterOptions', elem).html(html).trigger('create');
+    elem.querySelector('.filterOptions').innerHTML = html;
+    elem.dispatchEvent(new Event('create'));
 }
 
 function renderFilters(context, result) {
