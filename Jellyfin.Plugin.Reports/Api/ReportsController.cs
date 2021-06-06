@@ -34,7 +34,6 @@ namespace Jellyfin.Plugin.Reports.Api
         /// </summary>
         [HttpGet("Items")]
         public ActionResult<ReportResult> GetItemReport(
-            [FromQuery] string maxOfficialRating,
             [FromQuery] bool? hasThemeSong,
             [FromQuery] bool? hasThemeVideo,
             [FromQuery] bool? hasSubtitles,
@@ -184,7 +183,6 @@ namespace Jellyfin.Plugin.Reports.Api
                 IsHD = isHd,
                 IsNotFavorite = isNotFavorite ?? false,
                 IsPlaceHolder = isPlaceHolder,
-                MaxOfficialRating = maxOfficialRating,
                 MaxPremiereDate = maxPremiereDate,
                 MinCommunityRating = minCommunityRating,
                 MinCriticRating = minCriticRating,
@@ -202,30 +200,24 @@ namespace Jellyfin.Plugin.Reports.Api
             };
             return Ok(_reportsService.Get(request));
         }
-        
+
         /// <summary>
         /// Gets reports headers based on library items.
         /// </summary>
         /// <param name="reportView">The report view. Values (ReportData, ReportActivities).</param>
-        /// <param name="displayType">The report display type. Values (None, Screen, Export, ScreenExport).</param>
         /// <param name="includeItemTypes">Optional. If specified, results will be filtered based on item type. This allows multiple, comma delimeted.</param>
-        /// <param name="reportColumns">Optional. The columns to show.</param>
         /// <returns></returns>
         [HttpGet("Headers")]
         public ActionResult GetReportHeaders(
             [FromQuery] string reportView,
-            [FromQuery] string displayType,
-            [FromQuery] string includeItemTypes,
-            [FromQuery] string reportColumns)
+            [FromQuery] string includeItemTypes)
         {
             var request = new GetReportHeaders
             {
                 ReportView = reportView,
-                DisplayType = displayType,
-                IncludeItemTypes = includeItemTypes,
-                ReportColumns = reportColumns
+                IncludeItemTypes = includeItemTypes
             };
-            
+
             return Ok(_reportsService.Get(request));
         }
 
@@ -259,13 +251,12 @@ namespace Jellyfin.Plugin.Reports.Api
 
             return Ok(await _reportsService.Get(request).ConfigureAwait(false));
         }
-        
+
         /// <summary>
         /// Downloads report.
         /// </summary>
         [HttpGet("Items/Download")]
         public async Task<ActionResult<ReportResult>> GetReportDownload(
-            [FromQuery] string maxOfficialRating,
             [FromQuery] bool? hasThemeSong,
             [FromQuery] bool? hasThemeVideo,
             [FromQuery] bool? hasSubtitles,
@@ -417,7 +408,6 @@ namespace Jellyfin.Plugin.Reports.Api
                 IsHD = isHd,
                 IsNotFavorite = isNotFavorite ?? false,
                 IsPlaceHolder = isPlaceHolder,
-                MaxOfficialRating = maxOfficialRating,
                 MaxPremiereDate = maxPremiereDate,
                 MinCommunityRating = minCommunityRating,
                 MinCriticRating = minCriticRating,
@@ -441,7 +431,7 @@ namespace Jellyfin.Plugin.Reports.Api
             {
                 Response.Headers.Add(key, value);
             }
-            
+
             return Content(content, contentType);
         }
     }
