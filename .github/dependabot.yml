@@ -23,7 +23,7 @@ updates:
     labels:
       - ci
       - dependency
-      - github-actions
+      - github_actions
     commit-message:
       prefix: ci
       include: scope
