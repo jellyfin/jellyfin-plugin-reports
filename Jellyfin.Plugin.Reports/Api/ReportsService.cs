@@ -405,7 +405,7 @@ namespace Jellyfin.Plugin.Reports.Api
         {
             var activityLogQuery = new ActivityLogQuery
             {
-                StartIndex = request.StartIndex,
+                Skip = request.StartIndex,
                 Limit = request.HasQueryLimit ? request.Limit : null
             };
 
