@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using Jellyfin.Data.Enums;
 using Jellyfin.Plugin.Reports.Api.Common;
-using Jellyfin.Plugin.Reports.Api.Model;
 using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Querying;
 
@@ -420,20 +419,14 @@ namespace Jellyfin.Plugin.Reports.Api
             return (MediaTypes ?? string.Empty).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
-        public string[] GetIncludeItemTypes()
-        {
-            return (IncludeItemTypes ?? string.Empty).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-        }
+        public BaseItemKind[] GetIncludeItemTypes() => GetBaseItemKinds(IncludeItemTypes);
 
         public string[] GetExcludeItemIds()
         {
             return (ExcludeItemIds ?? string.Empty).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
-        public string[] GetExcludeItemTypes()
-        {
-            return (ExcludeItemTypes ?? string.Empty).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-        }
+        public BaseItemKind[] GetExcludeItemTypes() => GetBaseItemKinds(ExcludeItemTypes);
 
         public int[] GetYears()
         {
@@ -569,7 +562,7 @@ namespace Jellyfin.Plugin.Reports.Api
         /// <value> The report view. </value>
         // [ApiMember(Name = "ReportView", Description = "The report view. Values (ReportData, ReportActivities)", IsRequired = true, DataType = "string", ParameterType = "query", Verb = "GET")]
         public string ReportView { get; set; }
-        
+
         /// <summary> Gets or sets the report view. </summary>
         /// <value> The report view. </value>
         // [ApiMember(Name = "DisplayType", Description = "The report display type. Values (None, Screen, Export, ScreenExport)", IsRequired = true, DataType = "string", ParameterType = "query", Verb = "GET")]
@@ -594,7 +587,43 @@ namespace Jellyfin.Plugin.Reports.Api
         // [ApiMember(Name = "ReportColumns", Description = "Optional. The columns to show.", IsRequired = false, DataType = "string", ParameterType = "query", Verb = "GET")]
         public string ReportColumns { get; set; }
 
-     
+        private BaseItemKind[] GetBaseItemKinds(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return Array.Empty<BaseItemKind>();
+            }
+
+            var splitString = input.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            var converter = TypeDescriptor.GetConverter(typeof(BaseItemKind));
+            var parsedValues = new object[splitString.Length];
+            var convertedCount = 0;
+            for (var i = 0; i < splitString.Length; i++)
+            {
+                try
+                {
+                    parsedValues[i] = converter.ConvertFromString(splitString[i]);
+                    convertedCount++;
+                }
+                catch (FormatException)
+                {
+                    // suppress.
+                }
+            }
+
+            var typedValues = new BaseItemKind[convertedCount];
+            var typedValueIndex = 0;
+            for (var i = 0; i < parsedValues.Length; i++)
+            {
+                if (parsedValues[i] != null)
+                {
+                    typedValues.SetValue(parsedValues[i], typedValueIndex);
+                    typedValueIndex++;
+                }
+            }
+
+            return typedValues;
+        }
     }
 
 	public class GetItemReport : BaseReportRequest
