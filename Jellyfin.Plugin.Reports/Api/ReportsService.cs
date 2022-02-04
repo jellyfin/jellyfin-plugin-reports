@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -69,18 +70,12 @@ namespace Jellyfin.Plugin.Reports.Api
             request.DisplayType = "Screen";
             ReportViewType reportViewType = ReportHelper.GetReportViewType(request.ReportView);
 
-            List<ReportHeader> result = new List<ReportHeader>();
-            switch (reportViewType)
+            List<ReportHeader> result = reportViewType switch
             {
-                case ReportViewType.ReportData:
-                    ReportBuilder dataBuilder = new ReportBuilder(_libraryManager);
-                    result = dataBuilder.GetHeaders(request);
-                    break;
-                case ReportViewType.ReportActivities:
-                    ReportActivitiesBuilder activityBuilder = new ReportActivitiesBuilder(_libraryManager, _userManager);
-                    result = activityBuilder.GetHeaders(request);
-                    break;
-            }
+                ReportViewType.ReportData => new ReportBuilder(_libraryManager).GetHeaders(request),
+                ReportViewType.ReportActivities => new ReportActivitiesBuilder(_libraryManager, _userManager).GetHeaders(request),
+                _ => throw new InvalidEnumArgumentException()
+            };
 
             return result;
         }
@@ -148,10 +143,10 @@ namespace Jellyfin.Plugin.Reports.Api
             switch (request.ExportType)
             {
                 case ReportExportType.CSV:
-                    returnResult = new ReportExport().ExportToCsv(result);
+                    returnResult = ReportExport.ExportToCsv(result);
                     break;
                 case ReportExportType.Excel:
-                    returnResult = new ReportExport().ExportToExcel(result);
+                    returnResult = ReportExport.ExportToExcel(result);
                     break;
             }
 
@@ -222,11 +217,11 @@ namespace Jellyfin.Plugin.Reports.Api
             }
 
             query.IsFavorite = null;
-            if(request.IsFavorite == true)
+            if (request.IsFavorite)
             {
                 query.IsFavorite = true;
             }
-            else if (request.IsNotFavorite == true)
+            else if (request.IsNotFavorite)
             {
                 query.IsFavorite = false;
             }
@@ -275,13 +270,13 @@ namespace Jellyfin.Plugin.Reports.Api
             // Filter by Series Status
             if (!string.IsNullOrEmpty(request.SeriesStatus))
             {
-                query.SeriesStatuses = request.SeriesStatus.Split(',').Select(d => (SeriesStatus)Enum.Parse(typeof(SeriesStatus), d, true)).ToArray();
+                query.SeriesStatuses = request.SeriesStatus.Split(',').Select(d => Enum.Parse<SeriesStatus>(d, true)).ToArray();
             }
 
             // ExcludeLocationTypes
             if (!string.IsNullOrEmpty(request.ExcludeLocationTypes))
             {
-                var excludeLocationTypes = request.ExcludeLocationTypes.Split(',').Select(d => (LocationType)Enum.Parse(typeof(LocationType), d, true)).ToArray();
+                var excludeLocationTypes = request.ExcludeLocationTypes.Split(',').Select(d => Enum.Parse<LocationType>(d, true)).ToArray();
                 if (excludeLocationTypes.Contains(LocationType.Virtual))
                 {
                     query.IsVirtualItem = false;
