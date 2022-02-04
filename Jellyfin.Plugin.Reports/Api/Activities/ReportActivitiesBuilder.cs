@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable disable
+
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -49,7 +51,7 @@ namespace Jellyfin.Plugin.Reports.Api.Activities
                 var rowsGroup = rows.SelectMany(x => x.Columns[i].Name.Split(';'), (x, g) => new { Group = g.Trim(), Rows = x })
                     .GroupBy(x => x.Group)
                     .OrderBy(x => x.Key)
-                    .Select(x => new ReportGroup { Name = x.Key, Rows = x.Select(r => r.Rows).ToList() });
+                    .Select(x => new ReportGroup(x.Key, x.Select(r => r.Rows).ToList()));
 
                 result.Groups = rowsGroup.ToList();
                 result.IsGrouped = true;

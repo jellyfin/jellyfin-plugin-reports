@@ -13,49 +13,43 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         /// <param name="value"> The value. </param>
         /// <param name="fieldType"> Type of the field. </param>
         /// <returns> The field converted to string. </returns>
-        public static string ConvertToString<T>(T value, ReportFieldType fieldType)
+        public static string? ConvertToString<T>(T value, ReportFieldType fieldType)
         {
             if (value == null)
-                return string.Empty;
-            switch (fieldType)
             {
-                case ReportFieldType.String:
-                    return value.ToString();
-                case ReportFieldType.Boolean:
-                    return value.ToString();
-                case ReportFieldType.Date:
-                    return string.Format(CultureInfo.InvariantCulture, "{0:d}", value);
-                case ReportFieldType.Time:
-                    return string.Format(CultureInfo.InvariantCulture, "{0:t}", value);
-                case ReportFieldType.DateTime:
-                    return string.Format(CultureInfo.InvariantCulture, "{0:g}", value);
-                case ReportFieldType.Minutes:
-                    return string.Format(CultureInfo.InvariantCulture, "{0}mn", value);
-                case ReportFieldType.Int:
-                    return value.ToString();
-                default:
-                    if (value is Guid guid)
-                        return guid.ToString("N", CultureInfo.InvariantCulture);
-                    return value.ToString();
+                return string.Empty;
             }
+
+            return fieldType switch
+            {
+                ReportFieldType.Boolean | ReportFieldType.Int | ReportFieldType.String => value.ToString(),
+                ReportFieldType.Date => string.Format(CultureInfo.InvariantCulture, "{0:d}", value),
+                ReportFieldType.Time => string.Format(CultureInfo.InvariantCulture, "{0:t}", value),
+                ReportFieldType.DateTime => string.Format(CultureInfo.InvariantCulture, "{0:g}", value),
+                ReportFieldType.Minutes => string.Format(CultureInfo.InvariantCulture, "{0}mn", value),
+                _ when value is Guid guid => guid.ToString("N", CultureInfo.InvariantCulture),
+                _ => value.ToString()
+            };
         }
 
         /// <summary> Gets filtered report header metadata. </summary>
         /// <param name="reportColumns"> The report columns. </param>
         /// <param name="defaultReturnValue"> The default return value. </param>
         /// <returns> The filtered report header metadata. </returns>
-        public static List<HeaderMetadata> GetFilteredReportHeaderMetadata(string reportColumns, Func<List<HeaderMetadata>> defaultReturnValue = null)
+        public static List<HeaderMetadata> GetFilteredReportHeaderMetadata(string reportColumns, Func<List<HeaderMetadata>>? defaultReturnValue = null)
         {
             if (!string.IsNullOrEmpty(reportColumns))
             {
                 var s = reportColumns.Split('|').Select(x => ReportHelper.GetHeaderMetadataType(x)).Where(x => x != HeaderMetadata.None);
                 return s.ToList();
             }
-            else
-                if (defaultReturnValue != null)
-                    return defaultReturnValue();
-                else
-                    return new List<HeaderMetadata>();
+
+            if (defaultReturnValue == null)
+            {
+                return new List<HeaderMetadata>();
+            }
+
+            return defaultReturnValue();
         }
 
         /// <summary> Gets header metadata type. </summary>

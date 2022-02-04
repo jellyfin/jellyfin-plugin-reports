@@ -1,4 +1,5 @@
-﻿
+﻿#nullable disable
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,9 @@ namespace Jellyfin.Plugin.Reports.Api.Common
     /// <summary> A report builder base. </summary>
     public abstract class ReportBuilderBase
     {
+        /// <summary> Manager for library. </summary>
+        private readonly ILibraryManager _libraryManager;
+
         /// <summary>
         /// Initializes a new instance of the MediaBrowser.Api.Reports.ReportBuilderBase class. </summary>
         /// <param name="libraryManager"> Manager for library. </param>
@@ -24,9 +28,6 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         {
             _libraryManager = libraryManager;
         }
-
-        /// <summary> Manager for library. </summary>
-        private readonly ILibraryManager _libraryManager;
 
         protected Func<bool, string> GetBoolString => s => s == true ? "x" : string.Empty;
 
@@ -144,7 +145,7 @@ namespace Jellyfin.Plugin.Reports.Api.Common
                 return "Episode";
             }
 
-            string headerName = "";
+            string headerName = string.Empty;
             if (internalHeader != HeaderMetadata.None)
             {
                 string localHeader = internalHeader.ToString();
@@ -158,8 +159,7 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         /// <returns> The media source information. </returns>
         protected MediaSourceInfo GetMediaSourceInfo(BaseItem item)
         {
-            var mediaSource = item as IHasMediaSources;
-            if (mediaSource != null)
+            if (item is IHasMediaSources mediaSource)
                 return mediaSource.GetMediaSources(false).FirstOrDefault(n => n.Type == MediaSourceType.Default);
 
             return null;

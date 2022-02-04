@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable disable
+
+using System;
 using Jellyfin.Plugin.Reports.Api.Model;
 
 namespace Jellyfin.Plugin.Reports.Api.Data

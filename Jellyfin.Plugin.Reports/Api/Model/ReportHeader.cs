@@ -1,4 +1,6 @@
-﻿using Jellyfin.Plugin.Reports.Api.Common;
+﻿#nullable disable
+
+using Jellyfin.Plugin.Reports.Api.Common;
 
 namespace Jellyfin.Plugin.Reports.Api.Model
 {

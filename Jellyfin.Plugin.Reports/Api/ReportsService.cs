@@ -1,25 +1,27 @@
-﻿using MediaBrowser.Controller.Entities;
-using MediaBrowser.Controller.Library;
-using MediaBrowser.Model.Querying;
+﻿#nullable disable
+
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System;
 using System.Threading.Tasks;
+using MediaBrowser.Controller.Entities;
+using MediaBrowser.Controller.Library;
+using MediaBrowser.Model.Entities;
+using MediaBrowser.Model.Activity;
+using MediaBrowser.Model.Globalization;
+using MediaBrowser.Model.Querying;
 using Jellyfin.Data.Queries;
 using Jellyfin.Plugin.Reports.Api.Activities;
 using Jellyfin.Plugin.Reports.Api.Common;
 using Jellyfin.Plugin.Reports.Api.Data;
 using Jellyfin.Plugin.Reports.Api.Model;
-using MediaBrowser.Model.Entities;
-using MediaBrowser.Model.Activity;
-using MediaBrowser.Model.Globalization;
 using User = Jellyfin.Data.Entities.User;
 
 namespace Jellyfin.Plugin.Reports.Api
 {
     /// <summary> The reports service. </summary>
-    /// <seealso cref="T:MediaBrowser.Api.BaseApiService"/>
+    /// <seealso cref="BaseApiService"/>
     public class ReportsService
     {
         /// <summary>

@@ -1,4 +1,6 @@
-﻿namespace Jellyfin.Plugin.Reports.Api.Model
+﻿#nullable disable
+
+namespace Jellyfin.Plugin.Reports.Api.Model
 {
     /// <summary> A report item. </summary>
     public class ReportItem
@@ -19,7 +21,7 @@
 
         /// <summary> Returns a string that represents the current object. </summary>
         /// <returns> A string that represents the current object. </returns>
-        /// <seealso cref="M:System.Object.ToString()"/>
+        /// <seealso cref="Object.ToString()"/>
         public override string ToString()
         {
             return Name;

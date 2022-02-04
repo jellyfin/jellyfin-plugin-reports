@@ -1,12 +1,14 @@
-﻿using MediaBrowser.Controller.Entities;
-using MediaBrowser.Controller.Entities.Audio;
-using MediaBrowser.Controller.Entities.TV;
-using MediaBrowser.Controller.Library;
-using MediaBrowser.Model.Entities;
+﻿#nullable disable
+
 using System.Collections.Generic;
 using System.Linq;
 using Jellyfin.Plugin.Reports.Api.Common;
 using Jellyfin.Plugin.Reports.Api.Model;
+using MediaBrowser.Controller.Entities;
+using MediaBrowser.Controller.Entities.Audio;
+using MediaBrowser.Controller.Entities.TV;
+using MediaBrowser.Controller.Library;
+using MediaBrowser.Model.Entities;
 
 namespace Jellyfin.Plugin.Reports.Api.Data
 {
@@ -46,7 +48,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                 var rowsGroup = rows.SelectMany(x => x.Columns[i].Name.Split(';'), (x, g) => new { Group = g.Trim(), Rows = x })
                     .GroupBy(x => x.Group)
                     .OrderBy(x => x.Key)
-                    .Select(x => new ReportGroup { Name = x.Key, Rows = x.Select(r => r.Rows).ToList() });
+                    .Select(x => new ReportGroup(x.Key, x.Select(r => r.Rows).ToList()));
 
                 result.Groups = rowsGroup.ToList();
                 result.IsGrouped = true;

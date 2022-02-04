@@ -4,6 +4,5 @@ namespace Jellyfin.Plugin.Reports.Api.Common
     {
         ReportData,
         ReportActivities
-
     }
 }
