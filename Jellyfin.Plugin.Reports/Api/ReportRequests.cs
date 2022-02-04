@@ -526,13 +526,13 @@ namespace Jellyfin.Plugin.Reports.Api
             return GetOrderBy(SortBy, SortOrder);
         }
 
-        public static ValueTuple<string, SortOrder>[] GetOrderBy(string sortBy, string requestedSortOrder)
+        public static (string, SortOrder)[] GetOrderBy(string sortBy, string requestedSortOrder)
         {
             var val = sortBy;
 
             if (string.IsNullOrEmpty(val))
             {
-                return new ValueTuple<string, SortOrder>[] { };
+                return Array.Empty<(string, SortOrder)>();
             }
 
             var vals = val.Split(',');
@@ -543,7 +543,7 @@ namespace Jellyfin.Plugin.Reports.Api
 
             var sortOrders = requestedSortOrder.Split(',');
 
-            var result = new ValueTuple<string, SortOrder>[vals.Length];
+            var result = new (string, SortOrder)[vals.Length];
 
             for (var i = 0; i < vals.Length; i++)
             {
@@ -552,7 +552,7 @@ namespace Jellyfin.Plugin.Reports.Api
                 var sortOrderValue = sortOrders.Length > sortOrderIndex ? sortOrders[sortOrderIndex] : null;
                 var sortOrder = string.Equals(sortOrderValue, "Descending", StringComparison.OrdinalIgnoreCase) ? Jellyfin.Data.Enums.SortOrder.Descending : Jellyfin.Data.Enums.SortOrder.Ascending;
 
-                result[i] = new ValueTuple<string, SortOrder>(vals[i], sortOrder);
+                result[i] = (vals[i], sortOrder);
             }
 
             return result;
@@ -626,10 +626,9 @@ namespace Jellyfin.Plugin.Reports.Api
         }
     }
 
-	public class GetItemReport : BaseReportRequest
-	{
-
-	}
+    public class GetItemReport : BaseReportRequest
+    {
+    }
 
     public class GetReportHeaders : IReportsHeader
     {

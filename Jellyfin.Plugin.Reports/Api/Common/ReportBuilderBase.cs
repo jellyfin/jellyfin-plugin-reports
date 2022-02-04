@@ -15,9 +15,6 @@ namespace Jellyfin.Plugin.Reports.Api.Common
     /// <summary> A report builder base. </summary>
     public abstract class ReportBuilderBase
     {
-
-        #region [Constructors]
-
         /// <summary>
         /// Initializes a new instance of the MediaBrowser.Api.Reports.ReportBuilderBase class. </summary>
         /// <param name="libraryManager"> Manager for library. </param>
@@ -26,28 +23,16 @@ namespace Jellyfin.Plugin.Reports.Api.Common
             _libraryManager = libraryManager;
         }
 
-        #endregion
-
-        #region [Protected Fields]
-
         /// <summary> Manager for library. </summary>
-        protected readonly ILibraryManager _libraryManager; ///< Manager for library
+        protected readonly ILibraryManager _libraryManager;
 
-        protected Func<bool, string> GetBoolString = s => s == true ? "x" : ""; ///< .
-
-        #endregion
-
-        #region [Protected Internal Methods]
+        protected Func<bool, string> GetBoolString = s => s == true ? "x" : "";
 
         /// <summary> Gets the headers. </summary>
         /// <typeparam name="H"> Type of the header. </typeparam>
         /// <param name="request"> The request. </param>
         /// <returns> The headers. </returns>
         protected internal abstract List<ReportHeader> GetHeaders<H>(H request) where H : IReportsHeader;
-
-        #endregion
-
-        #region [Protected Methods]
 
         /// <summary> Gets active headers. </summary>
         /// <typeparam name="T"> Generic type parameter. </typeparam>
@@ -239,7 +224,7 @@ namespace Jellyfin.Plugin.Reports.Api.Common
 
                     if (this.DisplayTypeVisible(header.DisplayType, displayType))
                     {
-                       
+
                         if (!headersMetadataFiltered.Contains(header.FieldName) && displayType != ReportDisplayType.Export)
                         {
                             header.DisplayType = ReportDisplayType.None;
@@ -360,8 +345,5 @@ namespace Jellyfin.Plugin.Reports.Api.Common
             bool rval = headerDisplayType == displayType || headerDisplayType == ReportDisplayType.ScreenExport && (displayType == ReportDisplayType.Screen || displayType == ReportDisplayType.Export);
             return rval;
         }
-
-        #endregion
-
     }
 }

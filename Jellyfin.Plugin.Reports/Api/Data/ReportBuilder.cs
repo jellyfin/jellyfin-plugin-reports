@@ -14,9 +14,6 @@ namespace Jellyfin.Plugin.Reports.Api.Data
     /// <seealso cref="T:MediaBrowser.Api.Reports.ReportBuilderBase"/>
     public class ReportBuilder : ReportBuilderBase
     {
-
-        #region [Constructors]
-
         /// <summary>
         /// Initializes a new instance of the MediaBrowser.Api.Reports.ReportBuilder class. </summary>
         /// <param name="libraryManager"> Manager for library. </param>
@@ -24,10 +21,6 @@ namespace Jellyfin.Plugin.Reports.Api.Data
             : base(libraryManager)
         {
         }
-
-        #endregion
-
-        #region [Public Methods]
 
         /// <summary> Gets report result. </summary>
         /// <param name="items"> The items. </param>
@@ -67,10 +60,6 @@ namespace Jellyfin.Plugin.Reports.Api.Data
             return result;
         }
 
-        #endregion
-
-        #region [Protected Internal Methods]
-
         /// <summary> Gets the headers. </summary>
         /// <typeparam name="H"> Type of the header. </typeparam>
         /// <param name="request"> The request. </param>
@@ -81,10 +70,6 @@ namespace Jellyfin.Plugin.Reports.Api.Data
             ReportIncludeItemTypes reportRowType = ReportHelper.GetRowType(request.IncludeItemTypes);
             return this.GetHeaders<BaseItem>(request, () => this.GetDefaultHeaderMetadata(reportRowType), (hm) => this.GetOption(hm));
         }
-
-        #endregion
-
-        #region [Private Methods]
 
         /// <summary> Gets default report header metadata. </summary>
         /// <param name="reportIncludeItemTypes"> Type of the report row. </param>
@@ -358,7 +343,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                     option.Header.CanGroup = false;
                     option.Header.DisplayType = ReportDisplayType.Export;
                     break;
-                    
+
                 case HeaderMetadata.Path:
                     option.Column = (i, r) => i.Path;
                     option.Header.SortField = "Path,SortName";
@@ -597,8 +582,5 @@ namespace Jellyfin.Plugin.Reports.Api.Data
             };
             return rRow;
         }
-
-        #endregion
-
     }
 }

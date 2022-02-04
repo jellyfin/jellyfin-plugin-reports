@@ -1,5 +1,4 @@
-﻿using MediaBrowser.Controller.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,8 +7,6 @@ namespace Jellyfin.Plugin.Reports.Api.Common
     /// <summary> A report helper. </summary>
     public class ReportHelper
     {
-        #region [Public Methods]
-
         /// <summary> Convert field to string. </summary>
         /// <typeparam name="T"> Generic type parameter. </typeparam>
         /// <param name="value"> The value. </param>
@@ -18,7 +15,7 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         public static string ConvertToString<T>(T value, ReportFieldType fieldType)
         {
             if (value == null)
-                return "";
+                return string.Empty;
             switch (fieldType)
             {
                 case ReportFieldType.String:
@@ -131,8 +128,5 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         {
             return phrase;
         }
-
-        #endregion
-
     }
 }

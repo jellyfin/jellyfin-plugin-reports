@@ -22,8 +22,6 @@ namespace Jellyfin.Plugin.Reports.Api
     /// <seealso cref="T:MediaBrowser.Api.BaseApiService"/>
     public class ReportsService
     {
-        #region [Constructors]
-
         /// <summary>
         /// Initializes a new instance of the MediaBrowser.Api.Reports.ReportsService class. </summary>
         /// <param name="userManager"> Manager for user. </param>
@@ -38,24 +36,15 @@ namespace Jellyfin.Plugin.Reports.Api
             _activityManager = activityManager;
         }
 
-        #endregion
-
-        #region [Private Fields]
-
-        private readonly IActivityManager _activityManager; ///< Manager for activity
+        private readonly IActivityManager _activityManager;
 
         /// <summary> Manager for library. </summary>
-        private readonly ILibraryManager _libraryManager;   ///< Manager for library
-                                                            /// <summary> The localization. </summary>
+        private readonly ILibraryManager _libraryManager;
 
-        private readonly ILocalizationManager _localization;    ///< The localization
+        private readonly ILocalizationManager _localization;
 
         /// <summary> Manager for user. </summary>
-        private readonly IUserManager _userManager; ///< Manager for user
-
-        #endregion
-
-        #region [Public Methods]
+        private readonly IUserManager _userManager;
 
         /// <summary> Gets the given request. </summary>
         /// <param name="request"> The request. </param>
@@ -92,7 +81,6 @@ namespace Jellyfin.Plugin.Reports.Api
             }
 
             return result;
-
         }
 
         /// <summary> Gets the given request. </summary>
@@ -167,8 +155,6 @@ namespace Jellyfin.Plugin.Reports.Api
 
             return (returnResult, contentType, headers);
         }
-
-        #endregion
 
         private InternalItemsQuery GetItemsQuery(BaseReportRequest request, User user)
         {
@@ -396,8 +382,6 @@ namespace Jellyfin.Plugin.Reports.Api
             };
         }
 
-        #region [Private Methods]
-
         /// <summary> Gets report activities. </summary>
         /// <param name="request"> The request. </param>
         /// <returns> The report activities. </returns>
@@ -428,8 +412,5 @@ namespace Jellyfin.Plugin.Reports.Api
 
             return reportResult;
         }
-
-        #endregion
-
     }
 }

@@ -206,5 +206,4 @@ namespace Jellyfin.Plugin.Reports.Api.Data
 			returnValue.AppendLine("</tr>");
 		}
 	}
-
 }
