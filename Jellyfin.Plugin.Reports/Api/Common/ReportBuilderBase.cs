@@ -1,22 +1,25 @@
-﻿using MediaBrowser.Controller.Entities;
+﻿#nullable disable
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Globalization;
+using Jellyfin.Plugin.Reports.Api.Data;
+using Jellyfin.Plugin.Reports.Api.Model;
+using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.TV;
 using MediaBrowser.Controller.Library;
 using MediaBrowser.Model.Channels;
 using MediaBrowser.Model.Dto;
 using MediaBrowser.Model.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Jellyfin.Plugin.Reports.Api.Data;
-using Jellyfin.Plugin.Reports.Api.Model;
 
 namespace Jellyfin.Plugin.Reports.Api.Common
 {
     /// <summary> A report builder base. </summary>
     public abstract class ReportBuilderBase
     {
-
-        #region [Constructors]
+        /// <summary> Manager for library. </summary>
+        private readonly ILibraryManager _libraryManager;
 
         /// <summary>
         /// Initializes a new instance of the MediaBrowser.Api.Reports.ReportBuilderBase class. </summary>
@@ -26,28 +29,13 @@ namespace Jellyfin.Plugin.Reports.Api.Common
             _libraryManager = libraryManager;
         }
 
-        #endregion
-
-        #region [Protected Fields]
-
-        /// <summary> Manager for library. </summary>
-        protected readonly ILibraryManager _libraryManager; ///< Manager for library
-
-        protected Func<bool, string> GetBoolString = s => s == true ? "x" : ""; ///< .
-
-        #endregion
-
-        #region [Protected Internal Methods]
+        protected Func<bool, string> GetBoolString => s => s == true ? "x" : string.Empty;
 
         /// <summary> Gets the headers. </summary>
-        /// <typeparam name="H"> Type of the header. </typeparam>
+        /// <typeparam name="T"> Type of the header. </typeparam>
         /// <param name="request"> The request. </param>
         /// <returns> The headers. </returns>
-        protected internal abstract List<ReportHeader> GetHeaders<H>(H request) where H : IReportsHeader;
-
-        #endregion
-
-        #region [Protected Methods]
+        protected internal abstract List<ReportHeader> GetHeaders<T>(T request) where T : IReportsHeader;
 
         /// <summary> Gets active headers. </summary>
         /// <typeparam name="T"> Generic type parameter. </typeparam>
@@ -70,11 +58,14 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         protected string GetAudioStream(BaseItem item)
         {
             var stream = GetStream(item, MediaStreamType.Audio);
-            if (stream != null)
-                return stream.Codec.ToUpper() == "DCA" ? stream.Profile : stream.Codec.
-                ToUpper();
+            if (stream == null)
+            {
+                return string.Empty;
+            }
 
-            return string.Empty;
+            return string.Equals(stream.Codec, "DCA", StringComparison.OrdinalIgnoreCase)
+                ? stream.Profile
+                : stream.Codec.ToUpperInvariant();
         }
 
         /// <summary> Gets an episode. </summary>
@@ -106,8 +97,7 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         {
             if (string.IsNullOrEmpty(name))
                 return string.Empty;
-            return string.Format("{0:N}",
-                    GetGenre(name).Id);
+            return GetGenre(name).Id.ToString("N", CultureInfo.InvariantCulture);
         }
 
         /// <summary> Gets the headers. </summary>
@@ -155,7 +145,7 @@ namespace Jellyfin.Plugin.Reports.Api.Common
                 return "Episode";
             }
 
-            string headerName = "";
+            string headerName = string.Empty;
             if (internalHeader != HeaderMetadata.None)
             {
                 string localHeader = internalHeader.ToString();
@@ -169,24 +159,23 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         /// <returns> The media source information. </returns>
         protected MediaSourceInfo GetMediaSourceInfo(BaseItem item)
         {
-            var mediaSource = item as IHasMediaSources;
-            if (mediaSource != null)
+            if (item is IHasMediaSources mediaSource)
                 return mediaSource.GetMediaSources(false).FirstOrDefault(n => n.Type == MediaSourceType.Default);
 
             return null;
         }
 
         /// <summary> Gets an object. </summary>
-        /// <typeparam name="T"> Generic type parameter. </typeparam>
-        /// <typeparam name="R"> Type of the r. </typeparam>
+        /// <typeparam name="TItem"> Generic type parameter. </typeparam>
+        /// <typeparam name="TReturn"> Type of the r. </typeparam>
         /// <param name="item"> The item. </param>
         /// <param name="function"> The function. </param>
         /// <param name="defaultValue"> The default value. </param>
         /// <returns> The object. </returns>
-        protected R GetObject<T, R>(BaseItem item, Func<T, R> function, R defaultValue = default(R)) where T : class
+        protected TReturn GetObject<TItem, TReturn>(BaseItem item, Func<TItem, TReturn> function, TReturn defaultValue = default)
+            where TItem : class
         {
-            var value = item as T;
-            if (value != null && function != null)
+            if (item is TItem value && function != null)
                 return function(value);
             else
                 return defaultValue;
@@ -209,8 +198,7 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         {
             if (string.IsNullOrEmpty(name))
                 return string.Empty;
-            return string.Format("{0:N}",
-                    GetPerson(name).Id);
+            return GetPerson(name).Id.ToString("N", CultureInfo.InvariantCulture);
         }
 
         /// <summary> Gets report options. </summary>
@@ -239,7 +227,7 @@ namespace Jellyfin.Plugin.Reports.Api.Common
 
                     if (this.DisplayTypeVisible(header.DisplayType, displayType))
                     {
-                       
+
                         if (!headersMetadataFiltered.Contains(header.FieldName) && displayType != ReportDisplayType.Export)
                         {
                             header.DisplayType = ReportDisplayType.None;
@@ -317,8 +305,7 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         {
             if (string.IsNullOrEmpty(name))
                 return string.Empty;
-            return string.Format("{0:N}",
-                    GetStudio(name).Id);
+            return GetStudio(name).Id.ToString("N", CultureInfo.InvariantCulture);
         }
 
         /// <summary> Gets video resolution. </summary>
@@ -329,7 +316,7 @@ namespace Jellyfin.Plugin.Reports.Api.Common
             var stream = GetStream(item,
                     MediaStreamType.Video);
             if (stream != null && stream.Width != null)
-                return string.Format("{0} * {1}",
+                return string.Format(CultureInfo.InvariantCulture, "{0} * {1}",
                         stream.Width,
                         stream.Height != null ? stream.Height.ToString() : "-");
 
@@ -343,7 +330,7 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         {
             var stream = GetStream(item, MediaStreamType.Video);
             if (stream != null)
-                return stream.Codec.ToUpper();
+                return stream.Codec.ToUpperInvariant();
 
             return string.Empty;
         }
@@ -360,8 +347,5 @@ namespace Jellyfin.Plugin.Reports.Api.Common
             bool rval = headerDisplayType == displayType || headerDisplayType == ReportDisplayType.ScreenExport && (displayType == ReportDisplayType.Screen || displayType == ReportDisplayType.Export);
             return rval;
         }
-
-        #endregion
-
     }
 }

@@ -17,17 +17,11 @@ namespace Jellyfin.Plugin.Reports
 
         public override string Name => "Reports";
 
-
-        public override string Description
-            => "Generate Reports";
+        public override string Description => "Generate Reports";
 
         public PluginConfiguration PluginConfiguration => Configuration;
 
-        private Guid _id = new Guid("d4312cd9-5c90-4f38-82e8-51da566790e8");
-        public override Guid Id
-        {
-            get { return _id; }
-        }
+        public override Guid Id { get; } = new Guid("d4312cd9-5c90-4f38-82e8-51da566790e8");
 
         public IEnumerable<PluginPageInfo> GetPages()
         {

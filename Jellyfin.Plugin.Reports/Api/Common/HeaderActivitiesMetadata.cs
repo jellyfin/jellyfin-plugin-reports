@@ -1,7 +1,7 @@
 namespace Jellyfin.Plugin.Reports.Api.Common
 {
     public enum HeaderActivitiesMetadata
-	{
+    {
         None,
         Name,
         Overview,
@@ -12,5 +12,5 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         Severity,
         Item,
         User
-	}
+    }
 }

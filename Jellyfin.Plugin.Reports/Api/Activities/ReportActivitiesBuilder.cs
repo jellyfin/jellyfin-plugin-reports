@@ -1,21 +1,22 @@
-﻿using MediaBrowser.Model.Activity;
-using MediaBrowser.Model.Querying;
-using System.Collections.Generic;
-using System.Linq;
-using MediaBrowser.Controller.Library;
+﻿#nullable disable
+
 using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using Jellyfin.Plugin.Reports.Api.Common;
 using Jellyfin.Plugin.Reports.Api.Data;
 using Jellyfin.Plugin.Reports.Api.Model;
+using MediaBrowser.Controller.Library;
+using MediaBrowser.Model.Activity;
+using MediaBrowser.Model.Querying;
 
 namespace Jellyfin.Plugin.Reports.Api.Activities
 {
     /// <summary> A report activities builder. </summary>
-    /// <seealso cref="T:MediaBrowser.Api.Reports.ReportBuilderBase"/>
+    /// <seealso cref="ReportBuilderBase"/>
     public class ReportActivitiesBuilder : ReportBuilderBase
     {
-        #region [Constructors]
-
         /// <summary>
         /// Initializes a new instance of the MediaBrowser.Api.Reports.ReportActivitiesBuilder class. </summary>
         /// <param name="libraryManager"> Manager for library. </param>
@@ -26,15 +27,7 @@ namespace Jellyfin.Plugin.Reports.Api.Activities
             _userManager = userManager;
         }
 
-        #endregion
-
-        #region [Private Fields]
-
         private readonly IUserManager _userManager; ///< Manager for user
-
-        #endregion
-
-        #region [Public Methods]
 
         /// <summary> Gets a result. </summary>
         /// <param name="queryResult"> The query result. </param>
@@ -58,7 +51,7 @@ namespace Jellyfin.Plugin.Reports.Api.Activities
                 var rowsGroup = rows.SelectMany(x => x.Columns[i].Name.Split(';'), (x, g) => new { Group = g.Trim(), Rows = x })
                     .GroupBy(x => x.Group)
                     .OrderBy(x => x.Key)
-                    .Select(x => new ReportGroup { Name = x.Key, Rows = x.Select(r => r.Rows).ToList() });
+                    .Select(x => new ReportGroup(x.Key, x.Select(r => r.Rows).ToList()));
 
                 result.Groups = rowsGroup.ToList();
                 result.IsGrouped = true;
@@ -72,38 +65,30 @@ namespace Jellyfin.Plugin.Reports.Api.Activities
             return result;
         }
 
-        #endregion
-
-        #region [Protected Internal Methods]
-
         /// <summary> Gets the headers. </summary>
-        /// <typeparam name="H"> Type of the header. </typeparam>
+        /// <typeparam name="T"> Type of the header. </typeparam>
         /// <param name="request"> The request. </param>
         /// <returns> The headers. </returns>
-        /// <seealso cref="M:MediaBrowser.Api.Reports.ReportBuilderBase.GetHeaders{H}(H)"/>
-        protected internal override List<ReportHeader> GetHeaders<H>(H request)
+        /// <seealso cref="ReportBuilderBase.GetHeaders"/>
+        protected internal override List<ReportHeader> GetHeaders<T>(T request)
         {
             return this.GetHeaders<ActivityLogEntry>(request, () => this.GetDefaultHeaderMetadata(), (hm) => this.GetOption(hm));
         }
-
-        #endregion
-
-        #region [Private Methods]
 
         /// <summary> Gets default header metadata. </summary>
         /// <returns> The default header metadata. </returns>
         private List<HeaderMetadata> GetDefaultHeaderMetadata()
         {
             return new List<HeaderMetadata>
-					{
+                    {
                         HeaderMetadata.UserPrimaryImage,
                         HeaderMetadata.Date,
                         HeaderMetadata.User,
                         HeaderMetadata.Type,
                         HeaderMetadata.Severity,
-						HeaderMetadata.Name,
+                        HeaderMetadata.Name,
                         HeaderMetadata.ShortOverview,
-						HeaderMetadata.Overview,
+                        HeaderMetadata.Overview,
                         //HeaderMetadata.UserId
                         //HeaderMetadata.Item,
 					};
@@ -249,13 +234,10 @@ namespace Jellyfin.Plugin.Reports.Api.Activities
         {
             ReportRow rRow = new ReportRow
             {
-                Id = item.Id.ToString(),
+                Id = item.Id.ToString(CultureInfo.InvariantCulture),
                 UserId = item.UserId
             };
             return rRow;
         }
-
-        #endregion
-
     }
 }

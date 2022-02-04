@@ -1,22 +1,21 @@
-﻿using MediaBrowser.Controller.Entities;
-using MediaBrowser.Controller.Entities.Audio;
-using MediaBrowser.Controller.Entities.TV;
-using MediaBrowser.Controller.Library;
-using MediaBrowser.Model.Entities;
+﻿#nullable disable
+
 using System.Collections.Generic;
 using System.Linq;
 using Jellyfin.Plugin.Reports.Api.Common;
 using Jellyfin.Plugin.Reports.Api.Model;
+using MediaBrowser.Controller.Entities;
+using MediaBrowser.Controller.Entities.Audio;
+using MediaBrowser.Controller.Entities.TV;
+using MediaBrowser.Controller.Library;
+using MediaBrowser.Model.Entities;
 
 namespace Jellyfin.Plugin.Reports.Api.Data
 {
     /// <summary> A report builder. </summary>
-    /// <seealso cref="T:MediaBrowser.Api.Reports.ReportBuilderBase"/>
+    /// <seealso cref="ReportBuilderBase"/>
     public class ReportBuilder : ReportBuilderBase
     {
-
-        #region [Constructors]
-
         /// <summary>
         /// Initializes a new instance of the MediaBrowser.Api.Reports.ReportBuilder class. </summary>
         /// <param name="libraryManager"> Manager for library. </param>
@@ -24,10 +23,6 @@ namespace Jellyfin.Plugin.Reports.Api.Data
             : base(libraryManager)
         {
         }
-
-        #endregion
-
-        #region [Public Methods]
 
         /// <summary> Gets report result. </summary>
         /// <param name="items"> The items. </param>
@@ -53,7 +48,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                 var rowsGroup = rows.SelectMany(x => x.Columns[i].Name.Split(';'), (x, g) => new { Group = g.Trim(), Rows = x })
                     .GroupBy(x => x.Group)
                     .OrderBy(x => x.Key)
-                    .Select(x => new ReportGroup { Name = x.Key, Rows = x.Select(r => r.Rows).ToList() });
+                    .Select(x => new ReportGroup(x.Key, x.Select(r => r.Rows).ToList()));
 
                 result.Groups = rowsGroup.ToList();
                 result.IsGrouped = true;
@@ -67,24 +62,16 @@ namespace Jellyfin.Plugin.Reports.Api.Data
             return result;
         }
 
-        #endregion
-
-        #region [Protected Internal Methods]
-
         /// <summary> Gets the headers. </summary>
-        /// <typeparam name="H"> Type of the header. </typeparam>
+        /// <typeparam name="T"> Type of the header. </typeparam>
         /// <param name="request"> The request. </param>
         /// <returns> The headers. </returns>
-        /// <seealso cref="M:MediaBrowser.Api.Reports.ReportBuilderBase.GetHeaders{H}(H)"/>
-        protected internal override List<ReportHeader> GetHeaders<H>(H request)
+        /// <seealso cref="ReportBuilderBase.GetHeaders"/>
+        protected internal override List<ReportHeader> GetHeaders<T>(T request)
         {
             ReportIncludeItemTypes reportRowType = ReportHelper.GetRowType(request.IncludeItemTypes);
             return this.GetHeaders<BaseItem>(request, () => this.GetDefaultHeaderMetadata(reportRowType), (hm) => this.GetOption(hm));
         }
-
-        #endregion
-
-        #region [Private Methods]
 
         /// <summary> Gets default report header metadata. </summary>
         /// <param name="reportIncludeItemTypes"> Type of the report row. </param>
@@ -358,7 +345,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                     option.Header.CanGroup = false;
                     option.Header.DisplayType = ReportDisplayType.Export;
                     break;
-                    
+
                 case HeaderMetadata.Path:
                     option.Column = (i, r) => i.Path;
                     option.Header.SortField = "Path,SortName";
@@ -513,7 +500,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                     break;
 
                 case HeaderMetadata.Tracks:
-                    option.Column = (i, r) => this.GetObject<MusicAlbum, List<Audio>>(i, (x) => x.Tracks.ToList(), new List<Audio>()).Count();
+                    option.Column = (i, r) => this.GetObject<MusicAlbum, List<Audio>>(i, (x) => x.Tracks.ToList(), new List<Audio>()).Count;
                     break;
 
                 case HeaderMetadata.Audio:
@@ -582,23 +569,18 @@ namespace Jellyfin.Plugin.Reports.Api.Data
         /// <returns> The row. </returns>
         private ReportRow GetRow(BaseItem item)
         {
-            var video = item as Video;
-            ReportRow rRow = new ReportRow
+            return new ReportRow
             {
                 Id = item.Id.ToString("N"),
                 HasLockData = item.IsLocked,
                 HasLocalTrailer = item.GetExtras(new[] { ExtraType.Trailer }).Any(),
-                HasImageTagsPrimary = item.ImageInfos != null && item.ImageInfos.Count(n => n.Type == ImageType.Primary) > 0,
-                HasImageTagsBackdrop = item.ImageInfos != null && item.ImageInfos.Count(n => n.Type == ImageType.Backdrop) > 0,
-                HasImageTagsLogo = item.ImageInfos != null && item.ImageInfos.Count(n => n.Type == ImageType.Logo) > 0,
+                HasImageTagsPrimary = item.ImageInfos != null && item.ImageInfos.Any(n => n.Type == ImageType.Primary),
+                HasImageTagsBackdrop = item.ImageInfos != null && item.ImageInfos.Any(n => n.Type == ImageType.Backdrop),
+                HasImageTagsLogo = item.ImageInfos != null && item.ImageInfos.Any(n => n.Type == ImageType.Logo),
                 HasSpecials = item.GetExtras(BaseItem.DisplayExtraTypes).Any(),
-                HasSubtitles = video != null ? video.HasSubtitles : false,
+                HasSubtitles = item is Video video && video.HasSubtitles,
                 RowType = ReportHelper.GetRowType(item.GetClientTypeName())
             };
-            return rRow;
         }
-
-        #endregion
-
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable disable
+
+using System;
 using System.ComponentModel;
 using System.Linq;
 using Jellyfin.Data.Enums;
@@ -479,7 +481,7 @@ namespace Jellyfin.Plugin.Reports.Api
 
             if (string.IsNullOrEmpty(val))
             {
-                return new VideoType[] { };
+                return Array.Empty<VideoType>();
             }
 
             return val.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(v => (VideoType)Enum.Parse(typeof(VideoType), v, true)).ToArray();
@@ -495,7 +497,7 @@ namespace Jellyfin.Plugin.Reports.Api
 
             if (string.IsNullOrEmpty(val))
             {
-                return new ItemFilter[] { };
+                return Array.Empty<ItemFilter>();
             }
 
             return val.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(v => (ItemFilter)Enum.Parse(typeof(ItemFilter), v, true)).ToArray();
@@ -511,7 +513,7 @@ namespace Jellyfin.Plugin.Reports.Api
 
             if (string.IsNullOrEmpty(val))
             {
-                return new ImageType[] { };
+                return Array.Empty<ImageType>();
             }
 
             return val.Split(',').Select(v => (ImageType)Enum.Parse(typeof(ImageType), v, true)).ToArray();
@@ -526,13 +528,13 @@ namespace Jellyfin.Plugin.Reports.Api
             return GetOrderBy(SortBy, SortOrder);
         }
 
-        public static ValueTuple<string, SortOrder>[] GetOrderBy(string sortBy, string requestedSortOrder)
+        public static (string, SortOrder)[] GetOrderBy(string sortBy, string requestedSortOrder)
         {
             var val = sortBy;
 
             if (string.IsNullOrEmpty(val))
             {
-                return new ValueTuple<string, SortOrder>[] { };
+                return Array.Empty<(string, SortOrder)>();
             }
 
             var vals = val.Split(',');
@@ -543,7 +545,7 @@ namespace Jellyfin.Plugin.Reports.Api
 
             var sortOrders = requestedSortOrder.Split(',');
 
-            var result = new ValueTuple<string, SortOrder>[vals.Length];
+            var result = new (string, SortOrder)[vals.Length];
 
             for (var i = 0; i < vals.Length; i++)
             {
@@ -552,7 +554,7 @@ namespace Jellyfin.Plugin.Reports.Api
                 var sortOrderValue = sortOrders.Length > sortOrderIndex ? sortOrders[sortOrderIndex] : null;
                 var sortOrder = string.Equals(sortOrderValue, "Descending", StringComparison.OrdinalIgnoreCase) ? Jellyfin.Data.Enums.SortOrder.Descending : Jellyfin.Data.Enums.SortOrder.Ascending;
 
-                result[i] = new ValueTuple<string, SortOrder>(vals[i], sortOrder);
+                result[i] = (vals[i], sortOrder);
             }
 
             return result;
@@ -626,10 +628,9 @@ namespace Jellyfin.Plugin.Reports.Api
         }
     }
 
-	public class GetItemReport : BaseReportRequest
-	{
-
-	}
+    public class GetItemReport : BaseReportRequest
+    {
+    }
 
     public class GetReportHeaders : IReportsHeader
     {
