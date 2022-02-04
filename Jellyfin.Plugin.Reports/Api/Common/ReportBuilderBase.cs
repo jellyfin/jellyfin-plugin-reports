@@ -26,15 +26,15 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         }
 
         /// <summary> Manager for library. </summary>
-        protected readonly ILibraryManager _libraryManager;
+        private readonly ILibraryManager _libraryManager;
 
-        protected Func<bool, string> GetBoolString = s => s == true ? "x" : string.Empty;
+        protected Func<bool, string> GetBoolString => s => s == true ? "x" : string.Empty;
 
         /// <summary> Gets the headers. </summary>
-        /// <typeparam name="H"> Type of the header. </typeparam>
+        /// <typeparam name="T"> Type of the header. </typeparam>
         /// <param name="request"> The request. </param>
         /// <returns> The headers. </returns>
-        protected internal abstract List<ReportHeader> GetHeaders<H>(H request) where H : IReportsHeader;
+        protected internal abstract List<ReportHeader> GetHeaders<T>(T request) where T : IReportsHeader;
 
         /// <summary> Gets active headers. </summary>
         /// <typeparam name="T"> Generic type parameter. </typeparam>
@@ -57,11 +57,14 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         protected string GetAudioStream(BaseItem item)
         {
             var stream = GetStream(item, MediaStreamType.Audio);
-            if (stream != null)
-                return stream.Codec.ToUpper() == "DCA" ? stream.Profile : stream.Codec.
-                ToUpper();
+            if (stream == null)
+            {
+                return string.Empty;
+            }
 
-            return string.Empty;
+            return string.Equals(stream.Codec, "DCA", StringComparison.OrdinalIgnoreCase)
+                ? stream.Profile
+                : stream.Codec.ToUpperInvariant();
         }
 
         /// <summary> Gets an episode. </summary>
@@ -163,16 +166,16 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         }
 
         /// <summary> Gets an object. </summary>
-        /// <typeparam name="T"> Generic type parameter. </typeparam>
-        /// <typeparam name="R"> Type of the r. </typeparam>
+        /// <typeparam name="TItem"> Generic type parameter. </typeparam>
+        /// <typeparam name="TReturn"> Type of the r. </typeparam>
         /// <param name="item"> The item. </param>
         /// <param name="function"> The function. </param>
         /// <param name="defaultValue"> The default value. </param>
         /// <returns> The object. </returns>
-        protected R GetObject<T, R>(BaseItem item, Func<T, R> function, R defaultValue = default(R)) where T : class
+        protected TReturn GetObject<TItem, TReturn>(BaseItem item, Func<TItem, TReturn> function, TReturn defaultValue = default)
+            where TItem : class
         {
-            var value = item as T;
-            if (value != null && function != null)
+            if (item is TItem value && function != null)
                 return function(value);
             else
                 return defaultValue;
@@ -327,7 +330,7 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         {
             var stream = GetStream(item, MediaStreamType.Video);
             if (stream != null)
-                return stream.Codec.ToUpper();
+                return stream.Codec.ToUpperInvariant();
 
             return string.Empty;
         }

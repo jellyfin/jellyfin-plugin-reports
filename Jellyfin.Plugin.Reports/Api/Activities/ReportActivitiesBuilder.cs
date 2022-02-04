@@ -12,7 +12,7 @@ using MediaBrowser.Model.Querying;
 namespace Jellyfin.Plugin.Reports.Api.Activities
 {
     /// <summary> A report activities builder. </summary>
-    /// <seealso cref="T:MediaBrowser.Api.Reports.ReportBuilderBase"/>
+    /// <seealso cref="ReportBuilderBase"/>
     public class ReportActivitiesBuilder : ReportBuilderBase
     {
         /// <summary>
@@ -64,11 +64,11 @@ namespace Jellyfin.Plugin.Reports.Api.Activities
         }
 
         /// <summary> Gets the headers. </summary>
-        /// <typeparam name="H"> Type of the header. </typeparam>
+        /// <typeparam name="T"> Type of the header. </typeparam>
         /// <param name="request"> The request. </param>
         /// <returns> The headers. </returns>
-        /// <seealso cref="M:MediaBrowser.Api.Reports.ReportBuilderBase.GetHeaders{H}(H)"/>
-        protected internal override List<ReportHeader> GetHeaders<H>(H request)
+        /// <seealso cref="ReportBuilderBase.GetHeaders"/>
+        protected internal override List<ReportHeader> GetHeaders<T>(T request)
         {
             return this.GetHeaders<ActivityLogEntry>(request, () => this.GetDefaultHeaderMetadata(), (hm) => this.GetOption(hm));
         }

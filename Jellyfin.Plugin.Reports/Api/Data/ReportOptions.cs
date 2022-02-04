@@ -5,7 +5,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
 {
 
     /// <summary> A report options. </summary>
-    public class ReportOptions<I>
+    public class ReportOptions<T>
     {
         /// <summary> Initializes a new instance of the ReportOptions class. </summary>
         public ReportOptions()
@@ -15,7 +15,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
         /// <summary> Initializes a new instance of the ReportOptions class. </summary>
         /// <param name="header"> . </param>
         /// <param name="row"> . </param>
-        public ReportOptions(ReportHeader header, Func<I, ReportRow, object> column)
+        public ReportOptions(ReportHeader header, Func<T, ReportRow, object> column)
         {
             Header = header;
             Column = column;
@@ -27,7 +27,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
         /// <param name="header"></param>
         /// <param name="column"></param>
         /// <param name="itemID"></param>
-        public ReportOptions(ReportHeader header, Func<I, ReportRow, object> column, Func<I, object> itemID)
+        public ReportOptions(ReportHeader header, Func<T, ReportRow, object> column, Func<T, object> itemID)
         {
             Header = header;
             Column = column;
@@ -40,10 +40,10 @@ namespace Jellyfin.Plugin.Reports.Api.Data
 
         /// <summary> Gets or sets the column. </summary>
         /// <value> The column. </value>
-        public Func<I, ReportRow, object> Column { get; set; }
+        public Func<T, ReportRow, object> Column { get; set; }
 
         /// <summary> Gets or sets the identifier of the item. </summary>
         /// <value> The identifier of the item. </value>
-        public Func<I, object> ItemID { get; set; }
+        public Func<T, object> ItemID { get; set; }
     }
 }

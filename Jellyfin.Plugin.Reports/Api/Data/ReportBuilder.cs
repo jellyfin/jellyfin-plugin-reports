@@ -11,7 +11,7 @@ using Jellyfin.Plugin.Reports.Api.Model;
 namespace Jellyfin.Plugin.Reports.Api.Data
 {
     /// <summary> A report builder. </summary>
-    /// <seealso cref="T:MediaBrowser.Api.Reports.ReportBuilderBase"/>
+    /// <seealso cref="ReportBuilderBase"/>
     public class ReportBuilder : ReportBuilderBase
     {
         /// <summary>
@@ -61,11 +61,11 @@ namespace Jellyfin.Plugin.Reports.Api.Data
         }
 
         /// <summary> Gets the headers. </summary>
-        /// <typeparam name="H"> Type of the header. </typeparam>
+        /// <typeparam name="T"> Type of the header. </typeparam>
         /// <param name="request"> The request. </param>
         /// <returns> The headers. </returns>
-        /// <seealso cref="M:MediaBrowser.Api.Reports.ReportBuilderBase.GetHeaders{H}(H)"/>
-        protected internal override List<ReportHeader> GetHeaders<H>(H request)
+        /// <seealso cref="ReportBuilderBase.GetHeaders"/>
+        protected internal override List<ReportHeader> GetHeaders<T>(T request)
         {
             ReportIncludeItemTypes reportRowType = ReportHelper.GetRowType(request.IncludeItemTypes);
             return this.GetHeaders<BaseItem>(request, () => this.GetDefaultHeaderMetadata(reportRowType), (hm) => this.GetOption(hm));
