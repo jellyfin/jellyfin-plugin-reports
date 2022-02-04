@@ -1,14 +1,16 @@
-﻿using MediaBrowser.Controller.Entities;
+﻿
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Globalization;
+using Jellyfin.Plugin.Reports.Api.Data;
+using Jellyfin.Plugin.Reports.Api.Model;
+using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.TV;
 using MediaBrowser.Controller.Library;
 using MediaBrowser.Model.Channels;
 using MediaBrowser.Model.Dto;
 using MediaBrowser.Model.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Jellyfin.Plugin.Reports.Api.Data;
-using Jellyfin.Plugin.Reports.Api.Model;
 
 namespace Jellyfin.Plugin.Reports.Api.Common
 {
@@ -26,7 +28,7 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         /// <summary> Manager for library. </summary>
         protected readonly ILibraryManager _libraryManager;
 
-        protected Func<bool, string> GetBoolString = s => s == true ? "x" : "";
+        protected Func<bool, string> GetBoolString = s => s == true ? "x" : string.Empty;
 
         /// <summary> Gets the headers. </summary>
         /// <typeparam name="H"> Type of the header. </typeparam>
@@ -91,8 +93,7 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         {
             if (string.IsNullOrEmpty(name))
                 return string.Empty;
-            return string.Format("{0:N}",
-                    GetGenre(name).Id);
+            return GetGenre(name).Id.ToString("N", CultureInfo.InvariantCulture);
         }
 
         /// <summary> Gets the headers. </summary>
@@ -194,8 +195,7 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         {
             if (string.IsNullOrEmpty(name))
                 return string.Empty;
-            return string.Format("{0:N}",
-                    GetPerson(name).Id);
+            return GetPerson(name).Id.ToString("N", CultureInfo.InvariantCulture);
         }
 
         /// <summary> Gets report options. </summary>
@@ -302,8 +302,7 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         {
             if (string.IsNullOrEmpty(name))
                 return string.Empty;
-            return string.Format("{0:N}",
-                    GetStudio(name).Id);
+            return GetStudio(name).Id.ToString("N", CultureInfo.InvariantCulture);
         }
 
         /// <summary> Gets video resolution. </summary>
@@ -314,7 +313,7 @@ namespace Jellyfin.Plugin.Reports.Api.Common
             var stream = GetStream(item,
                     MediaStreamType.Video);
             if (stream != null && stream.Width != null)
-                return string.Format("{0} * {1}",
+                return string.Format(CultureInfo.InvariantCulture, "{0} * {1}",
                         stream.Width,
                         stream.Height != null ? stream.Height.ToString() : "-");
 

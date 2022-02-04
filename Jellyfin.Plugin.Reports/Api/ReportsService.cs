@@ -123,7 +123,7 @@ namespace Jellyfin.Plugin.Reports.Api
             }
 
             var filename = "ReportExport." + fileExtension;
-            headers["Content-Disposition"] = string.Format("attachment; filename=\"{0}\"", filename);
+            headers["Content-Disposition"] = string.Format(CultureInfo.InvariantCulture, "attachment; filename=\"{0}\"", filename);
             headers["Content-Encoding"] = "UTF-8";
 
             var user = !string.IsNullOrWhiteSpace(request.UserId) ? _userManager.GetUserById(new Guid(request.UserId)) : null;

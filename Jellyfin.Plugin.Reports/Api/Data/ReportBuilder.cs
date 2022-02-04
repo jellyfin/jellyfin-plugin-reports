@@ -498,7 +498,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                     break;
 
                 case HeaderMetadata.Tracks:
-                    option.Column = (i, r) => this.GetObject<MusicAlbum, List<Audio>>(i, (x) => x.Tracks.ToList(), new List<Audio>()).Count();
+                    option.Column = (i, r) => this.GetObject<MusicAlbum, List<Audio>>(i, (x) => x.Tracks.ToList(), new List<Audio>()).Count;
                     break;
 
                 case HeaderMetadata.Audio:
@@ -567,20 +567,18 @@ namespace Jellyfin.Plugin.Reports.Api.Data
         /// <returns> The row. </returns>
         private ReportRow GetRow(BaseItem item)
         {
-            var video = item as Video;
-            ReportRow rRow = new ReportRow
+            return new ReportRow
             {
                 Id = item.Id.ToString("N"),
                 HasLockData = item.IsLocked,
                 HasLocalTrailer = item.GetExtras(new[] { ExtraType.Trailer }).Any(),
-                HasImageTagsPrimary = item.ImageInfos != null && item.ImageInfos.Count(n => n.Type == ImageType.Primary) > 0,
-                HasImageTagsBackdrop = item.ImageInfos != null && item.ImageInfos.Count(n => n.Type == ImageType.Backdrop) > 0,
-                HasImageTagsLogo = item.ImageInfos != null && item.ImageInfos.Count(n => n.Type == ImageType.Logo) > 0,
+                HasImageTagsPrimary = item.ImageInfos != null && item.ImageInfos.Any(n => n.Type == ImageType.Primary),
+                HasImageTagsBackdrop = item.ImageInfos != null && item.ImageInfos.Any(n => n.Type == ImageType.Backdrop),
+                HasImageTagsLogo = item.ImageInfos != null && item.ImageInfos.Any(n => n.Type == ImageType.Logo),
                 HasSpecials = item.GetExtras(BaseItem.DisplayExtraTypes).Any(),
-                HasSubtitles = video != null ? video.HasSubtitles : false,
+                HasSubtitles = item is Video video && video.HasSubtitles,
                 RowType = ReportHelper.GetRowType(item.GetClientTypeName())
             };
-            return rRow;
         }
     }
 }

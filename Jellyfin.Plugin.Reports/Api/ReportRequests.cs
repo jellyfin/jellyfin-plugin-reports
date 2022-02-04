@@ -479,7 +479,7 @@ namespace Jellyfin.Plugin.Reports.Api
 
             if (string.IsNullOrEmpty(val))
             {
-                return new VideoType[] { };
+                return Array.Empty<VideoType>();
             }
 
             return val.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(v => (VideoType)Enum.Parse(typeof(VideoType), v, true)).ToArray();
@@ -495,7 +495,7 @@ namespace Jellyfin.Plugin.Reports.Api
 
             if (string.IsNullOrEmpty(val))
             {
-                return new ItemFilter[] { };
+                return Array.Empty<ItemFilter>();
             }
 
             return val.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(v => (ItemFilter)Enum.Parse(typeof(ItemFilter), v, true)).ToArray();
@@ -511,7 +511,7 @@ namespace Jellyfin.Plugin.Reports.Api
 
             if (string.IsNullOrEmpty(val))
             {
-                return new ImageType[] { };
+                return Array.Empty<ImageType>();
             }
 
             return val.Split(',').Select(v => (ImageType)Enum.Parse(typeof(ImageType), v, true)).ToArray();

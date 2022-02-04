@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace Jellyfin.Plugin.Reports.Api.Common
@@ -23,18 +24,18 @@ namespace Jellyfin.Plugin.Reports.Api.Common
                 case ReportFieldType.Boolean:
                     return value.ToString();
                 case ReportFieldType.Date:
-                    return string.Format("{0:d}", value);
+                    return string.Format(CultureInfo.InvariantCulture, "{0:d}", value);
                 case ReportFieldType.Time:
-                    return string.Format("{0:t}", value);
+                    return string.Format(CultureInfo.InvariantCulture, "{0:t}", value);
                 case ReportFieldType.DateTime:
-                    return string.Format("{0:g}", value);
+                    return string.Format(CultureInfo.InvariantCulture, "{0:g}", value);
                 case ReportFieldType.Minutes:
-                    return string.Format("{0}mn", value);
+                    return string.Format(CultureInfo.InvariantCulture, "{0}mn", value);
                 case ReportFieldType.Int:
-                    return string.Format("", value);
+                    return value.ToString();
                 default:
-                    if (value is Guid)
-                        return string.Format("{0:N}", value);
+                    if (value is Guid guid)
+                        return guid.ToString("N", CultureInfo.InvariantCulture);
                     return value.ToString();
             }
         }

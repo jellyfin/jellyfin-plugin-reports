@@ -1,12 +1,13 @@
-﻿using MediaBrowser.Model.Activity;
-using MediaBrowser.Model.Querying;
+﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using MediaBrowser.Controller.Library;
-using System;
 using Jellyfin.Plugin.Reports.Api.Common;
 using Jellyfin.Plugin.Reports.Api.Data;
 using Jellyfin.Plugin.Reports.Api.Model;
+using MediaBrowser.Controller.Library;
+using MediaBrowser.Model.Activity;
+using MediaBrowser.Model.Querying;
 
 namespace Jellyfin.Plugin.Reports.Api.Activities
 {
@@ -231,7 +232,7 @@ namespace Jellyfin.Plugin.Reports.Api.Activities
         {
             ReportRow rRow = new ReportRow
             {
-                Id = item.Id.ToString(),
+                Id = item.Id.ToString(CultureInfo.InvariantCulture),
                 UserId = item.UserId
             };
             return rRow;

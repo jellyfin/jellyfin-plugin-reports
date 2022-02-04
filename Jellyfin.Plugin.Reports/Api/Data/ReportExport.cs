@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Globalization;
+using System.Linq;
 using System.Text;
 using Jellyfin.Plugin.Reports.Api.Model;
 
@@ -168,7 +169,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
 			StringBuilder returnValue = new StringBuilder();
 			returnValue.AppendLine("<table  class='gridtable'>");
 			returnValue.AppendLine("<tr>");
-			returnValue.AppendLine(string.Join("", reportResult.Headers.Select(s => string.Format("<th>{0}</th>", s.Name)).ToArray()));
+			returnValue.AppendLine(string.Join("", reportResult.Headers.Select(s => string.Format(CultureInfo.InvariantCulture, "<th>{0}</th>", s.Name)).ToArray()));
 			returnValue.AppendLine("</tr>");
 			if (reportResult.IsGrouped)
 				foreach (ReportGroup group in reportResult.Groups)
@@ -202,7 +203,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
 			ReportRow row)
 		{
 			returnValue.AppendLine("<tr>");
-			returnValue.AppendLine(string.Join("", row.Columns.Select(s => string.Format("<td>{0}</td>", s.Name)).ToArray()));
+			returnValue.AppendLine(string.Join("", row.Columns.Select(s => string.Format(CultureInfo.InvariantCulture, "<td>{0}</td>", s.Name)).ToArray()));
 			returnValue.AppendLine("</tr>");
 		}
 	}
