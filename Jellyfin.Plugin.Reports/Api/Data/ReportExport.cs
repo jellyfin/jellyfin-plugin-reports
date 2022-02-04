@@ -17,20 +17,20 @@ namespace Jellyfin.Plugin.Reports.Api.Data
 		{
 			StringBuilder returnValue = new StringBuilder();
 
-			returnValue.AppendLine(string.Join(";", reportResult.Headers.Select(s => s.Name.Replace(',', ' ')).ToArray()));
+			returnValue.AppendLine(string.Join(';', reportResult.Headers.Select(s => s.Name.Replace(',', ' '))));
 
 			if (reportResult.IsGrouped)
 				foreach (ReportGroup group in reportResult.Groups)
 				{
 					foreach (ReportRow row in reportResult.Rows)
 					{
-						returnValue.AppendLine(string.Join(";", row.Columns.Select(s => s.Name.Replace(',', ' ')).ToArray()));
+						returnValue.AppendLine(string.Join(';', row.Columns.Select(s => s.Name.Replace(',', ' '))));
 					}
 				}
 			else
 				foreach (ReportRow row in reportResult.Rows)
 				{
-					returnValue.AppendLine(string.Join(";", row.Columns.Select(s => s.Name.Replace(',', ' ')).ToArray()));
+					returnValue.AppendLine(string.Join(';', row.Columns.Select(s => s.Name.Replace(',', ' '))));
 				}
 
 			return returnValue.ToString();
@@ -171,7 +171,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
 			StringBuilder returnValue = new StringBuilder();
 			returnValue.AppendLine("<table  class='gridtable'>");
 			returnValue.AppendLine("<tr>");
-			returnValue.AppendLine(string.Join("", reportResult.Headers.Select(s => string.Format(CultureInfo.InvariantCulture, "<th>{0}</th>", s.Name)).ToArray()));
+			returnValue.AppendLine(string.Join(string.Empty, reportResult.Headers.Select(s => string.Format(CultureInfo.InvariantCulture, "<th>{0}</th>", s.Name))));
 			returnValue.AppendLine("</tr>");
 			if (reportResult.IsGrouped)
 				foreach (ReportGroup group in reportResult.Groups)
@@ -205,7 +205,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
 			ReportRow row)
 		{
 			returnValue.AppendLine("<tr>");
-			returnValue.AppendLine(string.Join("", row.Columns.Select(s => string.Format(CultureInfo.InvariantCulture, "<td>{0}</td>", s.Name)).ToArray()));
+			returnValue.AppendLine(string.Join(string.Empty, row.Columns.Select(s => string.Format(CultureInfo.InvariantCulture, "<td>{0}</td>", s.Name))));
 			returnValue.AppendLine("</tr>");
 		}
 	}
