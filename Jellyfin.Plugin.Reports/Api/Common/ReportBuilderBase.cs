@@ -42,15 +42,7 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         /// <param name="options"> Options for controlling the operation. </param>
         /// <returns> The active headers. </returns>
         protected List<ReportHeader> GetActiveHeaders<T>(List<ReportOptions<T>> options, ReportDisplayType displayType)
-        {
-            List<ReportHeader> headers = new List<ReportHeader>();
-            foreach (ReportOptions<T> option in options.Where(x => this.DisplayTypeVisible(x.Header.DisplayType, displayType)))
-            {
-                headers.Add(option.Header);
-            }
-
-            return headers;
-        }
+            => options.Where(x => this.DisplayTypeVisible(x.Header.DisplayType, displayType)).Select(x => x.Header).ToList();
 
         /// <summary> Gets audio stream. </summary>
         /// <param name="item"> The item. </param>
@@ -73,11 +65,13 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         /// <returns> The episode. </returns>
         protected string GetEpisode(BaseItem item)
         {
-
-            if (item.GetClientTypeName() == ChannelMediaContentType.Episode.ToString() && item.ParentIndexNumber != null)
+            if (string.Equals(item.GetClientTypeName(), ChannelMediaContentType.Episode.ToString(), StringComparison.Ordinal)
+                && item.ParentIndexNumber != null)
+            {
                 return "Season " + item.ParentIndexNumber;
-            else
-                return item.Name;
+            }
+
+            return item.Name;
         }
 
         /// <summary> Gets a genre. </summary>
@@ -105,15 +99,7 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         /// <param name="options"> Options for controlling the operation. </param>
         /// <returns> The headers. </returns>
         protected List<ReportHeader> GetHeaders<T>(List<ReportOptions<T>> options)
-        {
-            List<ReportHeader> headers = new List<ReportHeader>();
-            foreach (ReportOptions<T> option in options)
-            {
-                headers.Add(option.Header);
-            }
-
-            return headers;
-        }
+            => options.ConvertAll(x => x.Header);
 
         /// <summary> Gets the headers. </summary>
         /// <typeparam name="T"> Generic type parameter. </typeparam>
@@ -132,7 +118,7 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         /// <returns> The list as string. </returns>
         protected string GetListAsString(List<string> items)
         {
-            return String.Join("; ", items);
+            return string.Join("; ", items);
         }
 
         /// <summary> Gets localized header. </summary>

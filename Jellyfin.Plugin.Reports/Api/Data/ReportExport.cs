@@ -1,6 +1,6 @@
 ﻿#nullable disable
 
-using System.Globalization;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Jellyfin.Plugin.Reports.Api.Model;
@@ -8,30 +8,35 @@ using Jellyfin.Plugin.Reports.Api.Model;
 namespace Jellyfin.Plugin.Reports.Api.Data
 {
     /// <summary> A report export. </summary>
-    public class ReportExport
+    public static class ReportExport
 	{
 		/// <summary> Export to CSV. </summary>
 		/// <param name="reportResult"> The report result. </param>
 		/// <returns> A string. </returns>
-		public string ExportToCsv(ReportResult reportResult)
+		public static string ExportToCsv(ReportResult reportResult)
 		{
-			StringBuilder returnValue = new StringBuilder();
+			static void AppendRows(StringBuilder builder, List<ReportRow> rows)
+			{
+				foreach (ReportRow row in rows)
+				{
+					builder.AppendJoin(';', row.Columns.Select(s => s.Name.Replace(',', ' '))).AppendLine();
+				}
+			}
 
-			returnValue.AppendLine(string.Join(';', reportResult.Headers.Select(s => s.Name.Replace(',', ' '))));
+			StringBuilder returnValue = new StringBuilder();
+			returnValue.AppendJoin(';', reportResult.Headers.Select(s => s.Name.Replace(',', ' '))).AppendLine();
 
 			if (reportResult.IsGrouped)
+			{
 				foreach (ReportGroup group in reportResult.Groups)
 				{
-					foreach (ReportRow row in reportResult.Rows)
-					{
-						returnValue.AppendLine(string.Join(';', row.Columns.Select(s => s.Name.Replace(',', ' '))));
-					}
+					AppendRows(returnValue, group.Rows);
 				}
+			}
 			else
-				foreach (ReportRow row in reportResult.Rows)
-				{
-					returnValue.AppendLine(string.Join(';', row.Columns.Select(s => s.Name.Replace(',', ' '))));
-				}
+			{
+				AppendRows(returnValue, reportResult.Rows);
+			}
 
 			return returnValue.ToString();
 		}
@@ -40,10 +45,9 @@ namespace Jellyfin.Plugin.Reports.Api.Data
 		/// <summary> Export to excel. </summary>
 		/// <param name="reportResult"> The report result. </param>
 		/// <returns> A string. </returns>
-		public string ExportToExcel(ReportResult reportResult)
+		public static string ExportToExcel(ReportResult reportResult)
 		{
-
-			string style = @"<style type='text/css'>
+			const string Style = @"<style type='text/css'>
 							BODY {
 									font-family: Arial;
 									font-size: 12px;
@@ -164,35 +168,46 @@ namespace Jellyfin.Plugin.Reports.Api.Data
 							<meta http-equiv='X-UA-Compatible' content='IE=8, IE=9, IE=10' />
 							<meta charset='utf-8'>
 							<title>Jellyfin Reports Export</title>";
-			Html += "\n" + style + "\n";
+			Html += "\n" + Style + "\n";
 			Html += "</head>\n";
 			Html += "<body>\n";
 
 			StringBuilder returnValue = new StringBuilder();
 			returnValue.AppendLine("<table  class='gridtable'>");
 			returnValue.AppendLine("<tr>");
-			returnValue.AppendLine(string.Join(string.Empty, reportResult.Headers.Select(s => string.Format(CultureInfo.InvariantCulture, "<th>{0}</th>", s.Name))));
+			foreach (var x in reportResult.Headers)
+			{
+				returnValue.Append("<th>")
+					.Append(x.Name)
+					.AppendLine("</th>");
+			}
+
 			returnValue.AppendLine("</tr>");
+
 			if (reportResult.IsGrouped)
+			{
 				foreach (ReportGroup group in reportResult.Groups)
 				{
 					returnValue.AppendLine("<tr>");
-					returnValue.AppendLine("<th scope='rowgroup' colspan='" + reportResult.Headers.Count + "'>" + (string.IsNullOrEmpty(group.Name) ? "&nbsp;" : group.Name) + "</th>");
+					returnValue.Append("<th scope='rowgroup' colspan='")
+						.Append(reportResult.Headers.Count)
+						.Append("'>")
+						.Append(string.IsNullOrEmpty(group.Name) ? "&nbsp;" : group.Name)
+						.AppendLine("</th>");
 					returnValue.AppendLine("</tr>");
-					foreach (ReportRow row in group.Rows)
-					{
-						ExportToExcelRow(reportResult, returnValue, row);
-					}
+					ExportToExcelRows(returnValue, group.Rows);
 					returnValue.AppendLine("<tr>");
-					returnValue.AppendLine("<th style='background-color: #ffffff;' scope='rowgroup' colspan='" + reportResult.Headers.Count + "'>" + "&nbsp;" + "</th>");
+					returnValue.Append("<th style='background-color: #ffffff;' scope='rowgroup' colspan='")
+						.Append(reportResult.Headers.Count)
+						.AppendLine("'>" + "&nbsp;" + "</th>");
 					returnValue.AppendLine("</tr>");
 				}
-
+			}
 			else
-				foreach (ReportRow row in reportResult.Rows)
-				{
-					ExportToExcelRow(reportResult, returnValue, row);
-				}
+			{
+				ExportToExcelRows(returnValue, reportResult.Rows);
+			}
+
 			returnValue.AppendLine("</table>");
 
 			Html += returnValue.ToString();
@@ -200,13 +215,23 @@ namespace Jellyfin.Plugin.Reports.Api.Data
 			Html += "</html>";
 			return Html;
 		}
-		private static void ExportToExcelRow(ReportResult reportResult,
+
+		private static void ExportToExcelRows(
 			StringBuilder returnValue,
-			ReportRow row)
+			List<ReportRow> rows)
 		{
-			returnValue.AppendLine("<tr>");
-			returnValue.AppendLine(string.Join(string.Empty, row.Columns.Select(s => string.Format(CultureInfo.InvariantCulture, "<td>{0}</td>", s.Name))));
-			returnValue.AppendLine("</tr>");
+			foreach (var row in rows)
+			{
+				returnValue.AppendLine("<tr>");
+				foreach (var x in row.Columns)
+				{
+					returnValue.Append("<td>")
+						.Append(x.Name)
+						.AppendLine("</td>");
+				}
+
+				returnValue.AppendLine("</tr>");
+			}
 		}
 	}
 }
