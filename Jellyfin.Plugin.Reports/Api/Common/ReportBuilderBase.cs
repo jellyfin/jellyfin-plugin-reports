@@ -1,4 +1,4 @@
-﻿#nullable disable
+#nullable disable
 
 using System;
 using System.Collections.Generic;
@@ -211,16 +211,11 @@ namespace Jellyfin.Plugin.Reports.Api.Common
                 foreach (ReportHeader header in options.Select(x => x.Header))
                 {
 
-                    if (this.DisplayTypeVisible(header.DisplayType, displayType))
+                    if ((!DisplayTypeVisible(header.DisplayType, displayType)) || (!headersMetadataFiltered.Contains(header.FieldName) && header.DisplayType != ReportDisplayType.Export)
+                        || (!headersMetadataFiltered.Contains(HeaderMetadata.Status) && header.DisplayType == ReportDisplayType.Export))
                     {
-
-                        if (!headersMetadataFiltered.Contains(header.FieldName) && displayType != ReportDisplayType.Export)
-                        {
-                            header.DisplayType = ReportDisplayType.None;
-                        }
-                    }
-                    else
                         header.DisplayType = ReportDisplayType.None;
+                    }
                 }
             }
 
