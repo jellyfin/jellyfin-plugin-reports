@@ -1,4 +1,4 @@
-﻿#nullable disable
+#nullable disable
 
 using System.Collections.Generic;
 using System.Linq;
@@ -15,16 +15,21 @@ namespace Jellyfin.Plugin.Reports.Api.Data
 		/// <returns> A string. </returns>
 		public static string ExportToCsv(ReportResult reportResult)
 		{
-			static void AppendRows(StringBuilder builder, List<ReportRow> rows)
+            static string EscapeText(string text)
+            {
+                string escapedText = text.Replace("\"", "\"\"", System.StringComparison.Ordinal);
+                return text.IndexOfAny(new char[4] {'"', ',', '\n', '\r'}) == -1 ? escapedText : '"' + escapedText + '"';
+            }
+            static void AppendRows(StringBuilder builder, List<ReportRow> rows)
 			{
 				foreach (ReportRow row in rows)
 				{
-					builder.AppendJoin(';', row.Columns.Select(s => s.Name.Replace(',', ' '))).AppendLine();
+					builder.AppendJoin(',', row.Columns.Select(s => EscapeText(s.Name))).AppendLine();
 				}
 			}
 
 			StringBuilder returnValue = new StringBuilder();
-			returnValue.AppendJoin(';', reportResult.Headers.Select(s => s.Name.Replace(',', ' '))).AppendLine();
+			returnValue.AppendJoin(',', reportResult.Headers.Select(s => EscapeText(s.Name))).AppendLine();
 
 			if (reportResult.IsGrouped)
 			{
