@@ -1,4 +1,4 @@
-﻿#nullable disable
+#nullable disable
 
 using System;
 using System.Collections.Generic;
@@ -107,7 +107,7 @@ namespace Jellyfin.Plugin.Reports.Api
             ReportViewType reportViewType = ReportHelper.GetReportViewType(request.ReportView);
             var headers = new Dictionary<string, string>();
             string fileExtension = "csv";
-            string contentType = "text/plain;charset='utf-8'";
+            string contentType = "text/csv;charset='utf-8'";
 
             switch (request.ExportType)
             {
