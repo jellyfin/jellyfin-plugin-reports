@@ -18,7 +18,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
             static string EscapeText(string text)
             {
                 string escapedText = text.Replace("\"", "\"\"", System.StringComparison.Ordinal);
-                return text.IndexOfAny(new char[4] { '"', ',', '\n', '\r' }) == -1 ? escapedText : '"' + escapedText + '"';
+                return text.IndexOfAny(new char[4] { '"', ',', '\n', '\r' }) == -1 ? escapedText : $"\"{escapedText}\"";
             }
             static void AppendRows(StringBuilder builder, List<ReportRow> rows)
             {
