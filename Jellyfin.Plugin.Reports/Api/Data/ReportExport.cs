@@ -1,6 +1,7 @@
 #nullable disable
 
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Jellyfin.Plugin.Reports.Api.Model;
@@ -12,8 +13,8 @@ namespace Jellyfin.Plugin.Reports.Api.Data
     {
         /// <summary> Export to CSV. </summary>
         /// <param name="reportResult"> The report result. </param>
-        /// <returns> A string. </returns>
-        public static string ExportToCsv(ReportResult reportResult)
+        /// <returns> A MemoryStream containing a CSV file. </returns>
+        public static MemoryStream ExportToCsv(ReportResult reportResult)
         {
             static string EscapeText(string text)
             {
@@ -43,14 +44,19 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                 AppendRows(returnValue, reportResult.Rows);
             }
 
-            return returnValue.ToString();
+            MemoryStream memoryStream = new MemoryStream();
+            StreamWriter writer = new StreamWriter(memoryStream);
+            writer.Write(returnValue);
+            writer.Flush();
+            memoryStream.Position = 0;
+            return memoryStream;
         }
 
 
         /// <summary> Export to excel. </summary>
         /// <param name="reportResult"> The report result. </param>
         /// <returns> A string. </returns>
-        public static string ExportToExcel(ReportResult reportResult)
+        public static MemoryStream ExportToExcel(ReportResult reportResult)
         {
             const string Style = @"<style type='text/css'>
                             BODY {
@@ -218,7 +224,13 @@ namespace Jellyfin.Plugin.Reports.Api.Data
             Html += returnValue.ToString();
             Html += "</body>";
             Html += "</html>";
-            return Html;
+
+            MemoryStream memoryStream = new MemoryStream();
+            StreamWriter writer = new StreamWriter(memoryStream);
+            writer.Write(Html);
+            writer.Flush();
+            memoryStream.Position = 0;
+            return memoryStream;
         }
 
         private static void ExportToExcelRows(

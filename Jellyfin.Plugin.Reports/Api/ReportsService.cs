@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using MediaBrowser.Controller.Entities;
@@ -89,8 +90,7 @@ namespace Jellyfin.Plugin.Reports.Api
                 return null;
 
             request.DisplayType = "Screen";
-            var user = !string.IsNullOrWhiteSpace(request.UserId) ? _userManager.GetUserById(new Guid(request.UserId)) : null;
-            var reportResult = GetReportResult(request, user);
+            ReportResult reportResult = GetReportResult(request);
 
             return reportResult;
         }
@@ -98,57 +98,43 @@ namespace Jellyfin.Plugin.Reports.Api
         /// <summary> Gets the given request. </summary>
         /// <param name="request"> The request. </param>
         /// <returns> A Task&lt;object&gt; </returns>
-        public async Task<(string content, string contentType, Dictionary<string,string> headers)> Get(GetReportDownload request)
+        public async Task<(MemoryStream content, string contentType, Dictionary<string,string> headers)> Get(GetReportDownload request)
         {
             if (string.IsNullOrEmpty(request.IncludeItemTypes))
                 return (null, null, null);
 
             request.DisplayType = "Export";
+            string filename = "ReportExport";
             ReportViewType reportViewType = ReportHelper.GetReportViewType(request.ReportView);
-            var headers = new Dictionary<string, string>();
-            string fileExtension = "csv";
-            string contentType = "text/csv;charset='utf-8'";
 
-            switch (request.ExportType)
-            {
-                case ReportExportType.CSV:
-                    break;
-                case ReportExportType.Excel:
-                    contentType = "application/vnd.ms-excel";
-                    fileExtension = "xls";
-                    break;
-            }
-
-            var filename = "ReportExport." + fileExtension;
-            headers["Content-Disposition"] = string.Format(CultureInfo.InvariantCulture, "attachment; filename=\"{0}\"", filename);
-            headers["Content-Encoding"] = "UTF-8";
-
-            var user = !string.IsNullOrWhiteSpace(request.UserId) ? _userManager.GetUserById(new Guid(request.UserId)) : null;
             ReportResult result = null;
             switch (reportViewType)
             {
                 case ReportViewType.ReportData:
-                    ReportIncludeItemTypes reportRowType = ReportHelper.GetRowType(request.IncludeItemTypes);
-                    ReportBuilder dataBuilder = new ReportBuilder(_libraryManager);
-                    QueryResult<BaseItem> queryResult = GetQueryResult(request, user);
-                    result = dataBuilder.GetResult(queryResult.Items, request);
-                    result.TotalRecordCount = queryResult.TotalRecordCount;
+                    result = GetReportResult(request);
                     break;
                 case ReportViewType.ReportActivities:
                     result = await GetReportActivities(request).ConfigureAwait(false);
                     break;
             }
 
-            string returnResult = string.Empty;
+            MemoryStream returnResult = null;
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            string contentType = "text/csv;charset='utf-8'";
+            string fileExtension = "csv";
             switch (request.ExportType)
             {
                 case ReportExportType.CSV:
                     returnResult = ReportExport.ExportToCsv(result);
                     break;
                 case ReportExportType.Excel:
+                    contentType = "application/vnd.ms-excel";
+                    fileExtension = "xls";
                     returnResult = ReportExport.ExportToExcel(result);
                     break;
             }
+            headers["Content-Disposition"] = $"attachment; filename=\"{filename}.{fileExtension}\"";
+            headers["Content-Encoding"] = "UTF-8";
 
             return (returnResult, contentType, headers);
         }
@@ -400,8 +386,9 @@ namespace Jellyfin.Plugin.Reports.Api
         /// <summary> Gets report result. </summary>
         /// <param name="request"> The request. </param>
         /// <returns> The report result. </returns>
-        private ReportResult GetReportResult(GetItemReport request, User user)
+        private ReportResult GetReportResult(BaseReportRequest request)
         {
+            User user = !string.IsNullOrWhiteSpace(request.UserId) ? _userManager.GetUserById(new Guid(request.UserId)) : null;
             ReportBuilder reportBuilder = new ReportBuilder(_libraryManager);
             QueryResult<BaseItem> queryResult = GetQueryResult(request, user);
             ReportResult reportResult = reportBuilder.GetResult(queryResult.Items, request);
