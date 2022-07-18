@@ -1,8 +1,10 @@
 #nullable disable
 
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using Jellyfin.Plugin.Reports.Api.Model;
 
@@ -58,196 +60,80 @@ namespace Jellyfin.Plugin.Reports.Api.Data
         /// <returns> A  MemoryStream containing a HTML file. </returns>
         public static MemoryStream ExportToHtml(ReportResult reportResult)
         {
-            const string Style = @"<style type='text/css'>
-                            BODY {
-                                    font-family: Arial;
-                                    font-size: 12px;
-                                }
+            const string Html = @"<!DOCTYPE html>
+                <html xmlns='http://www.w3.org/1999/xhtml'>
+                <head>
+                    <meta charset='utf-8'>
+                    <title>Jellyfin Reports Export</title>
+                    <style type='text/css'>
+                        body {
+                            font-family: Arial;
+                            font-size: 12px;
+                        }
+                        table.gridtable {
+                            color: #333333;
+                            border-width: 0.1pt;
+                            border-color: #666666;
+                            border-collapse: collapse;
+                        }
+                        table.gridtable th, table.gridtable td {
+                            border-width: 0.1pt;
+                            padding: 8px;
+                            border-style: solid;
+                            border-color: #666666;
+                        }
+                        table.gridtable th {
+                            background-color: #dedede;
+                        }
+                        table.gridtable td {
+                            background-color: #ffffff;
+                        }
+                    </style>
+                </head>
+                <body>";
 
-                                TABLE {
-                                    font-family: Arial;
-                                    font-size: 12px;
-                                }
-
-                                A {
-                                    font-family: Arial;
-                                    color: #144A86;
-                                    font-size: 12px;
-                                    cursor: pointer;
-                                    text-decoration: none;
-                                    font-weight: bold;
-                                }
-                                DIV {
-                                    font-family: Arial;
-                                    font-size: 12px;
-                                    margin-bottom: 0px;
-                                }
-                                P, LI, DIV {
-                                    font-size: 12px;
-                                    margin-bottom: 0px;
-                                }
-
-                                P, UL {
-                                    font-size: 12px;
-                                    margin-bottom: 6px;
-                                    margin-top: 0px;
-                                }
-
-                                H1 {
-                                    font-size: 18pt;
-                                }
-
-                                H2 {
-                                    font-weight: bold;
-                                    font-size: 14pt;
-                                    COLOR: #C0C0C0;
-                                }
-
-                                H3 {
-                                    font-weight: normal;
-                                    font-size: 14pt;
-                                    text-indent: +1em;
-                                }
-
-                                H4 {
-                                    font-size: 10pt;
-                                    font-weight: normal;
-                                }
-
-                                H5 {
-                                    font-size: 10pt;
-                                    font-weight: normal;
-                                    background: #A9A9A9;
-                                    COLOR: white;
-                                    display: inline;
-                                }
-
-                                H6 {
-                                    padding: 2 1 2 5;
-                                    font-size: 11px;
-                                    font-weight: bold;
-                                    text-decoration: none;
-                                    margin-bottom: 1px;
-                                }
-
-                                UL {
-                                    line-height: 1.5em;
-                                    list-style-type: disc;
-                                }
-
-                                OL {
-                                    line-height: 1.5em;
-                                }
-
-                                LI {
-                                    line-height: 1.5em;
-                                }
-
-                                A IMG {
-                                    border: 0;
-                                }
-
-                                table.gridtable {
-                                    color: #333333;
-                                    border-width: 0.1pt;
-                                    border-color: #666666;
-                                    border-collapse: collapse;
-                                }
-
-                                table.gridtable th {
-                                    border-width: 0.1pt;
-                                    padding: 8px;
-                                    border-style: solid;
-                                    border-color: #666666;
-                                    background-color: #dedede;
-                                }
-                                table.gridtable tr {
-                                    background-color: #ffffff;
-                                }
-                                table.gridtable td {
-                                    border-width: 0.1pt;
-                                    padding: 8px;
-                                    border-style: solid;
-                                    border-color: #666666;
-                                    background-color: #ffffff;
-                                }
-                        </style>";
-
-            string Html = @"<!DOCTYPE html>
-                            <html xmlns='http://www.w3.org/1999/xhtml'>
-                            <head>
-                            <meta http-equiv='X-UA-Compatible' content='IE=8, IE=9, IE=10' />
-                            <meta charset='utf-8'>
-                            <title>Jellyfin Reports Export</title>";
-            Html += "\n" + Style + "\n";
-            Html += "</head>\n";
-            Html += "<body>\n";
-
-            StringBuilder returnValue = new StringBuilder();
-            returnValue.AppendLine("<table  class='gridtable'>");
-            returnValue.AppendLine("<tr>");
-            foreach (var x in reportResult.Headers)
+            StringBuilder returnValue = new StringBuilder(Html);
+            returnValue.Append("<table  class='gridtable'><tr>");
+            foreach (ReportHeader x in reportResult.Headers)
             {
-                returnValue.Append("<th>")
-                    .Append(x.Name)
-                    .AppendLine("</th>");
+                returnValue.Append(CultureInfo.InvariantCulture, $"<th>{WebUtility.HtmlEncode(x.Name)}</th>");
             }
-
-            returnValue.AppendLine("</tr>");
+            returnValue.Append("</tr>");
 
             if (reportResult.IsGrouped)
             {
                 foreach (ReportGroup group in reportResult.Groups)
                 {
-                    returnValue.AppendLine("<tr>");
-                    returnValue.Append("<th scope='rowgroup' colspan='")
-                        .Append(reportResult.Headers.Count)
-                        .Append("'>")
-                        .Append(string.IsNullOrEmpty(group.Name) ? "&nbsp;" : group.Name)
-                        .AppendLine("</th>");
-                    returnValue.AppendLine("</tr>");
+                    string groupName = string.IsNullOrEmpty(group.Name) ? "&nbsp;" : WebUtility.HtmlEncode(group.Name);
+                    returnValue.Append(CultureInfo.InvariantCulture, $"<tr><th colspan='{reportResult.Headers.Count}'>{groupName}</th></tr>");
                     ExportToHtmlRows(returnValue, group.Rows);
-                    returnValue.AppendLine("<tr>");
-                    returnValue.Append("<th style='background-color: #ffffff;' scope='rowgroup' colspan='")
-                        .Append(reportResult.Headers.Count)
-                        .AppendLine("'>" + "&nbsp;" + "</th>");
-                    returnValue.AppendLine("</tr>");
+                    returnValue.Append(CultureInfo.InvariantCulture, $"<tr><td colspan='{reportResult.Headers.Count}'>&nbsp;</td></tr>");
                 }
             }
             else
             {
                 ExportToHtmlRows(returnValue, reportResult.Rows);
             }
-
-            returnValue.AppendLine("</table>");
-
-            Html += returnValue.ToString();
-            Html += "</body>";
-            Html += "</html>";
+            returnValue.Append("</table></body></html>");
 
             MemoryStream memoryStream = new MemoryStream();
             StreamWriter writer = new StreamWriter(memoryStream);
-            writer.Write(Html);
+            writer.Write(returnValue);
             writer.Flush();
             memoryStream.Position = 0;
             return memoryStream;
         }
 
-        private static void ExportToHtmlRows(
-            StringBuilder returnValue,
-            List<ReportRow> rows)
+        private static void ExportToHtmlRows(StringBuilder returnValue, List<ReportRow> rows)
         {
-            foreach (var row in rows)
+            foreach (ReportRow row in rows)
             {
-                returnValue.AppendLine("<tr>");
-                foreach (var x in row.Columns)
+                returnValue.Append("<tr>");
+                foreach (ReportItem x in row.Columns)
                 {
-                    returnValue.Append("<td>")
-                        .Append(x.Name)
-                        .AppendLine("</td>");
+                    returnValue.Append(CultureInfo.InvariantCulture, $"<td>{WebUtility.HtmlEncode(x.Name)}</td>");
                 }
-
-                returnValue.AppendLine("</tr>");
+                returnValue.Append("</tr>");
             }
         }
     }
