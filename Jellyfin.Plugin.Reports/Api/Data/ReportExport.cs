@@ -53,10 +53,10 @@ namespace Jellyfin.Plugin.Reports.Api.Data
         }
 
 
-        /// <summary> Export to excel. </summary>
+        /// <summary> Export to HTML. </summary>
         /// <param name="reportResult"> The report result. </param>
-        /// <returns> A string. </returns>
-        public static MemoryStream ExportToExcel(ReportResult reportResult)
+        /// <returns> A  MemoryStream containing a HTML file. </returns>
+        public static MemoryStream ExportToHtml(ReportResult reportResult)
         {
             const string Style = @"<style type='text/css'>
                             BODY {
@@ -206,7 +206,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                         .Append(string.IsNullOrEmpty(group.Name) ? "&nbsp;" : group.Name)
                         .AppendLine("</th>");
                     returnValue.AppendLine("</tr>");
-                    ExportToExcelRows(returnValue, group.Rows);
+                    ExportToHtmlRows(returnValue, group.Rows);
                     returnValue.AppendLine("<tr>");
                     returnValue.Append("<th style='background-color: #ffffff;' scope='rowgroup' colspan='")
                         .Append(reportResult.Headers.Count)
@@ -216,7 +216,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
             }
             else
             {
-                ExportToExcelRows(returnValue, reportResult.Rows);
+                ExportToHtmlRows(returnValue, reportResult.Rows);
             }
 
             returnValue.AppendLine("</table>");
@@ -233,7 +233,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
             return memoryStream;
         }
 
-        private static void ExportToExcelRows(
+        private static void ExportToHtmlRows(
             StringBuilder returnValue,
             List<ReportRow> rows)
         {

@@ -127,10 +127,10 @@ namespace Jellyfin.Plugin.Reports.Api
                 case ReportExportType.CSV:
                     returnResult = ReportExport.ExportToCsv(result);
                     break;
-                case ReportExportType.Excel:
-                    contentType = "application/vnd.ms-excel";
-                    fileExtension = "xls";
-                    returnResult = ReportExport.ExportToExcel(result);
+                case ReportExportType.HTML:
+                    contentType = "text/html;charset='utf-8'";
+                    fileExtension = "html";
+                    returnResult = ReportExport.ExportToHtml(result);
                     break;
             }
             headers["Content-Disposition"] = $"attachment; filename=\"{filename}.{fileExtension}\"";
