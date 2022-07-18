@@ -1,11 +1,9 @@
 #nullable disable
 
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
 using Jellyfin.Plugin.Reports.Api.Model;
 
 namespace Jellyfin.Plugin.Reports.Api.Data
@@ -23,33 +21,31 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                 string escapedText = text.Replace("\"", "\"\"", System.StringComparison.Ordinal);
                 return text.IndexOfAny(new char[4] { '"', ',', '\n', '\r' }) == -1 ? escapedText : $"\"{escapedText}\"";
             }
-            static void AppendRows(StringBuilder builder, List<ReportRow> rows)
+            static void AppendRows(StreamWriter writer, List<ReportRow> rows)
             {
                 foreach (ReportRow row in rows)
                 {
-                    builder.AppendJoin(',', row.Columns.Select(s => EscapeText(s.Name))).AppendLine();
+                    writer.WriteLine(string.Join(',', row.Columns.Select(s => EscapeText(s.Name))));
                 }
-            }
-
-            StringBuilder returnValue = new StringBuilder();
-            returnValue.AppendJoin(',', reportResult.Headers.Select(s => EscapeText(s.Name))).AppendLine();
-
-            if (reportResult.IsGrouped)
-            {
-                foreach (ReportGroup group in reportResult.Groups)
-                {
-                    AppendRows(returnValue, group.Rows);
-                }
-            }
-            else
-            {
-                AppendRows(returnValue, reportResult.Rows);
             }
 
             MemoryStream memoryStream = new MemoryStream();
-            StreamWriter writer = new StreamWriter(memoryStream);
-            writer.Write(returnValue);
-            writer.Flush();
+            using (StreamWriter writer = new StreamWriter(memoryStream, leaveOpen:true))
+            {
+                writer.WriteLine(string.Join(',', reportResult.Headers.Select(s => EscapeText(s.Name))));
+
+                if (reportResult.IsGrouped)
+                {
+                    foreach (ReportGroup group in reportResult.Groups)
+                    {
+                        AppendRows(writer, group.Rows);
+                    }
+                }
+                else
+                {
+                    AppendRows(writer, reportResult.Rows);
+                }
+            }
             memoryStream.Position = 0;
             return memoryStream;
         }
@@ -92,48 +88,47 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                 </head>
                 <body>";
 
-            StringBuilder returnValue = new StringBuilder(Html);
-            returnValue.Append("<table  class='gridtable'><tr>");
-            foreach (ReportHeader x in reportResult.Headers)
-            {
-                returnValue.Append(CultureInfo.InvariantCulture, $"<th>{WebUtility.HtmlEncode(x.Name)}</th>");
-            }
-            returnValue.Append("</tr>");
-
-            if (reportResult.IsGrouped)
-            {
-                foreach (ReportGroup group in reportResult.Groups)
-                {
-                    string groupName = string.IsNullOrEmpty(group.Name) ? "&nbsp;" : WebUtility.HtmlEncode(group.Name);
-                    returnValue.Append(CultureInfo.InvariantCulture, $"<tr><th colspan='{reportResult.Headers.Count}'>{groupName}</th></tr>");
-                    ExportToHtmlRows(returnValue, group.Rows);
-                    returnValue.Append(CultureInfo.InvariantCulture, $"<tr><td colspan='{reportResult.Headers.Count}'>&nbsp;</td></tr>");
-                }
-            }
-            else
-            {
-                ExportToHtmlRows(returnValue, reportResult.Rows);
-            }
-            returnValue.Append("</table></body></html>");
-
             MemoryStream memoryStream = new MemoryStream();
-            StreamWriter writer = new StreamWriter(memoryStream);
-            writer.Write(returnValue);
-            writer.Flush();
+            using (StreamWriter writer = new StreamWriter(memoryStream, leaveOpen: true))
+            {
+                writer.Write(Html);
+                writer.Write("<table  class='gridtable'><tr>");
+                foreach (ReportHeader x in reportResult.Headers)
+                {
+                    writer.Write($"<th>{WebUtility.HtmlEncode(x.Name)}</th>");
+                }
+                writer.Write("</tr>");
+
+                if (reportResult.IsGrouped)
+                {
+                    foreach (ReportGroup group in reportResult.Groups)
+                    {
+                        string groupName = string.IsNullOrEmpty(group.Name) ? "&nbsp;" : WebUtility.HtmlEncode(group.Name);
+                        writer.Write($"<tr><th colspan='{reportResult.Headers.Count}'>{groupName}</th></tr>");
+                        ExportToHtmlRows(writer, group.Rows);
+                        writer.Write($"<tr><td colspan='{reportResult.Headers.Count}'>&nbsp;</td></tr>");
+                    }
+                }
+                else
+                {
+                    ExportToHtmlRows(writer, reportResult.Rows);
+                }
+                writer.Write("</table></body></html>");
+            }
             memoryStream.Position = 0;
             return memoryStream;
         }
 
-        private static void ExportToHtmlRows(StringBuilder returnValue, List<ReportRow> rows)
+        private static void ExportToHtmlRows(StreamWriter writer, List<ReportRow> rows)
         {
             foreach (ReportRow row in rows)
             {
-                returnValue.Append("<tr>");
+                writer.Write("<tr>");
                 foreach (ReportItem x in row.Columns)
                 {
-                    returnValue.Append(CultureInfo.InvariantCulture, $"<td>{WebUtility.HtmlEncode(x.Name)}</td>");
+                    writer.Write($"<td>{WebUtility.HtmlEncode(x.Name)}</td>");
                 }
-                returnValue.Append("</tr>");
+                writer.Write("</tr>");
             }
         }
     }
