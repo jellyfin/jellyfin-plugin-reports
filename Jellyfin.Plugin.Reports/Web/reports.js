@@ -751,6 +751,11 @@ export default function (view) {
         ExportReport(view, e);
     });
 
+    view.querySelector('#btnReportExportExcel').addEventListener('click', function (e) {
+        query.ExportType = 'Excel';
+        ExportReport(view, e);
+    });
+
     view.querySelector('#btnReportExportHtml').addEventListener('click', function (e) {
         query.ExportType = 'HTML';
         ExportReport(view, e);
