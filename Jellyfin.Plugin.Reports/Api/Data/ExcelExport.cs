@@ -119,10 +119,13 @@ namespace Jellyfin.Plugin.Reports.Api.Data
             private int numCols;
             private int rowCount;
             private bool isGrouped;
+            private int[] colWidths;
             private List<int> groupHeaderRows = new();
             private ExcelSharedString sharedString;
             private StringBuilder sheetXml;
-            private const string sheetXmlHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\"><sheetPr><outlinePr summaryBelow=\"0\"/></sheetPr><sheetViews><sheetView showGridLines=\"0\" tabSelected=\"1\" workbookViewId=\"0\"><pane ySplit=\"1\" topLeftCell=\"A2\" activePane=\"bottomLeft\" state=\"frozen\"/></sheetView></sheetViews><sheetFormatPr defaultRowHeight=\"15\" outlineLevelRow=\"1\"/><cols><col min=\"1\" max=\"16384\" width=\"15\" style=\"0\"/></cols><sheetData>";
+            private const int minColWidth = 10;
+            private const int maxColWidth = 50;
+            private const string sheetXmlHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\"><sheetPr><outlinePr summaryBelow=\"0\"/></sheetPr><sheetViews><sheetView showGridLines=\"0\" tabSelected=\"1\" workbookViewId=\"0\"><pane ySplit=\"1\" topLeftCell=\"A2\" activePane=\"bottomLeft\" state=\"frozen\"/></sheetView></sheetViews><sheetFormatPr defaultRowHeight=\"15\" outlineLevelRow=\"1\"/>";
             private enum RowType
             {
                 sheetHeader,
@@ -135,7 +138,8 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                 this.sharedString = sharedString;
                 isGrouped = reportResult.IsGrouped;
                 numCols = reportResult.Headers.Count;
-                sheetXml = new StringBuilder(sheetXmlHeader);
+                colWidths = Enumerable.Repeat(minColWidth, numCols).ToArray();
+                sheetXml = new StringBuilder();
                 AddRow(reportResult.Headers.Select(s => s.Name).ToArray(), RowType.sheetHeader);
             }
 
@@ -161,6 +165,10 @@ namespace Jellyfin.Plugin.Reports.Api.Data
 
             public override void WriteXml(StreamWriter writer)
             {
+                writer.Write(sheetXmlHeader);
+                writer.Write("<cols>");
+                writer.Write(string.Join(null, colWidths.Select((width,idx) => $"<col min=\"{idx+1}\" max=\"{idx+1}\" width=\"{width}\" style=\"0\"/>")));
+                writer.Write($"</cols><sheetData>");
                 writer.Write(sheetXml);
                 writer.Write("</sheetData>");
                 if (isGrouped)
@@ -200,6 +208,11 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                     else
                     {
                         sheetXml.Append(CultureInfo.InvariantCulture, $"\" t=\"s\"><v>{sharedString.AddString(cellStr)}</v></c>");
+                        if (!rowType.Equals(RowType.groupHeader))
+                        {
+                            int colWidth = (int)Math.Ceiling(cellStr.Length * (rowType.Equals(RowType.standard) ? 1 : 1.2));
+                            colWidths[colIdx] = Math.Max(colWidths[colIdx], Math.Min(colWidth, maxColWidth));
+                        }
                     }
                 }
                 sheetXml.Append("</row>");
