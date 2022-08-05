@@ -53,9 +53,22 @@ namespace Jellyfin.Plugin.Reports.Api.Data
 
         /// <summary> Export to HTML. </summary>
         /// <param name="reportResult"> The report result. </param>
-        /// <returns> A  MemoryStream containing a HTML file. </returns>
+        /// <returns> A MemoryStream containing a HTML file. </returns>
         public static MemoryStream ExportToHtml(ReportResult reportResult)
         {
+            static void ExportToHtmlRows(StreamWriter writer, List<ReportRow> rows)
+            {
+                foreach (ReportRow row in rows)
+                {
+                    writer.Write("<tr>");
+                    foreach (ReportItem x in row.Columns)
+                    {
+                        writer.Write($"<td>{WebUtility.HtmlEncode(x.Name)}</td>");
+                    }
+                    writer.Write("</tr>");
+                }
+            }
+
             const string Html = @"<!DOCTYPE html>
                 <html xmlns='http://www.w3.org/1999/xhtml'>
                 <head>
@@ -119,17 +132,12 @@ namespace Jellyfin.Plugin.Reports.Api.Data
             return memoryStream;
         }
 
-        private static void ExportToHtmlRows(StreamWriter writer, List<ReportRow> rows)
+        /// <summary> Export to Excel. </summary>
+        /// <param name="reportResult"> The report result. </param>
+        /// <returns> A MemoryStream containing a XLSX file. </returns>
+        public static MemoryStream ExportToExcel(ReportResult reportResult)
         {
-            foreach (ReportRow row in rows)
-            {
-                writer.Write("<tr>");
-                foreach (ReportItem x in row.Columns)
-                {
-                    writer.Write($"<td>{WebUtility.HtmlEncode(x.Name)}</td>");
-                }
-                writer.Write("</tr>");
-            }
+            return ExcelExport.GenerateXlsx(reportResult);
         }
     }
 }

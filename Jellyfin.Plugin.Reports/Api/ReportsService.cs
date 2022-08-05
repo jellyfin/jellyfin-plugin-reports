@@ -132,6 +132,11 @@ namespace Jellyfin.Plugin.Reports.Api
                     fileExtension = "html";
                     returnResult = ReportExport.ExportToHtml(result);
                     break;
+                case ReportExportType.Excel:
+                    contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                    fileExtension = "xlsx";
+                    returnResult = ReportExport.ExportToExcel(result);
+                    break;
             }
             headers["Content-Disposition"] = $"attachment; filename=\"{filename}.{fileExtension}\"";
             headers["Content-Encoding"] = "UTF-8";
