@@ -86,7 +86,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
         private class ExcelSharedString : ExcelXmlBuilder
         {
             private int wordCount;
-            private List<string> wordList = new();
+            private readonly List<string> wordList = new();
             private const string sharedStringXmlHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><sst xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" count=\"";
 
             /// <summary> Add a string to the workbook's shared string list (if not already in list), returning its index </summary>
@@ -116,13 +116,13 @@ namespace Jellyfin.Plugin.Reports.Api.Data
         /// <summary> XML builder for sheet XML files (e.g. sheet1.xml) </summary>
         private class ExcelSheet : ExcelXmlBuilder
         {
-            private int numCols;
+            private readonly int numCols;
             private int rowCount;
-            private bool isGrouped;
-            private int[] colWidths;
-            private List<int> groupHeaderRows = new();
-            private ExcelSharedString sharedString;
-            private StringBuilder sheetXml;
+            private readonly bool isGrouped;
+            private readonly int[] colWidths;
+            private readonly List<int> groupHeaderRows = new();
+            private readonly ExcelSharedString sharedString;
+            private readonly StringBuilder sheetXml;
             private const int minColWidth = 10;
             private const int maxColWidth = 50;
             private const string sheetXmlHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\"><sheetPr><outlinePr summaryBelow=\"0\"/></sheetPr><sheetViews><sheetView showGridLines=\"0\" tabSelected=\"1\" workbookViewId=\"0\"><pane ySplit=\"1\" topLeftCell=\"A2\" activePane=\"bottomLeft\" state=\"frozen\"/></sheetView></sheetViews><sheetFormatPr defaultRowHeight=\"15\" outlineLevelRow=\"1\"/>";
@@ -220,22 +220,22 @@ namespace Jellyfin.Plugin.Reports.Api.Data
 
             /// <summary>
             /// Converts a column index to a Excel Column Ref.
-            /// <example> For example <code>ColIdxToColRef(12)</code>returns "L" </example>
-            /// <example> and <code>ColIdxToColRef(30)</code> returns "AD". </example>
+            /// <example> For example <code>ColIdxToColRef(12)</code>returns "M" </example>
+            /// <example> and <code>ColIdxToColRef(30)</code> returns "AE". </example>
             /// </summary>
             /// <param name="colIdx"> The column index to be converted, should use zero-based indexing </param>
             /// <returns> Excel Column referecnce in terms of base-26 alphabetic string </returns>
             private static string ColIdxToColRef(int colIdx)
             {
-                string colRef = "";
+                LinkedList<int> colRef = new();
                 colIdx++;
                 while (colIdx > 0)
                 {
                     int rem = (colIdx - 1) % 26;
-                    colRef = Convert.ToChar('A' + rem) + colRef;
+                    colRef.AddFirst(rem);
                     colIdx = (colIdx - rem) / 26;
                 }
-                return colRef;
+                return new string(colRef.Select(rem => Convert.ToChar('A' + rem)).ToArray());
             }
         }
 
