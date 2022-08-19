@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using Jellyfin.Plugin.Reports.Api.Model;
+using ClosedXML.Excel;
 
 namespace Jellyfin.Plugin.Reports.Api.Data
 {
@@ -137,7 +139,68 @@ namespace Jellyfin.Plugin.Reports.Api.Data
         /// <returns> A MemoryStream containing a XLSX file. </returns>
         public static MemoryStream ExportToExcel(ReportResult reportResult)
         {
-            return ExcelExport.GenerateXlsx(reportResult);
+            static void AddHeaderStyle(IXLRange range)
+            {
+                range.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                range.Style.Font.Bold = true;
+                range.Style.Fill.BackgroundColor = XLColor.FromArgb(222, 222, 222);
+            }
+
+            static void AddReportRows(IXLWorksheet worksheet, List<ReportRow> reportRows, ref int nextRow)
+            {
+                IEnumerable<string[]> rows = reportRows.Select(r => r.Columns.Select(s => s.Name).ToArray());
+                worksheet.Cell(nextRow, 1).InsertData(rows);
+                nextRow += rows.Count();
+            }
+
+            IXLWorkbook workbook = new XLWorkbook(XLEventTracking.Disabled);
+            IXLWorksheet worksheet = workbook.Worksheets.Add("ReportExport");
+
+            // Add report rows
+            int nextRow = 1;
+            IEnumerable<string> headers = reportResult.Headers.Select(s => s.Name);
+            IXLRange headerRange = worksheet.Cell(nextRow++, 1).InsertData(headers, true);
+            AddHeaderStyle(headerRange);
+            if (reportResult.IsGrouped)
+            {
+                foreach (ReportGroup group in reportResult.Groups)
+                {
+                    int groupHeaderRow = nextRow++;
+                    worksheet.Cell(groupHeaderRow, 1).Value = group.Name;
+                    AddHeaderStyle(worksheet.Cell(groupHeaderRow, 1).AsRange());
+                    worksheet.Range(groupHeaderRow, 1, groupHeaderRow, reportResult.Headers.Count).Merge();
+                    AddReportRows(worksheet, group.Rows, ref nextRow);
+                    worksheet.Rows(groupHeaderRow + 1, nextRow - 1).Group();
+                }
+            }
+            else
+            {
+                AddReportRows(worksheet, reportResult.Rows, ref nextRow);
+            }
+
+            // Sheet properties
+            worksheet.Style.Font.FontColor = XLColor.FromArgb(51, 51, 51);
+            worksheet.Style.Font.FontName = "Arial";
+            worksheet.Style.Font.FontSize = 9;
+            worksheet.ShowGridLines = false;
+            worksheet.SheetView.FreezeRows(1);
+            worksheet.Outline.SummaryVLocation = XLOutlineSummaryVLocation.Top;
+            worksheet.RangeUsed().Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+            worksheet.RangeUsed().Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            //worksheet.ColumnsUsed().AdjustToContents(10.0, 50.0);
+
+            // Workbook properties
+            workbook.Properties.Author = "Jellyfin";
+            workbook.Properties.Title = "ReportExport";
+            string pluginVer = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            workbook.Properties.Comments = $"Produced by Jellyfin Reports Plugin {pluginVer}";
+
+            // Save workbook to stream and return
+            MemoryStream memoryStream = new MemoryStream();
+            workbook.SaveAs(memoryStream);
+            workbook.Dispose();
+            memoryStream.Position = 0;
+            return memoryStream;
         }
     }
 }
