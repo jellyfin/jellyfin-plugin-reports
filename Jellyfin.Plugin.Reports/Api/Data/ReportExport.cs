@@ -153,7 +153,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                 nextRow += rows.Count();
             }
 
-            IXLWorkbook workbook = new XLWorkbook(XLEventTracking.Disabled);
+            using IXLWorkbook workbook = new XLWorkbook(XLEventTracking.Disabled);
             IXLWorksheet worksheet = workbook.Worksheets.Add("ReportExport");
 
             // Add report rows
@@ -198,7 +198,6 @@ namespace Jellyfin.Plugin.Reports.Api.Data
             // Save workbook to stream and return
             MemoryStream memoryStream = new MemoryStream();
             workbook.SaveAs(memoryStream);
-            workbook.Dispose();
             memoryStream.Position = 0;
             return memoryStream;
         }
