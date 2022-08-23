@@ -11,6 +11,10 @@ description: "Generate reports of your media library"
 category: "General"
 artifacts:
   - "Jellyfin.Plugin.Reports.dll"
+  - "ClosedXML.dll"
+  - "DocumentFormat.OpenXml.dll"
+  - "ExcelNumberFormat.dll"
+  - "System.IO.Packaging.dll"
 changelog: |2-
   ### Bug Fixes ###
   - Fix CSV Export Format (#73) @mwildgoose

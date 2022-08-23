@@ -756,6 +756,11 @@ export default function (view) {
         ExportReport(view, e);
     });
 
+    view.querySelector('#btnReportExportHtml').addEventListener('click', function (e) {
+        query.ExportType = 'HTML';
+        ExportReport(view, e);
+    });
+
     view.querySelector('#btnResetReportColumns').addEventListener('click', function () {
         query.ReportColumns = null;
         query.StartIndex = 0;

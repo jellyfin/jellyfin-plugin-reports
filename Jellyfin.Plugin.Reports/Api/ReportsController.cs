@@ -430,7 +430,7 @@ namespace Jellyfin.Plugin.Reports.Api
                 Response.Headers.Add(key, value);
             }
 
-            return Content(content, contentType);
+            return File(content, contentType);
         }
     }
 }
