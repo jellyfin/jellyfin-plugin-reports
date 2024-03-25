@@ -2,8 +2,8 @@
 name: "Reports"
 guid: "d4312cd9-5c90-4f38-82e8-51da566790e8"
 imageUrl: "https://repo.jellyfin.org/releases/plugin/images/jellyfin-plugin-reports.png"
-version: 15
-targetAbi: "10.8.1.0"
+version: 16
+targetAbi: "10.8.13.0"
 framework: "net6.0"
 owner: "jellyfin"
 overview: "Generate reports of your media library"
@@ -16,14 +16,8 @@ artifacts:
   - "ExcelNumberFormat.dll"
   - "System.IO.Packaging.dll"
 changelog: |2-
-  ### Bug Fixes ###
-  - Fix CSV Export Format (#73) @mwildgoose
+  ### New features and improvements ###
+  - Add XLSX Excel As Export Option (#74) @mwildgoose
 
-  ### Code or Repo Maintenance ###
-  - Use meta ci (#66) @crobibero
-  - Performance improvements (#59) @Bond-009
-  - Style fixes, enable analysis and nullable (#57) @Bond-009
-
-  ### CI & build changes ###
-  - fix: meta ci workflows (#68) @h1dden-da3m0n
-  - Use meta ci (#66) @crobibero
+  ### Dependency updates ###
+  - chore(deps): update dependency closedxml to v0.97.0 (#76) @renovate
