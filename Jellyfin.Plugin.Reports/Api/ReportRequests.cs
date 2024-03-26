@@ -3,6 +3,7 @@
 using System;
 using System.ComponentModel;
 using System.Linq;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Jellyfin.Data.Enums;
 using Jellyfin.Plugin.Reports.Api.Common;
 using MediaBrowser.Model.Entities;
@@ -94,7 +95,7 @@ namespace Jellyfin.Plugin.Reports.Api
         public bool? HasTrailer { get; set; }
 
         // [ApiMember(Name = "AdjacentTo", Description = "Optional. Return items that are siblings of a supplied item.", IsRequired = false, DataType = "string", ParameterType = "query", Verb = "GET")]
-        public string AdjacentTo { get; set; }
+        public Guid? AdjacentTo { get; set; }
 
         // [ApiMember(Name = "MinIndexNumber", Description = "Optional filter by minimum index number.", IsRequired = false, DataType = "int", ParameterType = "query", Verb = "GET")]
         public int? MinIndexNumber { get; set; }
@@ -403,46 +404,50 @@ namespace Jellyfin.Plugin.Reports.Api
 
         public string[] GetGenres()
         {
-            return (Genres ?? string.Empty).Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            return (Genres ?? string.Empty).Split( '|', StringSplitOptions.RemoveEmptyEntries);
         }
 
         public string[] GetTags()
         {
-            return (Tags ?? string.Empty).Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            return (Tags ?? string.Empty).Split('|', StringSplitOptions.RemoveEmptyEntries);
         }
 
         public string[] GetOfficialRatings()
         {
-            return (OfficialRatings ?? string.Empty).Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            return (OfficialRatings ?? string.Empty).Split('|', StringSplitOptions.RemoveEmptyEntries);
         }
 
-        public string[] GetMediaTypes()
+        public MediaType[] GetMediaTypes()
         {
-            return (MediaTypes ?? string.Empty).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            return (MediaTypes ?? string.Empty).Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(r => Enum.TryParse(r, out MediaType mt) ? mt : (MediaType?)null)
+                .Where(r => r is not null)
+                .Select(r => r.Value)
+                .ToArray();
         }
 
         public BaseItemKind[] GetIncludeItemTypes() => GetBaseItemKinds(IncludeItemTypes);
 
         public string[] GetExcludeItemIds()
         {
-            return (ExcludeItemIds ?? string.Empty).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            return (ExcludeItemIds ?? string.Empty).Split(',', StringSplitOptions.RemoveEmptyEntries);
         }
 
         public BaseItemKind[] GetExcludeItemTypes() => GetBaseItemKinds(ExcludeItemTypes);
 
         public int[] GetYears()
         {
-            return (Years ?? string.Empty).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
+            return (Years ?? string.Empty).Split(',', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
         }
 
         public Guid[] GetGuids(string value)
         {
-            return (value ?? string.Empty).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(i => new Guid(i)).ToArray();
+            return (value ?? string.Empty).Split(',', StringSplitOptions.RemoveEmptyEntries).Select(i => new Guid(i)).ToArray();
         }
 
         public string[] GetStudios()
         {
-            return (Studios ?? string.Empty).Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            return (Studios ?? string.Empty).Split('|', StringSplitOptions.RemoveEmptyEntries);
         }
 
         public Guid[] GetArtistIds()
@@ -462,7 +467,7 @@ namespace Jellyfin.Plugin.Reports.Api
 
         public string[] GetPersonTypes()
         {
-            return (PersonTypes ?? string.Empty).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            return (PersonTypes ?? string.Empty).Split(',', StringSplitOptions.RemoveEmptyEntries);
         }
 
         public Guid[] GetPersonIds()
@@ -484,7 +489,7 @@ namespace Jellyfin.Plugin.Reports.Api
                 return Array.Empty<VideoType>();
             }
 
-            return val.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(v => (VideoType)Enum.Parse(typeof(VideoType), v, true)).ToArray();
+            return val.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(v => (VideoType)Enum.Parse(typeof(VideoType), v, true)).ToArray();
         }
 
         /// <summary>
@@ -500,7 +505,7 @@ namespace Jellyfin.Plugin.Reports.Api
                 return Array.Empty<ItemFilter>();
             }
 
-            return val.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(v => (ItemFilter)Enum.Parse(typeof(ItemFilter), v, true)).ToArray();
+            return val.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(v => (ItemFilter)Enum.Parse(typeof(ItemFilter), v, true)).ToArray();
         }
 
         /// <summary>
@@ -523,18 +528,18 @@ namespace Jellyfin.Plugin.Reports.Api
         /// Gets the order by.
         /// </summary>
         /// <returns>IEnumerable{ItemSortBy}.</returns>
-        public ValueTuple<string, SortOrder>[] GetOrderBy()
+        public ValueTuple<ItemSortBy, SortOrder>[] GetOrderBy()
         {
             return GetOrderBy(SortBy, SortOrder);
         }
 
-        public static (string, SortOrder)[] GetOrderBy(string sortBy, string requestedSortOrder)
+        public static (ItemSortBy, SortOrder)[] GetOrderBy(string sortBy, string requestedSortOrder)
         {
             var val = sortBy;
 
             if (string.IsNullOrEmpty(val))
             {
-                return Array.Empty<(string, SortOrder)>();
+                return Array.Empty<(ItemSortBy, SortOrder)>();
             }
 
             var vals = val.Split(',');
@@ -545,16 +550,21 @@ namespace Jellyfin.Plugin.Reports.Api
 
             var sortOrders = requestedSortOrder.Split(',');
 
-            var result = new (string, SortOrder)[vals.Length];
+            var result = new (ItemSortBy, SortOrder)[vals.Length];
 
             for (var i = 0; i < vals.Length; i++)
             {
+                if (!Enum.TryParse(vals[i], out ItemSortBy currentSortBy))
+                {
+                    continue;
+                }
+
                 var sortOrderIndex = sortOrders.Length > i ? i : 0;
 
                 var sortOrderValue = sortOrders.Length > sortOrderIndex ? sortOrders[sortOrderIndex] : null;
                 var sortOrder = string.Equals(sortOrderValue, "Descending", StringComparison.OrdinalIgnoreCase) ? Jellyfin.Data.Enums.SortOrder.Descending : Jellyfin.Data.Enums.SortOrder.Ascending;
 
-                result[i] = (vals[i], sortOrder);
+                result[i] = (currentSortBy, sortOrder);
             }
 
             return result;

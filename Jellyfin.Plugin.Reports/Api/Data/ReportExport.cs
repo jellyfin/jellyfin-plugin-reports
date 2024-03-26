@@ -21,7 +21,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
             static string EscapeText(string text)
             {
                 string escapedText = text.Replace("\"", "\"\"", System.StringComparison.Ordinal);
-                return text.IndexOfAny(new char[4] { '"', ',', '\n', '\r' }) == -1 ? escapedText : $"\"{escapedText}\"";
+                return text.IndexOfAny(['"', ',', '\n', '\r']) == -1 ? escapedText : $"\"{escapedText}\"";
             }
             static void AppendRows(StreamWriter writer, List<ReportRow> rows)
             {
@@ -153,7 +153,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                 nextRow += rows.Count();
             }
 
-            using IXLWorkbook workbook = new XLWorkbook(XLEventTracking.Disabled);
+            using var workbook = new XLWorkbook(XLEventTracking.Disabled);
             IXLWorksheet worksheet = workbook.Worksheets.Add("ReportExport");
 
             // Add report rows

@@ -238,9 +238,8 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         protected string GetSeriesProductionYear(BaseItem item)
         {
 
-            string productionYear = item.ProductionYear.ToString();
-            var series = item as Series;
-            if (series == null)
+            string productionYear = item.ProductionYear?.ToString(CultureInfo.InvariantCulture);
+            if (item is not Series series)
             {
                 if (item.ProductionYear == null || item.ProductionYear == 0)
                     return string.Empty;
@@ -248,10 +247,10 @@ namespace Jellyfin.Plugin.Reports.Api.Common
             }
 
             if (series.Status == SeriesStatus.Continuing)
-                return productionYear += "-Present";
+                return productionYear + "-Present";
 
             if (series.EndDate != null && series.EndDate.Value.Year != series.ProductionYear)
-                return productionYear += "-" + series.EndDate.Value.Year;
+                return productionYear + "-" + series.EndDate.Value.Year;
 
             return productionYear;
         }
@@ -298,8 +297,8 @@ namespace Jellyfin.Plugin.Reports.Api.Common
                     MediaStreamType.Video);
             if (stream != null && stream.Width != null)
                 return string.Format(CultureInfo.InvariantCulture, "{0} * {1}",
-                        stream.Width,
-                        stream.Height != null ? stream.Height.ToString() : "-");
+                    stream.Width,
+                    stream.Height?.ToString(CultureInfo.InvariantCulture) ?? "-");
 
             return string.Empty;
         }

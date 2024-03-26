@@ -1,6 +1,7 @@
 ﻿#nullable disable
 
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Jellyfin.Plugin.Reports.Api.Common;
 using Jellyfin.Plugin.Reports.Api.Model;
@@ -389,7 +390,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                     break;
 
                 case HeaderMetadata.SeasonNumber:
-                    option.Column = (i, r) => this.GetObject<Season, string>(i, (x) => x.IndexNumber == null ? "" : x.IndexNumber.ToString());
+                    option.Column = (i, r) => this.GetObject<Season, string>(i, (x) => x.IndexNumber == null ? "" : x.IndexNumber?.ToString(CultureInfo.InvariantCulture));
                     option.Header.SortField = "IndexNumber";
                     option.Header.HeaderFieldType = ReportFieldType.Int;
                     break;
@@ -429,7 +430,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                     break;
 
                 case HeaderMetadata.EpisodeNumber:
-                    option.Column = (i, r) => this.GetObject<BaseItem, string>(i, (x) => x.IndexNumber == null ? "" : x.IndexNumber.ToString());
+                    option.Column = (i, r) => this.GetObject<BaseItem, string>(i, (x) => x.IndexNumber == null ? "" : x.IndexNumber?.ToString(CultureInfo.InvariantCulture));
                     //option.Header.SortField = "IndexNumber";
                     //option.Header.HeaderFieldType = ReportFieldType.Int;
                     break;
