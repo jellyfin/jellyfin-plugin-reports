@@ -1,4 +1,5 @@
-﻿using System.Net.Mime;
+﻿using System;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using Jellyfin.Plugin.Reports.Api.Common;
 using Jellyfin.Plugin.Reports.Api.Model;
@@ -6,13 +7,14 @@ using MediaBrowser.Controller.Library;
 using MediaBrowser.Model.Activity;
 using MediaBrowser.Model.Globalization;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Jellyfin.Plugin.Reports.Api
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize(Policy = "DefaultAuthorization")]
+    [Authorize]
     [Produces(MediaTypeNames.Application.Json)]
     public class ReportsController : ControllerBase
     {
@@ -37,7 +39,7 @@ namespace Jellyfin.Plugin.Reports.Api
             [FromQuery] bool? hasSubtitles,
             [FromQuery] bool? hasSpecialFeature,
             [FromQuery] bool? hasTrailer,
-            [FromQuery] string? adjacentTo,
+            [FromQuery] Guid? adjacentTo,
             [FromQuery] int? minIndexNumber,
             [FromQuery] int? parentIndexNumber,
             [FromQuery] bool? hasParentalRating,
@@ -260,7 +262,7 @@ namespace Jellyfin.Plugin.Reports.Api
             [FromQuery] bool? hasSubtitles,
             [FromQuery] bool? hasSpecialFeature,
             [FromQuery] bool? hasTrailer,
-            [FromQuery] string? adjacentTo,
+            [FromQuery] Guid? adjacentTo,
             [FromQuery] int? minIndexNumber,
             [FromQuery] int? parentIndexNumber,
             [FromQuery] bool? hasParentalRating,
@@ -427,7 +429,7 @@ namespace Jellyfin.Plugin.Reports.Api
 
             foreach (var (key, value) in headers)
             {
-                Response.Headers.Add(key, value);
+                Response.Headers.Append(key, value);
             }
 
             return File(content, contentType);
