@@ -2,7 +2,7 @@
 name: "Reports"
 guid: "d4312cd9-5c90-4f38-82e8-51da566790e8"
 imageUrl: "https://repo.jellyfin.org/releases/plugin/images/jellyfin-plugin-reports.png"
-version: 15
+version: 16
 targetAbi: "10.9.0.0"
 framework: "net8.0"
 owner: "jellyfin"
@@ -15,4 +15,11 @@ artifacts:
   - "DocumentFormat.OpenXml.dll"
   - "ExcelNumberFormat.dll"
   - "System.IO.Packaging.dll"
-changelog: |2-
+changelog: |-
+  - 10.9 (#82) @crobibero
+
+  ### New features and improvements ###
+  - Add XLSX Excel As Export Option (#74) @mwildgoose
+
+  ### Dependency updates ###
+  - chore(deps): update dependency closedxml to v0.97.0 (#76) @renovate
