@@ -15,6 +15,7 @@ artifacts:
   - "DocumentFormat.OpenXml.dll"
   - "ExcelNumberFormat.dll"
   - "System.IO.Packaging.dll"
+  - "SixLabors.Fonts.dll"
 changelog: |-
   - 10.9 (#82) @crobibero
 
@@ -23,4 +24,3 @@ changelog: |-
 
   ### Dependency updates ###
   - chore(deps): update dependency closedxml to v0.97.0 (#76) @renovate
-  - "SixLabors.Fonts.dll"
