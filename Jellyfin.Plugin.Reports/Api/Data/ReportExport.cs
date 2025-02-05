@@ -153,7 +153,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                 nextRow += rows.Count();
             }
 
-            using var workbook = new XLWorkbook(XLEventTracking.Disabled);
+            using var workbook = new XLWorkbook();
             IXLWorksheet worksheet = workbook.Worksheets.Add("ReportExport");
 
             // Add report rows
