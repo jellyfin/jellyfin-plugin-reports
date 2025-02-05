@@ -28,7 +28,7 @@ These reports can be exported to Excel and CSV formats.
 
 ## Build
 
-1. To build this plugin you will need [.Net 5.x](https://dotnet.microsoft.com/download/dotnet/5.0).
+1. To build this plugin you will need [.Net 8.x](https://dotnet.microsoft.com/download/dotnet/8.0).
 
 2. Build plugin with following command
   ```
