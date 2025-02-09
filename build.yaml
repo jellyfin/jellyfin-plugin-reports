@@ -12,10 +12,13 @@ category: "General"
 artifacts:
   - "Jellyfin.Plugin.Reports.dll"
   - "ClosedXML.dll"
+  - "ClosedXML.Parser.dll"
   - "DocumentFormat.OpenXml.dll"
+  - "DocumentFormat.OpenXml.Framework.dll"
   - "ExcelNumberFormat.dll"
   - "System.IO.Packaging.dll"
   - "SixLabors.Fonts.dll"
+  - "RBush.dll"
 changelog: |-
   - put that thing in the correct place (#85) @crobibero
 
