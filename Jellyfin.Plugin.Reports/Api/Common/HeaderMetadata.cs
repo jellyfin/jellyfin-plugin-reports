@@ -53,6 +53,7 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         Years,
         ParentalRatings,
         CommunityRatings,
+        FileSize,
 
         //Activity logs
         Overview,

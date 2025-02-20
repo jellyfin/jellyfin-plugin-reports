@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -122,6 +122,20 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         public static string GetCoreLocalizedString(string phrase)
         {
             return phrase;
+        }
+
+        public static string FormatFileSize(long size)
+        {
+            if (size < 1024)
+                return $"{size} B";
+            else if (size < 1024 * 1024)
+                return $"{size / 1024.0:F2} KB";
+            else if (size < 1024 * 1024 * 1024)
+                return $"{size / (1024.0 * 1024):F2} MB";
+            else
+                return $"{size / (1024.0 * 1024 * 1024):F2} GB";
+            else
+                return $"{size / (1024.0 * 1024 * 1024 * 1024):F2} TB";
         }
     }
 }

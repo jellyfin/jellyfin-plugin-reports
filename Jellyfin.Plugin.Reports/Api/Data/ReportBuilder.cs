@@ -1,4 +1,4 @@
-﻿#nullable disable
+#nullable disable
 
 using System.Collections.Generic;
 using System.Globalization;
@@ -94,7 +94,8 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                         HeaderMetadata.SeasonNumber,
                         HeaderMetadata.DateAdded,
                         HeaderMetadata.Year,
-                        HeaderMetadata.Genres
+                        HeaderMetadata.Genres,
+                        HeaderMetadata.FileSize
                     };
 
                 case ReportIncludeItemTypes.Series:
@@ -114,7 +115,8 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                         HeaderMetadata.CommunityRating,
                         HeaderMetadata.Runtime,
                         HeaderMetadata.Trailers,
-                        HeaderMetadata.Specials
+                        HeaderMetadata.Specials,
+                        HeaderMetadata.FileSize
                     };
 
                 case ReportIncludeItemTypes.MusicAlbum:
@@ -131,7 +133,8 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                         HeaderMetadata.ReleaseDate,
                         HeaderMetadata.Tracks,
                         HeaderMetadata.Year,
-                        HeaderMetadata.Genres
+                        HeaderMetadata.Genres,
+                        HeaderMetadata.FileSize
                     };
 
                 case ReportIncludeItemTypes.MusicArtist:
@@ -146,7 +149,8 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                         HeaderMetadata.Countries,
                         HeaderMetadata.DateAdded,
                         HeaderMetadata.Year,
-                        HeaderMetadata.Genres
+                        HeaderMetadata.Genres,
+                        HeaderMetadata.FileSize
                     };
 
                 case ReportIncludeItemTypes.Movie:
@@ -171,7 +175,8 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                         HeaderMetadata.Subtitles,
                         HeaderMetadata.Trailers,
                         HeaderMetadata.Specials,
-                        HeaderMetadata.Path
+                        HeaderMetadata.Path,
+                        HeaderMetadata.FileSize
                     };
 
                 case ReportIncludeItemTypes.Book:
@@ -188,7 +193,8 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                         HeaderMetadata.Year,
                         HeaderMetadata.Genres,
                         HeaderMetadata.ParentalRating,
-                        HeaderMetadata.CommunityRating
+                        HeaderMetadata.CommunityRating,
+                        HeaderMetadata.FileSize
                     };
 
                 case ReportIncludeItemTypes.BoxSet:
@@ -206,7 +212,8 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                         HeaderMetadata.Genres,
                         HeaderMetadata.ParentalRating,
                         HeaderMetadata.CommunityRating,
-                        HeaderMetadata.Trailers
+                        HeaderMetadata.Trailers,
+                        HeaderMetadata.FileSize
                     };
 
                 case ReportIncludeItemTypes.Audio:
@@ -229,7 +236,8 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                         HeaderMetadata.ParentalRating,
                         HeaderMetadata.CommunityRating,
                         HeaderMetadata.Runtime,
-                        HeaderMetadata.Audio
+                        HeaderMetadata.Audio,
+                        HeaderMetadata.FileSize
                     };
 
                 case ReportIncludeItemTypes.Episode:
@@ -257,7 +265,8 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                         HeaderMetadata.Subtitles,
                         HeaderMetadata.Trailers,
                         HeaderMetadata.Specials,
-                        HeaderMetadata.Path
+                        HeaderMetadata.Path,
+                        HeaderMetadata.FileSize
                     };
 
                 case ReportIncludeItemTypes.Video:
@@ -288,7 +297,8 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                         HeaderMetadata.Audio,
                         HeaderMetadata.Subtitles,
                         HeaderMetadata.Trailers,
-                        HeaderMetadata.Specials
+                        HeaderMetadata.Specials,
+                        HeaderMetadata.FileSize
                     };
 
             }
@@ -528,6 +538,11 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                     option.Column = (i, r) => this.GetListAsString(i.Genres.ToList());
                     break;
 
+                case HeaderMetadata.FileSize:
+                    option.Column = (i, r) => i.GetMediaSources(false).FirstOrDefault()?.Size;
+                    option.Header.HeaderFieldType = ReportFieldType.Int;
+                    option.Header.SortField = "Size,SortName";
+                    break;
             }
 
             option.Header.Name = GetLocalizedHeader(internalHeader);

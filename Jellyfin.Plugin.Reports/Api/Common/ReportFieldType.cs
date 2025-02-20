@@ -10,6 +10,7 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         Int,
         Image,
         Object,
-        Minutes
+        Minutes,
+        FileSize
     }
 }
