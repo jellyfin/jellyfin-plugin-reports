@@ -3,6 +3,7 @@ using System.Net.Mime;
 using System.Threading.Tasks;
 using Jellyfin.Plugin.Reports.Api.Common;
 using Jellyfin.Plugin.Reports.Api.Model;
+using MediaBrowser.Common.Api;
 using MediaBrowser.Controller.Library;
 using MediaBrowser.Model.Activity;
 using MediaBrowser.Model.Globalization;
@@ -14,7 +15,7 @@ namespace Jellyfin.Plugin.Reports.Api
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize]
+    [Authorize(Policy = Policies.RequiresElevation)]
     [Produces(MediaTypeNames.Application.Json)]
     public class ReportsController : ControllerBase
     {
