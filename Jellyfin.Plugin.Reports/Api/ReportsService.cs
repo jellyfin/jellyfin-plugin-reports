@@ -14,11 +14,11 @@ using MediaBrowser.Model.Activity;
 using MediaBrowser.Model.Globalization;
 using MediaBrowser.Model.Querying;
 using Jellyfin.Data.Queries;
+using Jellyfin.Database.Implementations.Entities;
 using Jellyfin.Plugin.Reports.Api.Activities;
 using Jellyfin.Plugin.Reports.Api.Common;
 using Jellyfin.Plugin.Reports.Api.Data;
 using Jellyfin.Plugin.Reports.Api.Model;
-using User = Jellyfin.Data.Entities.User;
 
 namespace Jellyfin.Plugin.Reports.Api
 {
@@ -277,13 +277,13 @@ namespace Jellyfin.Plugin.Reports.Api
             // Min official rating
             if (!string.IsNullOrWhiteSpace(request.MinOfficialRating))
             {
-                query.MinParentalRating = _localization.GetRatingLevel(request.MinOfficialRating);
+                query.MinParentalRating = _localization.GetRatingScore(request.MinOfficialRating);
             }
 
             // Max official rating
             if (!string.IsNullOrWhiteSpace(request.MaxOfficialRating))
             {
-                query.MaxParentalRating = _localization.GetRatingLevel(request.MaxOfficialRating);
+                query.MaxParentalRating = _localization.GetRatingScore(request.MaxOfficialRating);
             }
 
             query.CollapseBoxSetItems = false;

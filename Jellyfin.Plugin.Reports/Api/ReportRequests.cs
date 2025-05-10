@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Jellyfin.Data.Enums;
+using Jellyfin.Database.Implementations.Enums;
 using Jellyfin.Plugin.Reports.Api.Common;
 using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Querying;
@@ -489,7 +490,7 @@ namespace Jellyfin.Plugin.Reports.Api
                 return Array.Empty<VideoType>();
             }
 
-            return val.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(v => (VideoType)Enum.Parse(typeof(VideoType), v, true)).ToArray();
+            return val.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(v => Enum.Parse<VideoType>(v, true)).ToArray();
         }
 
         /// <summary>
@@ -505,7 +506,7 @@ namespace Jellyfin.Plugin.Reports.Api
                 return Array.Empty<ItemFilter>();
             }
 
-            return val.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(v => (ItemFilter)Enum.Parse(typeof(ItemFilter), v, true)).ToArray();
+            return val.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(v => Enum.Parse<ItemFilter>(v, true)).ToArray();
         }
 
         /// <summary>
@@ -521,7 +522,7 @@ namespace Jellyfin.Plugin.Reports.Api
                 return Array.Empty<ImageType>();
             }
 
-            return val.Split(',').Select(v => (ImageType)Enum.Parse(typeof(ImageType), v, true)).ToArray();
+            return val.Split(',').Select(v => Enum.Parse<ImageType>(v, true)).ToArray();
         }
 
         /// <summary>
@@ -562,7 +563,7 @@ namespace Jellyfin.Plugin.Reports.Api
                 var sortOrderIndex = sortOrders.Length > i ? i : 0;
 
                 var sortOrderValue = sortOrders.Length > sortOrderIndex ? sortOrders[sortOrderIndex] : null;
-                var sortOrder = string.Equals(sortOrderValue, "Descending", StringComparison.OrdinalIgnoreCase) ? Jellyfin.Data.Enums.SortOrder.Descending : Jellyfin.Data.Enums.SortOrder.Ascending;
+                var sortOrder = string.Equals(sortOrderValue, "Descending", StringComparison.OrdinalIgnoreCase) ? Database.Implementations.Enums.SortOrder.Descending : Database.Implementations.Enums.SortOrder.Ascending;
 
                 result[i] = (currentSortBy, sortOrder);
             }
