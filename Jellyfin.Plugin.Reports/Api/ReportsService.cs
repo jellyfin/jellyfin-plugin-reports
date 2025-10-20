@@ -378,7 +378,7 @@ namespace Jellyfin.Plugin.Reports.Api
             var activityLogQuery = new ActivityLogQuery
             {
                 Skip = request.StartIndex,
-                Limit = request.HasQueryLimit ? request.Limit : null
+                Limit = request.Limit
             };
 
             var queryResult = await _activityManager.GetPagedResultAsync(activityLogQuery).ConfigureAwait(false);
