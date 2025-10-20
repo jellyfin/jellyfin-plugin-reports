@@ -21,7 +21,7 @@ namespace Jellyfin.Plugin.Reports
 
         public PluginConfiguration PluginConfiguration => Configuration;
 
-        public override Guid Id { get; } = new Guid("d4312cd9-5c90-4f38-82e8-51da566790e8");
+        public override Guid Id => new Guid("d4312cd9-5c90-4f38-82e8-51da566790e8");
 
         public IEnumerable<PluginPageInfo> GetPages()
         {

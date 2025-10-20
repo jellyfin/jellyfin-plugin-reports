@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Jellyfin.Database.Implementations.Entities;
 using Jellyfin.Plugin.Reports.Api.Common;
 using Jellyfin.Plugin.Reports.Api.Data;
 using Jellyfin.Plugin.Reports.Api.Model;
@@ -154,7 +155,7 @@ namespace Jellyfin.Plugin.Reports.Api.Activities
                     {
                         if (i.UserId != Guid.Empty)
                         {
-                            Jellyfin.Data.Entities.User user = _userManager.GetUserById(i.UserId);
+                            User user = _userManager.GetUserById(i.UserId);
                             if (user != null)
                             {
                                 var dto = _userManager.GetUserDto(user);
@@ -178,7 +179,7 @@ namespace Jellyfin.Plugin.Reports.Api.Activities
                     {
                         if (i.UserId != Guid.Empty)
                         {
-                            Jellyfin.Data.Entities.User user = _userManager.GetUserById(i.UserId);
+                            User user = _userManager.GetUserById(i.UserId);
                             if (user != null)
                                 return user.Username;
                         }
