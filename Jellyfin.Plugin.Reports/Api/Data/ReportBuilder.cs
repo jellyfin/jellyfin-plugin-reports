@@ -1,5 +1,6 @@
 ﻿#nullable disable
 
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -61,6 +62,98 @@ namespace Jellyfin.Plugin.Reports.Api.Data
             }
 
             return result;
+        }
+
+        /// <summary> Applies custom sorting to report results. </summary>
+        /// <param name="result"> The report result. </param>
+        /// <param name="sortBy"> The field to sort by. </param>
+        /// <param name="sortOrder"> The sort order (Ascending/Descending). </param>
+        /// <returns> The sorted report result. </returns>
+        public ReportResult ApplySorting(ReportResult result, string sortBy, string sortOrder)
+        {
+            if (result == null || result.IsGrouped || result.Rows == null || result.Rows.Count == 0)
+                return result;
+
+            if (string.IsNullOrWhiteSpace(sortBy))
+                return result;
+
+            // Find the header index for the sort field
+            // The UI sends SortField value (e.g., "Width", "Size"), so we need to match by:
+            // 1. SortField (primary - what UI sends)
+            // 2. FieldName (secondary - fallback)
+            // 3. Name (tertiary - display name)
+            int sortColumnIndex = result.Headers.FindIndex(h =>
+                (!string.IsNullOrEmpty(h.SortField) && h.SortField.Split(',')[0].Trim().Equals(sortBy, StringComparison.OrdinalIgnoreCase)) ||
+                h.FieldName.ToString().Equals(sortBy, StringComparison.OrdinalIgnoreCase) ||
+                h.Name.Equals(sortBy, StringComparison.OrdinalIgnoreCase));
+
+            if (sortColumnIndex < 0)
+                return result; // Sort field not found in headers
+
+            bool isDescending = !string.IsNullOrWhiteSpace(sortOrder) &&
+                               sortOrder.Equals("Descending", StringComparison.OrdinalIgnoreCase);
+
+            // Sort rows by the specified column
+            var sortedRows = isDescending
+                ? result.Rows.OrderByDescending(row => GetSortableValue(row, sortColumnIndex)).ToList()
+                : result.Rows.OrderBy(row => GetSortableValue(row, sortColumnIndex)).ToList();
+
+            result.Rows = sortedRows;
+
+            return result;
+        }
+
+        /// <summary> Gets a sortable value from a report row column. </summary>
+        /// <param name="row"> The report row. </param>
+        /// <param name="columnIndex"> The column index. </param>
+        /// <returns> A sortable string value. </returns>
+        private string GetSortableValue(ReportRow row, int columnIndex)
+        {
+            if (columnIndex < 0 || columnIndex >= row.Columns.Count)
+                return string.Empty;
+
+            var column = row.Columns[columnIndex];
+            if (column == null || string.IsNullOrEmpty(column.Name))
+                return string.Empty;
+
+            var value = column.Name.Trim();
+
+            // Extract numeric part if present
+            var numericPart = string.Empty;
+            foreach (char c in value)
+            {
+                if (char.IsDigit(c) || c == '.')
+                    numericPart += c;
+                else if (!string.IsNullOrEmpty(numericPart))
+                    break;
+            }
+
+            // If we found a numeric part, convert to proper sort value
+            if (!string.IsNullOrEmpty(numericPart))
+            {
+                if (double.TryParse(numericPart, NumberStyles.Any, CultureInfo.InvariantCulture, out double numValue))
+                {
+                    // Convert to base units for proper sorting
+                    if (value.Contains("TB", StringComparison.OrdinalIgnoreCase))
+                        numValue *= 1024.0 * 1024.0 * 1024.0 * 1024.0;
+                    else if (value.Contains("GB", StringComparison.OrdinalIgnoreCase))
+                        numValue *= 1024.0 * 1024.0 * 1024.0;
+                    else if (value.Contains("MB", StringComparison.OrdinalIgnoreCase))
+                        numValue *= 1024.0 * 1024.0;
+                    else if (value.Contains("KB", StringComparison.OrdinalIgnoreCase))
+                        numValue *= 1024.0;
+                    else if (value.Contains("Mbps", StringComparison.OrdinalIgnoreCase))
+                        numValue *= 1000.0 * 1000.0;
+                    else if (value.Contains("kbps", StringComparison.OrdinalIgnoreCase))
+                        numValue *= 1000.0;
+
+                    // Return as padded numeric string for proper sorting
+                    return numValue.ToString("000000000000000.00", CultureInfo.InvariantCulture);
+                }
+            }
+
+            // Return original value for non-numeric fields (codecs, aspect ratios)
+            return value;
         }
 
         /// <summary> Gets the headers. </summary>
@@ -165,9 +258,15 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                         HeaderMetadata.ParentalRating,
                         HeaderMetadata.CommunityRating,
                         HeaderMetadata.Runtime,
+                        HeaderMetadata.Container,
                         HeaderMetadata.Video,
-                        HeaderMetadata.Resolution,
                         HeaderMetadata.Audio,
+                        HeaderMetadata.ResolutionX,
+                        HeaderMetadata.ResolutionY,
+                        HeaderMetadata.AspectRatio,
+                        HeaderMetadata.VideoBitrate,
+                        HeaderMetadata.AudioBitrate,
+                        HeaderMetadata.FileSize,
                         HeaderMetadata.Subtitles,
                         HeaderMetadata.Trailers,
                         HeaderMetadata.Specials,
@@ -229,7 +328,10 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                         HeaderMetadata.ParentalRating,
                         HeaderMetadata.CommunityRating,
                         HeaderMetadata.Runtime,
-                        HeaderMetadata.Audio
+                        HeaderMetadata.Audio,
+                        HeaderMetadata.AudioBitrate,
+                        HeaderMetadata.FileSize,
+                        HeaderMetadata.Container
                     };
 
                 case ReportIncludeItemTypes.Episode:
@@ -251,9 +353,15 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                         HeaderMetadata.ParentalRating,
                         HeaderMetadata.CommunityRating,
                         HeaderMetadata.Runtime,
+                        HeaderMetadata.Container,
                         HeaderMetadata.Video,
-                        HeaderMetadata.Resolution,
                         HeaderMetadata.Audio,
+                        HeaderMetadata.ResolutionX,
+                        HeaderMetadata.ResolutionY,
+                        HeaderMetadata.AspectRatio,
+                        HeaderMetadata.VideoBitrate,
+                        HeaderMetadata.AudioBitrate,
+                        HeaderMetadata.FileSize,
                         HeaderMetadata.Subtitles,
                         HeaderMetadata.Trailers,
                         HeaderMetadata.Specials,
@@ -272,9 +380,6 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                         HeaderMetadata.ImagePrimary,
                         HeaderMetadata.ImageBackdrop,
                         HeaderMetadata.ImageLogo,
-                        HeaderMetadata.ImagePrimary,
-                        HeaderMetadata.ImageBackdrop,
-                        HeaderMetadata.ImageLogo,
                         HeaderMetadata.Name,
                         HeaderMetadata.DateAdded,
                         HeaderMetadata.ReleaseDate,
@@ -283,9 +388,15 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                         HeaderMetadata.ParentalRating,
                         HeaderMetadata.CommunityRating,
                         HeaderMetadata.Runtime,
+                        HeaderMetadata.Container,
                         HeaderMetadata.Video,
-                        HeaderMetadata.Resolution,
                         HeaderMetadata.Audio,
+                        HeaderMetadata.ResolutionX,
+                        HeaderMetadata.ResolutionY,
+                        HeaderMetadata.AspectRatio,
+                        HeaderMetadata.VideoBitrate,
+                        HeaderMetadata.AudioBitrate,
+                        HeaderMetadata.FileSize,
                         HeaderMetadata.Subtitles,
                         HeaderMetadata.Trailers,
                         HeaderMetadata.Specials
@@ -522,6 +633,54 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                 case HeaderMetadata.Subtitles:
                     option.Column = (i, r) => this.GetBoolString(r.HasSubtitles);
                     option.Header.ItemViewType = ItemViewType.SubtitleImage;
+                    break;
+
+                case HeaderMetadata.ResolutionX:
+                    option.Column = (i, r) => this.GetVideoResolutionX(i);
+                    option.Header.HeaderFieldType = ReportFieldType.Int;
+                    option.Header.SortField = "Width";
+                    option.Header.CanGroup = false;
+                    internalHeader = HeaderMetadata.ResolutionX;
+                    break;
+
+                case HeaderMetadata.ResolutionY:
+                    option.Column = (i, r) => this.GetVideoResolutionY(i);
+                    option.Header.HeaderFieldType = ReportFieldType.Int;
+                    option.Header.SortField = "Height";
+                    option.Header.CanGroup = false;
+                    internalHeader = HeaderMetadata.ResolutionY;
+                    break;
+
+                case HeaderMetadata.FileSize:
+                    option.Column = (i, r) => this.GetFormattedFileSize(i);
+                    option.Header.HeaderFieldType = ReportFieldType.String;
+                    option.Header.SortField = "Size";
+                    option.Header.CanGroup = false;
+                    break;
+
+                case HeaderMetadata.AspectRatio:
+                    option.Column = (i, r) => this.GetAspectRatio(i);
+                    option.Header.HeaderFieldType = ReportFieldType.String;
+                    option.Header.CanGroup = true;
+                    break;
+
+                case HeaderMetadata.AudioBitrate:
+                    option.Column = (i, r) => this.GetAudioBitrate(i);
+                    option.Header.HeaderFieldType = ReportFieldType.String;
+                    option.Header.CanGroup = false;
+                    break;
+
+                case HeaderMetadata.VideoBitrate:
+                    option.Column = (i, r) => this.GetVideoBitrate(i);
+                    option.Header.HeaderFieldType = ReportFieldType.String;
+                    option.Header.CanGroup = false;
+                    break;
+
+                case HeaderMetadata.Container:
+                    option.Column = (i, r) => this.GetContainer(i);
+                    option.Header.HeaderFieldType = ReportFieldType.String;
+                    option.Header.SortField = "Container";
+                    option.Header.CanGroup = true;
                     break;
 
                 case HeaderMetadata.Genres:

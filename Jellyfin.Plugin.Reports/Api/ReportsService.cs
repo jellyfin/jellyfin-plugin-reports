@@ -395,11 +395,94 @@ namespace Jellyfin.Plugin.Reports.Api
         {
             User user = !string.IsNullOrWhiteSpace(request.UserId) ? _userManager.GetUserById(new Guid(request.UserId)) : null;
             ReportBuilder reportBuilder = new ReportBuilder(_libraryManager);
-            QueryResult<BaseItem> queryResult = GetQueryResult(request, user);
+
+            // Check if we need to fetch all results for client-side sorting
+            bool needsCustomSorting = NeedsCustomSorting(request.SortBy);
+
+            QueryResult<BaseItem> queryResult;
+            int? originalStartIndex = request.StartIndex;
+            int? originalLimit = request.Limit;
+            string originalSortBy = request.SortBy;
+            string originalSortOrder = request.SortOrder;
+
+            if (needsCustomSorting)
+            {
+                // Fetch ALL results without pagination for custom sorting
+                request.StartIndex = null;
+                request.Limit = null;
+                request.SortBy = null; // Disable server-side sorting
+                request.SortOrder = null;
+                queryResult = GetQueryResult(request, user);
+
+                // Restore original settings
+                request.StartIndex = originalStartIndex;
+                request.Limit = originalLimit;
+                request.SortBy = originalSortBy;
+                request.SortOrder = originalSortOrder;
+            }
+            else
+            {
+                // Use normal Jellyfin server-side sorting and pagination
+                queryResult = GetQueryResult(request, user);
+            }
+
             ReportResult reportResult = reportBuilder.GetResult(queryResult.Items, request);
             reportResult.TotalRecordCount = queryResult.TotalRecordCount;
 
+            // Apply custom sorting if needed
+            if (needsCustomSorting)
+            {
+                string sortBy = originalSortBy ?? string.Empty;
+                string sortOrder = originalSortOrder ?? "Ascending";
+                reportResult = reportBuilder.ApplySorting(reportResult, sortBy, sortOrder);
+
+                // Update total count
+                reportResult.TotalRecordCount = reportResult.Rows?.Count ?? 0;
+
+                // Apply pagination
+                if (reportResult.Rows != null)
+                {
+                    int startIndex = originalStartIndex ?? 0;
+                    int limit = originalLimit ?? reportResult.Rows.Count;
+                    reportResult.Rows = reportResult.Rows.Skip(startIndex).Take(limit).ToList();
+                }
+            }
+
             return reportResult;
+        }
+
+        /// <summary> Checks if custom sorting is needed (for enriched or formatted columns). </summary>
+        /// <param name="sortBy"> The sort field. </param>
+        /// <returns> True if custom sorting is needed. </returns>
+        private bool NeedsCustomSorting(string sortBy)
+        {
+            if (string.IsNullOrWhiteSpace(sortBy))
+                return false;
+
+            // The UI sends SortField values (e.g., "Size", "Width"), not FieldName values
+            // We need custom sorting for ALL our enriched/formatted columns
+            // These are the SortField values and FieldName values that need custom sorting:
+            var customSortColumns = new[]
+            {
+                // Enriched columns (no SortField - these won't come through but include for completeness)
+                "Audio",
+                "Video",
+                "AudioBitrate",
+                "VideoBitrate",
+                "AspectRatio",
+
+                // Formatted columns (these DO have SortField but Jellyfin can't sort formatted values properly)
+                "FileSize",     // UI sends this as FieldName
+                "Size",         // UI sends this as SortField for FileSize
+                "Container",    // Both FieldName and SortField
+                "Width",        // SortField for ResolutionX
+                "Height",       // SortField for ResolutionY
+                "ResolutionX",  // FieldName
+                "ResolutionY"   // FieldName
+            };
+
+            var sortFields = sortBy.Split(',', StringSplitOptions.RemoveEmptyEntries);
+            return sortFields.Any(field => customSortColumns.Contains(field.Trim(), StringComparer.OrdinalIgnoreCase));
         }
     }
 }
