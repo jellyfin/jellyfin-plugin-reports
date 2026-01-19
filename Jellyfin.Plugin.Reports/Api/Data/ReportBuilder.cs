@@ -205,6 +205,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                         HeaderMetadata.Genres,
                         HeaderMetadata.ParentalRating,
                         HeaderMetadata.CommunityRating,
+                        HeaderMetadata.ImdbId,
                         HeaderMetadata.Runtime,
                         HeaderMetadata.Trailers,
                         HeaderMetadata.Specials
@@ -257,6 +258,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                         HeaderMetadata.Genres,
                         HeaderMetadata.ParentalRating,
                         HeaderMetadata.CommunityRating,
+                        HeaderMetadata.ImdbId,
                         HeaderMetadata.Runtime,
                         HeaderMetadata.Container,
                         HeaderMetadata.Video,
@@ -352,6 +354,7 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                         HeaderMetadata.Genres,
                         HeaderMetadata.ParentalRating,
                         HeaderMetadata.CommunityRating,
+                        HeaderMetadata.ImdbId,
                         HeaderMetadata.Runtime,
                         HeaderMetadata.Container,
                         HeaderMetadata.Video,
@@ -685,6 +688,12 @@ namespace Jellyfin.Plugin.Reports.Api.Data
 
                 case HeaderMetadata.Genres:
                     option.Column = (i, r) => this.GetListAsString(i.Genres.ToList());
+                    break;
+
+                case HeaderMetadata.ImdbId:
+                    option.Column = (i, r) => i.GetProviderId(MediaBrowser.Model.Entities.MetadataProvider.Imdb) ?? string.Empty;
+                    option.Header.SortField = "";  // Non-sortable
+                    option.Header.CanGroup = false;
                     break;
 
             }

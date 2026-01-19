@@ -60,6 +60,7 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         Years,
         ParentalRatings,
         CommunityRatings,
+        ImdbId,
 
         //Activity logs
         Overview,
