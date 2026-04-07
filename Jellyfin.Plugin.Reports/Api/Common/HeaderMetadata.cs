@@ -27,6 +27,8 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         EmbeddedImage,
         Video,
         Resolution,
+        VideoBitrate,
+        AudioBitrate,
         Subtitles,
         Genres,
         Countries,

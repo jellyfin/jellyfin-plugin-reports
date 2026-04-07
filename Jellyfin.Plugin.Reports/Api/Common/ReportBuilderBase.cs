@@ -303,6 +303,28 @@ namespace Jellyfin.Plugin.Reports.Api.Common
             return string.Empty;
         }
 
+        /// <summary> Gets video bitrate. </summary>
+        /// <param name="item"> The item. </param>
+        /// <returns> The video bitrate. </returns>
+        protected string GetVideoBitrate(BaseItem item)
+        {
+            var stream = GetStream(item, MediaStreamType.Video);
+            if (stream != null && stream.BitRate != null)
+                return string.Format(CultureInfo.InvariantCulture, "{0} mbps", stream.BitRate / 1000);
+            return string.Empty;
+        }
+
+        /// <summary> Gets audio bitrate. </summary>
+        /// <param name="item"> The item. </param>
+        /// <returns> The audio bitrate. </returns>
+        protected string GetAudioBitrate(BaseItem item)
+        {
+            var stream = GetStream(item, MediaStreamType.Audio);
+            if (stream != null && stream.BitRate != null)
+                return string.Format(CultureInfo.InvariantCulture, "{0} kbps", stream.BitRate / 1000);
+            return string.Empty;
+        }
+
         /// <summary> Gets video stream. </summary>
         /// <param name="item"> The item. </param>
         /// <returns> The video stream. </returns>
