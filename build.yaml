@@ -2,8 +2,8 @@
 name: "Reports"
 guid: "d4312cd9-5c90-4f38-82e8-51da566790e8"
 imageUrl: "https://repo.jellyfin.org/releases/plugin/images/jellyfin-plugin-reports.png"
-version: 18
-targetAbi: "10.11.0.0"
+version: 19
+targetAbi: "12.0.0.0"
 framework: "net9.0"
 owner: "jellyfin"
 overview: "Generate reports of your media library"
@@ -20,8 +20,7 @@ artifacts:
   - "SixLabors.Fonts.dll"
   - "RBush.dll"
 changelog: |-
-  - Jellyfin 10.11 support (#98) @crobibero
-  - fix: require admin privileges to access reports API (#95) @Theta-Dev
+  - fix: export limiting to maximum 100 lines (#100) @Yghore
 
-  ### Code or Repo Maintenance ###
-  - Fix Overlay Button Accessibility  (#91) @a-mnich
+  ### Dependency updates ###
+  - Update dependency ClosedXML to 0.105.1 (#109) [@renovate[bot]](https://github.com/apps/renovate)
