@@ -155,6 +155,12 @@ namespace Jellyfin.Plugin.Reports.Api
         // [ApiMember(Name = "HasTvdbId", Description = "Optional filter by items that have a tvdb id or not.", IsRequired = false, DataType = "bool", ParameterType = "query", Verb = "GET")]
         public bool? HasTvdbId { get; set; }
 
+        // [ApiMember(Name = "HasImagePrimary", Description = "Optional filter by items that have a primary image or not.", IsRequired = false, DataType = "bool", ParameterType = "query", Verb = "GET")]
+        public bool? HasImagePrimary { get; set; }
+
+        // [ApiMember(Name = "HasImageBackdrop", Description = "Optional filter by items that have a backdrop image or not.", IsRequired = false, DataType = "bool", ParameterType = "query", Verb = "GET")]
+        public bool? HasImageBackdrop { get; set; }
+
         // [ApiMember(Name = "IsInBoxSet", Description = "Optional filter by items that are in boxsets, or not.", IsRequired = false, DataType = "bool", ParameterType = "query", Verb = "GET")]
         public bool? IsInBoxSet { get; set; }
 
