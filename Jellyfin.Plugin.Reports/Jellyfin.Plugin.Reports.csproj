@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.105.1" />
-    <PackageReference Include="Jellyfin.Data" Version="10.*-*" />
+    <PackageReference Include="Jellyfin.Data" Version="10.1*-*" />
     <PackageReference Include="Jellyfin.Controller" Version="10.*-*" />
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
