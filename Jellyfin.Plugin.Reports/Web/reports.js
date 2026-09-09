@@ -458,6 +458,8 @@ function updateFilterControls(context) {
     context.querySelector('#chkMissingImdbId').checked = query.HasImdbId == false;
     context.querySelector('#chkMissingTmdbId').checked = query.HasTmdbId == false;
     context.querySelector('#chkMissingTvdbId').checked = query.HasTvdbId == false;
+    context.querySelector('#chkMissingImagePrimary').checked = query.HasImagePrimary == false;
+    context.querySelector('#chkMissingImageBackdrop').checked = query.HasImageBackdrop == false;
 
     //Episodes
     context.querySelector('#chkSpecialEpisode').checked = query.ParentIndexNumber == 0;
@@ -946,6 +948,22 @@ export default function (view) {
     chkMissingTvdbId.addEventListener('change', () => {
         query.StartIndex = 0;
         query.HasTvdbId = chkMissingTvdbId.checked ? false : null;
+
+        reloadItems(view);
+    });
+
+    const chkMissingImagePrimary = view.querySelector('#chkMissingImagePrimary');
+    chkMissingImagePrimary.addEventListener('change', () => {
+        query.StartIndex = 0;
+        query.HasImagePrimary = chkMissingImagePrimary.checked ? false : null;
+
+        reloadItems(view);
+    });
+
+    const chkMissingImageBackdrop = view.querySelector('#chkMissingImageBackdrop');
+    chkMissingImageBackdrop.addEventListener('change', () => {
+        query.StartIndex = 0;
+        query.HasImageBackdrop = chkMissingImageBackdrop.checked ? false : null;
 
         reloadItems(view);
     });

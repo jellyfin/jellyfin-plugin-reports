@@ -396,6 +396,27 @@ namespace Jellyfin.Plugin.Reports.Api
             User user = !string.IsNullOrWhiteSpace(request.UserId) ? _userManager.GetUserById(new Guid(request.UserId)) : null;
             ReportBuilder reportBuilder = new ReportBuilder(_libraryManager);
             QueryResult<BaseItem> queryResult = GetQueryResult(request, user);
+
+            if (request.HasImagePrimary != null || request.HasImageBackdrop != null)
+            {
+                var tmpResults = new List<BaseItem>();
+                foreach (var result in queryResult.Items)
+                {
+                    // filter for requested image type matches
+                    if (   (request.HasImagePrimary?.Equals(result.HasImage(ImageType.Primary)) ?? true)
+                        && (request.HasImageBackdrop?.Equals(result.HasImage(ImageType.Backdrop)) ?? true))
+                    {
+                        tmpResults.Add(result);
+                    }
+                }
+
+                queryResult = new QueryResult<BaseItem>
+                {
+                    Items = tmpResults,
+                    TotalRecordCount = tmpResults.Count,
+                };
+            }
+
             ReportResult reportResult = reportBuilder.GetResult(queryResult.Items, request);
             reportResult.TotalRecordCount = queryResult.TotalRecordCount;
 
