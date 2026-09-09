@@ -315,6 +315,148 @@ namespace Jellyfin.Plugin.Reports.Api.Common
             return string.Empty;
         }
 
+        /// <summary> Gets video resolution X (width). </summary>
+        /// <param name="item"> The item. </param>
+        /// <returns> The video width in pixels. </returns>
+        protected int? GetVideoResolutionX(BaseItem item)
+        {
+            var stream = GetStream(item, MediaStreamType.Video);
+            return stream?.Width;
+        }
+
+        /// <summary> Gets video resolution Y (height). </summary>
+        /// <param name="item"> The item. </param>
+        /// <returns> The video height in pixels. </returns>
+        protected int? GetVideoResolutionY(BaseItem item)
+        {
+            var stream = GetStream(item, MediaStreamType.Video);
+            return stream?.Height;
+        }
+
+        /// <summary> Gets formatted file size. </summary>
+        /// <param name="item"> The item. </param>
+        /// <returns> The formatted file size (e.g., "4.2 GB", "350 MB"). </returns>
+        protected string GetFormattedFileSize(BaseItem item)
+        {
+            if (item.Size == null || item.Size == 0)
+                return string.Empty;
+
+            long bytes = item.Size.Value;
+            string[] sizes = { "B", "KB", "MB", "GB", "TB" };
+            int order = 0;
+            double size = bytes;
+
+            while (size >= 1024 && order < sizes.Length - 1)
+            {
+                order++;
+                size /= 1024;
+            }
+
+            return string.Format(CultureInfo.InvariantCulture, "{0:0.##} {1}", size, sizes[order]);
+        }
+
+        /// <summary> Gets aspect ratio. </summary>
+        /// <param name="item"> The item. </param>
+        /// <returns> The aspect ratio (e.g., "16:9", "4:3", "21:9"). </returns>
+        protected string GetAspectRatio(BaseItem item)
+        {
+            var stream = GetStream(item, MediaStreamType.Video);
+            if (stream?.Width == null || stream?.Height == null || stream.Height == 0)
+                return string.Empty;
+
+            int width = stream.Width.Value;
+            int height = stream.Height.Value;
+            double actualRatio = (double)width / height;
+
+            // Check against common aspect ratios with 3% tolerance
+            if (IsCloseToRatio(actualRatio, 16.0 / 9.0)) return "16:9";
+            if (IsCloseToRatio(actualRatio, 4.0 / 3.0)) return "4:3";
+            if (IsCloseToRatio(actualRatio, 21.0 / 9.0)) return "21:9";
+            if (IsCloseToRatio(actualRatio, 2.39)) return "2.39:1";  // Anamorphic widescreen
+            if (IsCloseToRatio(actualRatio, 2.35)) return "2.35:1";  // CinemaScope
+            if (IsCloseToRatio(actualRatio, 1.85)) return "1.85:1";  // VistaVision
+            if (IsCloseToRatio(actualRatio, 16.0 / 10.0)) return "16:10";
+            if (IsCloseToRatio(actualRatio, 5.0 / 4.0)) return "5:4";
+            if (IsCloseToRatio(actualRatio, 1.0)) return "1:1";
+
+            // Return calculated ratio in reduced form for non-standard ratios
+            int gcd = CalculateGCD(width, height);
+            int ratioWidth = width / gcd;
+            int ratioHeight = height / gcd;
+
+            // If reduced ratio is too complex, show decimal instead
+            if (ratioWidth > 100 || ratioHeight > 100)
+                return string.Format(CultureInfo.InvariantCulture, "{0:0.##}:1", actualRatio);
+
+            return string.Format(CultureInfo.InvariantCulture, "{0}:{1}", ratioWidth, ratioHeight);
+        }
+
+        /// <summary> Calculates greatest common divisor. </summary>
+        private int CalculateGCD(int a, int b)
+        {
+            while (b != 0)
+            {
+                int temp = b;
+                b = a % b;
+                a = temp;
+            }
+            return a;
+        }
+
+        /// <summary> Checks if actual ratio is close to a standard ratio. </summary>
+        private bool IsCloseToRatio(double actualRatio, double standardRatio)
+        {
+            // 3% tolerance for aspect ratio variations
+            double tolerance = standardRatio * 0.03;
+            return Math.Abs(actualRatio - standardRatio) <= tolerance;
+        }
+
+        /// <summary> Gets audio bitrate. </summary>
+        /// <param name="item"> The item. </param>
+        /// <returns> The audio bitrate formatted (e.g., "320 kbps", "1.5 Mbps"). </returns>
+        protected string GetAudioBitrate(BaseItem item)
+        {
+            var stream = GetStream(item, MediaStreamType.Audio);
+            if (stream?.BitRate == null || stream.BitRate == 0)
+                return string.Empty;
+
+            int bitrate = stream.BitRate.Value;
+
+            if (bitrate >= 1000000)
+                return string.Format(CultureInfo.InvariantCulture, "{0:0.#} Mbps", bitrate / 1000000.0);
+            else
+                return string.Format(CultureInfo.InvariantCulture, "{0} kbps", bitrate / 1000);
+        }
+
+        /// <summary> Gets video bitrate. </summary>
+        /// <param name="item"> The item. </param>
+        /// <returns> The video bitrate formatted (e.g., "8.5 Mbps", "2500 kbps"). </returns>
+        protected string GetVideoBitrate(BaseItem item)
+        {
+            var stream = GetStream(item, MediaStreamType.Video);
+            if (stream?.BitRate == null || stream.BitRate == 0)
+                return string.Empty;
+
+            int bitrate = stream.BitRate.Value;
+
+            if (bitrate >= 1000000)
+                return string.Format(CultureInfo.InvariantCulture, "{0:0.#} Mbps", bitrate / 1000000.0);
+            else
+                return string.Format(CultureInfo.InvariantCulture, "{0} kbps", bitrate / 1000);
+        }
+
+        /// <summary> Gets container format. </summary>
+        /// <param name="item"> The item. </param>
+        /// <returns> The container format (e.g., "MKV", "MP4", "AVI"). </returns>
+        protected string GetContainer(BaseItem item)
+        {
+            var mediaSource = GetMediaSourceInfo(item);
+            if (mediaSource == null || string.IsNullOrEmpty(mediaSource.Container))
+                return string.Empty;
+
+            return mediaSource.Container.ToUpperInvariant();
+        }
+
         /// <summary> Displays a type visible. </summary>
         /// <param name="headerDisplayType"> Type of the header display. </param>
         /// <param name="displayType"> Type of the display. </param>

@@ -28,6 +28,13 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         Video,
         Resolution,
         Subtitles,
+        ResolutionX,
+        ResolutionY,
+        FileSize,
+        AspectRatio,
+        AudioBitrate,
+        VideoBitrate,
+        Container,
         Genres,
         Countries,
         Status,
@@ -53,6 +60,7 @@ namespace Jellyfin.Plugin.Reports.Api.Common
         Years,
         ParentalRatings,
         CommunityRatings,
+        ImdbId,
 
         //Activity logs
         Overview,
