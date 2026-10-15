@@ -209,7 +209,7 @@ function getItem(rHeader, rRow, rItem) {
 function ExportReport() {
     query.UserId = Dashboard.getCurrentUserId();
     query.HasQueryLimit = false;
-    query.api_key = ApiClient.accessToken();
+    query.ApiKey = ApiClient.accessToken();
     const url = ApiClient.getUrl('Reports/Items/Download', query);
 
     if (url) {
