@@ -167,6 +167,8 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                         HeaderMetadata.Runtime,
                         HeaderMetadata.Video,
                         HeaderMetadata.Resolution,
+                        HeaderMetadata.VideoBitrate,
+                        HeaderMetadata.AudioBitrate,
                         HeaderMetadata.Audio,
                         HeaderMetadata.Subtitles,
                         HeaderMetadata.Trailers,
@@ -253,6 +255,8 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                         HeaderMetadata.Runtime,
                         HeaderMetadata.Video,
                         HeaderMetadata.Resolution,
+                        HeaderMetadata.VideoBitrate,
+                        HeaderMetadata.AudioBitrate,
                         HeaderMetadata.Audio,
                         HeaderMetadata.Subtitles,
                         HeaderMetadata.Trailers,
@@ -285,6 +289,8 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                         HeaderMetadata.Runtime,
                         HeaderMetadata.Video,
                         HeaderMetadata.Resolution,
+                        HeaderMetadata.VideoBitrate,
+                        HeaderMetadata.AudioBitrate,
                         HeaderMetadata.Audio,
                         HeaderMetadata.Subtitles,
                         HeaderMetadata.Trailers,
@@ -518,7 +524,12 @@ namespace Jellyfin.Plugin.Reports.Api.Data
                 case HeaderMetadata.Resolution:
                     option.Column = (i, r) => this.GetVideoResolution(i);
                     break;
-
+                case HeaderMetadata.VideoBitrate:
+                    option.Column = (i, r) => this.GetVideoBitrate(i);
+                    break;
+                case HeaderMetadata.AudioBitrate:
+                    option.Column = (i, r) => this.GetAudioBitrate(i);
+                    break;
                 case HeaderMetadata.Subtitles:
                     option.Column = (i, r) => this.GetBoolString(r.HasSubtitles);
                     option.Header.ItemViewType = ItemViewType.SubtitleImage;
